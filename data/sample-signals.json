@@ -1,0 +1,39 @@
+{
+  "company_name": "Cognix demo company",
+  "project_name": "GTM fragmentation readout",
+  "diagnostic_type": "Fragmentation readout",
+  "company_stage": "Founder-led emerging SaaS",
+  "primary_buyer": "GTM leadership",
+  "signals": [
+    {
+      "signal_type": "Website copy",
+      "title": "Founder strategy note",
+      "content": "Cognix is a revenue cognition system for AI-era GTM teams. It protects strategic coherence by detecting GTM fragmentation before it becomes revenue risk and turning scattered signals into leadership decisions.",
+      "notes": "Founder narrative and intended category claim."
+    },
+    {
+      "signal_type": "Positioning document",
+      "title": "Website hero draft",
+      "content": "Run a Cognix readout to find GTM contradictions in minutes. Paste GTM signals, get an evidence trail, and see the revenue risk before teams create more sales and marketing content.",
+      "notes": "Public website copy for the first product workflow."
+    },
+    {
+      "signal_type": "Sales deck",
+      "title": "Sales talk track",
+      "content": "Position Cognix as a diagnostic workspace for GTM teams. Lead with a practical analysis of messaging, buyer clarity, sales narrative, and enablement gaps so prospects understand the first use case quickly.",
+      "notes": "Field narrative for discovery calls."
+    },
+    {
+      "signal_type": "Customer feedback",
+      "title": "Prospect confusion notes",
+      "content": "A VP Marketing prospect asked whether Cognix is strategic infrastructure, a diagnostic workspace, a reporting aid, or an enablement review tool. They liked the revenue cognition framing but did not understand the first use case or buying motion.",
+      "notes": "Sales call notes from beta discovery."
+    },
+    {
+      "signal_type": "Enablement asset",
+      "title": "Beta sales talk track",
+      "content": "Use Cognix as a reporting aid for founders, CMOs, PMM, RevOps, enablement, and GTM leadership. Reps should promise better reports, cleaner summaries, and faster alignment, then mention revenue risk and leadership decision later.",
+      "notes": "Internal enablement."
+    }
+  ]
+}
