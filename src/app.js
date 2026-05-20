@@ -264,7 +264,7 @@ function render() {
               </div>`).join("")}
           </nav>
           <div class="nav-actions">
-            <a class="login-link" href="/product.html">Open product</a>
+            <a class="login-link" href="product.html">Open product</a>
             <a class="btn btn-primary" href="#beta">Run free readout</a>
           </div>
         </div>

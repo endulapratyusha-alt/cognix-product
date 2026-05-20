@@ -138,9 +138,9 @@ async function loadAndRender() {
 
 function loadLocalProjects() {
   clearLegacyLocalStorage();
-  const saved = localStorage.getItem(storageKey);
+  const saved = readStorageItem(storageKey);
   if (!saved) {
-    const seeded = withSampleCognition(structuredClone(sampleProject));
+    const seeded = withSampleCognition(cloneSampleProject());
     saveLocalProjectPayload([seeded]);
     return [seeded];
   }
@@ -148,7 +148,7 @@ function loadLocalProjects() {
     const projects = JSON.parse(saved).projects || [sampleProject];
     return projects.map((project) => project.id === "sample-project" ? withSampleCognition(project) : project);
   } catch {
-    return [withSampleCognition(structuredClone(sampleProject))];
+    return [withSampleCognition(cloneSampleProject())];
   }
 }
 
@@ -158,23 +158,56 @@ function saveLocalProjects() {
 
 function saveLocalProjectPayload(projects) {
   const compactProjects = projects.map(compactProjectForStorage);
-  try {
-    localStorage.setItem(storageKey, JSON.stringify({ projects: compactProjects }));
-  } catch {
-    clearLegacyLocalStorage();
-    const minimalProjects = compactProjects.map((project) => ({
-      ...project,
-      reports: project.reports.slice(0, 1),
-      memory: project.memory.slice(-3)
-    }));
-    localStorage.setItem(storageKey, JSON.stringify({ projects: minimalProjects }));
+  if (writeStorageItem(storageKey, JSON.stringify({ projects: compactProjects }))) return;
+
+  clearLegacyLocalStorage();
+  const minimalProjects = compactProjects.map((project) => ({
+    ...project,
+    reports: project.reports.slice(0, 1),
+    memory: project.memory.slice(-3)
+  }));
+
+  if (!writeStorageItem(storageKey, JSON.stringify({ projects: minimalProjects }))) {
+    state.error = "";
   }
 }
 
 function clearLegacyLocalStorage() {
-  Object.keys(localStorage)
-    .filter((key) => key.startsWith("cognix.cognition.mvp.") && key !== storageKey)
-    .forEach((key) => localStorage.removeItem(key));
+  try {
+    Object.keys(localStorage)
+      .filter((key) => key.startsWith("cognix.cognition.mvp.") && key !== storageKey)
+      .forEach((key) => {
+        try {
+          localStorage.removeItem(key);
+        } catch {
+          // Storage cleanup is best effort. Rendering should not depend on it.
+        }
+      });
+  } catch {
+    // Browsers can block localStorage access entirely in some privacy modes.
+  }
+}
+
+function readStorageItem(key) {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function writeStorageItem(key, value) {
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function cloneSampleProject() {
+  if (typeof structuredClone === "function") return structuredClone(sampleProject);
+  return JSON.parse(JSON.stringify(sampleProject));
 }
 
 function compactProjectForStorage(project) {
@@ -322,10 +355,10 @@ function renderShell() {
     <div class="site-shell">
       <header class="nav">
         <div class="nav-inner">
-          <a class="brand" href="/product.html"><span class="mark"></span><span>Cognix</span></a>
+          <a class="brand" href="product.html"><span class="mark"></span><span>Cognix</span></a>
           <nav class="nav-links demo-nav">
             <span class="trust-pill">Local deterministic inference</span>
-            <a class="btn" href="/">Website</a>
+            <a class="btn" href="index.html">Website</a>
           </nav>
         </div>
       </header>
@@ -1242,7 +1275,7 @@ async function addSignal(project, form) {
 async function runProjectAnalysis(project) {
   let report;
   if (state.mode === "supabase" && state.session) {
-    const response = await fetch("/api/analyze", {
+    const response = await fetch("api/analyze", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
