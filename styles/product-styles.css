@@ -635,6 +635,7 @@ h3 {
 .evidence-card,
 .pathway-card,
 .scenario-card,
+.storage-notice,
 .gravity-list article,
 .pressure-list article,
 .script-grid article,
@@ -680,6 +681,24 @@ h3 {
   font-size: 18px;
 }
 
+.readout-flow {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.readout-flow span {
+  border: 1px solid rgba(76, 167, 255, 0.28);
+  border-radius: 999px;
+  padding: 8px 10px;
+  color: var(--ink);
+  background: rgba(76, 167, 255, 0.08);
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+}
+
 .decision-callout {
   margin-top: 18px;
   border: 1px solid rgba(79, 214, 163, 0.3);
@@ -703,6 +722,20 @@ h3 {
 
 .decision-callout strong {
   display: block;
+  line-height: 1.45;
+}
+
+.storage-notice {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-top: 14px;
+  border-color: rgba(255, 200, 87, 0.35);
+  background: rgba(255, 200, 87, 0.08);
+}
+
+.storage-notice strong {
   line-height: 1.45;
 }
 
@@ -735,7 +768,7 @@ h3 {
 
 .contradiction-detail-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   margin-top: 18px;
 }
@@ -865,6 +898,51 @@ h3 {
 .pathway-grid,
 .scenario-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.evidence-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 14px 0 0;
+}
+
+.evidence-meta div {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+.evidence-meta dt {
+  margin-bottom: 4px;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.evidence-meta dd {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.risk-explanation-grid,
+.decision-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.revenue-risk-section {
+  border-color: rgba(255, 122, 136, 0.26);
+}
+
+.leadership-decision-section {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 20px;
+  border-color: rgba(79, 214, 163, 0.3);
 }
 
 .map-section .ontology-preview {
@@ -1467,6 +1545,7 @@ h3 {
   .app-layout,
   .readout-section,
   .contradiction-section,
+  .leadership-decision-section,
   .split-demo {
     grid-template-columns: 1fr;
   }
@@ -1497,9 +1576,13 @@ h3 {
   .executive-risk-grid,
   .memory-grid,
   .evidence-grid,
+  .evidence-meta,
+  .risk-explanation-grid,
+  .decision-grid,
   .pathway-grid,
   .scenario-grid,
-  .script-grid {
+  .script-grid,
+  .readout-flow {
     grid-template-columns: 1fr;
   }
 

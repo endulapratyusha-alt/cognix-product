@@ -10,7 +10,8 @@ const state = {
   session: null,
   loading: false,
   analysisStage: "",
-  error: ""
+  error: "",
+  storageWarning: ""
 };
 
 const sampleProject = {
@@ -157,6 +158,7 @@ function saveLocalProjects() {
 }
 
 function saveLocalProjectPayload(projects) {
+  state.storageWarning = "";
   const compactProjects = projects.map(compactProjectForStorage);
   if (writeStorageItem(storageKey, JSON.stringify({ projects: compactProjects }))) return;
 
@@ -164,11 +166,16 @@ function saveLocalProjectPayload(projects) {
   const minimalProjects = compactProjects.map((project) => ({
     ...project,
     reports: project.reports.slice(0, 1),
-    memory: project.memory.slice(-3)
+    memory: project.memory.slice(-2),
+    signals: project.signals.slice(-5).map((signal) => ({
+      ...signal,
+      content: truncateText(signal.content, 180),
+      notes: truncateText(signal.notes, 120)
+    }))
   }));
 
   if (!writeStorageItem(storageKey, JSON.stringify({ projects: minimalProjects }))) {
-    state.error = "";
+    state.storageWarning = "Memory storage limit reached. Current readout is still available. Clear saved memory to continue saving new runs.";
   }
 }
 
@@ -210,27 +217,33 @@ function cloneSampleProject() {
   return JSON.parse(JSON.stringify(sampleProject));
 }
 
+function truncateText(value = "", max = 240) {
+  const text = String(value || "").replace(/\s+/g, " ").trim();
+  return text.length > max ? `${text.slice(0, max - 3).trim()}...` : text;
+}
+
 function compactProjectForStorage(project) {
   return {
     ...project,
-    signals: (project.signals || []).slice(-20).map((signal) => ({
+    demo_step: project.demo_step || 0,
+    signals: (project.signals || []).slice(-8).map((signal) => ({
       id: signal.id,
       project_id: signal.project_id,
       signal_type: signal.signal_type,
       title: signal.title,
-      content: signal.content,
-      notes: signal.notes,
+      content: truncateText(signal.content, 320),
+      notes: truncateText(signal.notes, 160),
       created_at: signal.created_at
     })),
-    reports: (project.reports || []).slice(0, 2).map(compactReportForStorage),
-    memory: (project.memory || []).slice(-6).map((entry) => ({
+    reports: (project.reports || []).slice(0, 5).map(compactReportForStorage),
+    memory: (project.memory || []).slice(-5).map((entry) => ({
       id: entry.id,
       created_at: entry.created_at,
-      summary: entry.summary,
-      contradictions: (entry.contradictions || []).slice(0, 4),
-      dominant_narratives: (entry.dominant_narratives || []).slice(0, 4),
-      strategic_pressure: (entry.strategic_pressure || []).slice(0, 3),
-      dominant_entities: (entry.dominant_entities || []).slice(0, 6)
+      summary: truncateText(entry.summary, 180),
+      contradictions: (entry.contradictions || []).slice(0, 3).map((item) => typeof item === "string" ? truncateText(item, 160) : item),
+      dominant_narratives: (entry.dominant_narratives || []).slice(0, 3),
+      strategic_pressure: (entry.strategic_pressure || []).slice(0, 2),
+      dominant_entities: (entry.dominant_entities || []).slice(0, 4)
     }))
   };
 }
@@ -402,17 +415,16 @@ function projectView(project) {
   return `
     <div class="workspace-head demo-head">
       <div>
-        <div class="eyebrow">Readout workspace · ${esc(project.company_name)} · ${esc(project.company_stage)}</div>
+        <div class="eyebrow">Product readout · ${esc(project.company_name)} · ${esc(project.company_stage)}</div>
         <h2>Cognix detects GTM fragmentation before it becomes revenue risk.</h2>
-        <p class="muted">${project.signals.length} signals analyzed · ${project.reports.length} cognition runs · ${(project.memory || []).length} memory snapshots</p>
+        <p class="muted">Add messy GTM signals. Cognix identifies the active contradiction, shows evidence, explains revenue risk, recommends the leadership decision, and saves the run as memory.</p>
       </div>
       <div class="button-row">
         <button class="btn" data-action="seed-sample">Reset sample</button>
         <button class="btn primary" data-action="run-analysis" ${project.signals.length ? "" : "disabled"}>Run new analysis</button>
       </div>
     </div>
-    ${latestReport ? canonicalDemoView(latestReport, previousReport, project) : emptyView("No cognition run yet", "Run analysis to generate the Cognix demo readout.")}
-    ${founderDemoScript()}`;
+    ${latestReport ? canonicalDemoView(latestReport, previousReport, project) : emptyView("No cognition run yet", "Run analysis to generate the Cognix readout.")}`;
 }
 
 function canonicalDemoView(report, previousReport, project) {
@@ -420,14 +432,15 @@ function canonicalDemoView(report, previousReport, project) {
   const brief = executiveBriefData(report, contradiction);
   const readout = cognixReadout(project, report, contradiction, brief);
   return `
-    ${trustNotice(report)}
     ${readoutView(readout)}
     ${activeContradictionView(contradiction)}
+    ${evidenceTrailView(contradiction)}
+    ${revenueRiskView(readout)}
+    ${leadershipDecisionView(readout)}
+    ${memorySnapshotView(project, report, previousReport, readout)}
     ${causalChainView(readout)}
     ${executiveBriefView(report, readout)}
-    ${memorySnapshotView(project, report, previousReport, readout)}
     ${cognitionChangedView(report, previousReport)}
-    ${evidenceTrailView(contradiction)}
     ${signalWorkspace(project)}
     ${connectedMapView(report, project)}
     ${propagationPathwaysView(report)}
@@ -447,10 +460,15 @@ function readoutView(readout) {
         <span class="tag">Cognix readout</span>
         <h2>${esc(readout.headline)}</h2>
         <p class="readout-lede">${esc(readout.summary)}</p>
+        <div class="readout-flow" aria-label="Cognix reasoning flow">
+          ${["Signal", "Contradiction", "Evidence", "Root cause", "Revenue risk", "Leadership decision"].map((item) => `<span>${esc(item)}</span>`).join("")}
+        </div>
         <div class="decision-callout">
-          <span>Recommended decision</span>
+          <span>Recommended leadership decision</span>
           <strong>${esc(readout.recommendedDecision)}</strong>
         </div>
+        ${storageNotice()}
+        ${trustNotice({ engine: "rule-based", ai_unavailable: true })}
       </div>
       <div class="readout-grid">
         ${readoutItem("What Cognix analyzed", readout.analyzed)}
@@ -459,6 +477,15 @@ function readoutView(readout) {
         ${readoutItem("What leadership should do next", readout.next)}
       </div>
     </section>`;
+}
+
+function storageNotice() {
+  if (!state.storageWarning) return "";
+  return `
+    <div class="storage-notice">
+      <strong>${esc(state.storageWarning)}</strong>
+      <button class="btn" type="button" data-action="clear-memory">Clear saved memory</button>
+    </div>`;
 }
 
 function readoutItem(label, value) {
@@ -474,13 +501,14 @@ function activeContradictionView(contradiction) {
         <h2>${esc(normalized.name)}</h2>
         <p>${esc(normalized.plainEnglish)}</p>
         <div class="contradiction-detail-grid">
+          ${readoutItem("Plain-English meaning", normalized.meaning)}
           ${readoutItem("Root cause", normalized.rootCause)}
           ${readoutItem("Revenue risk", normalized.revenueRisk)}
           ${readoutItem("Recommended decision", normalized.recommendedDecision)}
         </div>
       </div>
       <aside>
-        <span>Evidence</span>
+        <span>Source evidence</span>
         ${(normalized.evidence || []).slice(0, 3).map((item) => `<strong>${esc(item)}</strong>`).join("")}
       </aside>
     </section>`;
@@ -538,6 +566,7 @@ function memorySnapshotView(project, report, previousReport, readout) {
         <h2>Saved cognition runs</h2>
         <p class="muted">Each run preserves the diagnosis, risk, contradiction, root cause, revenue risk, and recommended decision so the next signal can change the interpretation.</p>
       </div>
+      ${state.storageWarning ? storageNotice() : ""}
       <div class="memory-grid">
         ${memoryRows.map((row) => `
           <article class="memory-card">
@@ -551,6 +580,7 @@ function memorySnapshotView(project, report, previousReport, readout) {
               <div><dt>Root cause</dt><dd>${esc(row.rootCause)}</dd></div>
               <div><dt>Revenue risk</dt><dd>${esc(row.revenueRisk)}</dd></div>
               <div><dt>Recommended decision</dt><dd>${esc(row.recommendedDecision)}</dd></div>
+              <div><dt>What changed</dt><dd>${esc(row.changed)}</dd></div>
             </dl>
           </article>`).join("")}
       </div>
@@ -586,21 +616,62 @@ function changeItem(label, before, after) {
 }
 
 function evidenceTrailView(contradiction) {
-  const rows = evidenceTrailRows(contradiction).slice(0, 4);
+  const rows = evidenceTrailRows(contradiction).slice(0, 5);
   return `
     <section class="demo-section">
       <div class="section-title">
         <span class="tag">Evidence trail</span>
         <h2>Why Cognix reached this conclusion</h2>
-        <p class="muted">Short, executive-readable evidence only. Source excerpts stay compressed for the demo flow.</p>
+        <p class="muted">Every diagnosis is tied back to the GTM signals that caused it.</p>
       </div>
       <div class="evidence-grid">
         ${rows.map((row) => `
           <article class="evidence-card">
-            <span>${esc(row.source)}</span>
+            <span>${esc(row.source)} · ${esc(row.type)}</span>
             <strong>${esc(row.claim)}</strong>
             <p>${esc(row.why)}</p>
+            <dl class="evidence-meta">
+              <div><dt>Diagnosis role</dt><dd>${esc(row.role)}</dd></div>
+              <div><dt>Confidence</dt><dd>${esc(row.confidence)}</dd></div>
+            </dl>
           </article>`).join("")}
+      </div>
+    </section>`;
+}
+
+function revenueRiskView(readout) {
+  const risks = [
+    ["Affected team", readout.affectedTeam],
+    ["Affected funnel stage", readout.affectedFunnelStage],
+    ["Expected GTM impact", readout.expectedImpact],
+    ["What breaks next", readout.whatBreaksNext]
+  ];
+  return `
+    <section class="demo-section revenue-risk-section">
+      <div class="section-title">
+        <span class="tag">Revenue-risk explanation</span>
+        <h2>This is not just messaging inconsistency.</h2>
+        <p class="muted">${esc(readout.revenueRisk)}</p>
+      </div>
+      <div class="risk-explanation-grid">
+        ${risks.map(([label, value]) => readoutItem(label, value)).join("")}
+      </div>
+    </section>`;
+}
+
+function leadershipDecisionView(readout) {
+  return `
+    <section class="demo-section leadership-decision-section">
+      <div>
+        <span class="tag">Recommended leadership decision</span>
+        <h2>${esc(readout.recommendedDecision)}</h2>
+        <p class="muted">Cognix recommends a decision leadership can own, not a generic request to polish copy.</p>
+      </div>
+      <div class="decision-grid">
+        ${readoutItem("Owner", readout.owner)}
+        ${readoutItem("Urgency", readout.urgency)}
+        ${readoutItem("Expected impact", readout.expectedImpact)}
+        ${readoutItem("First action", readout.firstAction)}
       </div>
     </section>`;
 }
@@ -705,63 +776,6 @@ function signalWorkspace(project) {
         </section>
       </div>
     </section>`;
-}
-
-function founderDemoScript() {
-  return `
-    <details class="demo-script">
-      <summary><span class="tag">Founder demo script</span> 5-minute walkthrough</summary>
-      <div class="script-walkthrough">
-        <article>
-            <span>1. Opening: why GTM fragmentation matters</span>
-            <p>Modern GTM teams are not short on data. They have CRM records, call summaries, product analytics, campaign dashboards, enablement assets, customer notes, and now AI-generated outputs on top of all of it.</p>
-            <p>The problem is that none of those systems is responsible for interpretation. They record what happened, but they do not tell leadership what the signals mean, where the story is breaking, or what decision should be made before the break shows up in pipeline.</p>
-          <p>That is the gap Cognix is built for. We call it revenue cognition infrastructure for AI-era GTM teams.</p>
-        </article>
-        <article>
-          <span>2. What Cognix analyzed</span>
-          <p>In this demo, Cognix analyzed a set of GTM signals that normally live in separate places: website messaging, positioning documents, launch material, customer feedback, and enablement language.</p>
-          <p>Individually, each asset looks reasonable. The website tells one story, the sales materials tell another, the launch narrative introduces a third, and customer feedback shows what the market actually understood.</p>
-          <p>Cognix connects those signals into one leadership-ready view so executives can see the system, not just the artifacts.</p>
-        </article>
-        <article>
-          <span>3. Main diagnosis: positioning fragmentation</span>
-          <p>The main diagnosis is positioning fragmentation.</p>
-          <p>Cognix found that multiple strategic frames are active at the same time. The company is being described as infrastructure, a reporting aid, a launch review workflow, and a leadership decision system. Those may all be true at some level, but they are not organized into one hierarchy.</p>
-          <p>That creates ambiguity. Different teams can choose the story that fits their immediate work, which means the market receives a fragmented version of the company.</p>
-        </article>
-        <article>
-          <span>4. Why it matters to pipeline, sales, buyer clarity, and category clarity</span>
-          <p>This matters because positioning fragmentation does not stay inside messaging. It moves into pipeline quality, sales execution, buyer clarity, and category creation.</p>
-          <p>If sales is not sure whether it is selling reporting, governance, launch review, or executive decision support, qualification becomes inconsistent. If buyers cannot understand the commercial motion, they hesitate. If leadership cannot defend the category clearly, the board conversation becomes activity reporting instead of strategic judgment.</p>
-          <p>More content will not solve that. More dashboards will not solve that. The team needs a system that understands what the signals mean.</p>
-        </article>
-        <article>
-          <span>5. Evidence: how Cognix reached the conclusion</span>
-          <p>Cognix reached this conclusion by comparing the actual GTM signals against each other.</p>
-          <p>It saw infrastructure language in one place, reporting language in another, launch review language in another, and buyer feedback showing confusion about what the company actually does first.</p>
-          <p>The important point is that Cognix is not treating that feedback as anecdote. It connects the feedback back to the upstream narrative signals that likely created the confusion.</p>
-        </article>
-        <article>
-          <span>6. Recommended leadership move</span>
-          <p>The recommended leadership move is to choose one primary commercial motion and one controlling narrative hierarchy.</p>
-          <p>That does not mean deleting nuance. It means making the hierarchy explicit: what category Cognix owns, what buying motion it leads with, what proof supports the claim, and how every team should translate that into their work.</p>
-          <p>Once that hierarchy exists, marketing, sales, enablement, customer success, and leadership can operate from one shared interpretation.</p>
-        </article>
-        <article>
-          <span>7. How cognition changes when new memory is added</span>
-          <p>The key difference is that Cognix is not a static report. When a new signal is added, the system updates its interpretation.</p>
-          <p>If a sales deck changes the story, Cognix can show how the active contradiction changes. If buyer feedback confirms confusion, Cognix can connect that feedback to the upstream narrative. If enablement introduces generic AI language, Cognix can show whether it increases or reduces strategic clarity.</p>
-          <p>That is why we describe this as cognition, not analytics. The system is building GTM memory and updating the business interpretation as the organization changes.</p>
-        </article>
-        <article>
-          <span>8. Closing: Cognix detects GTM fragmentation before it becomes revenue risk</span>
-          <p>The broader thesis is simple: GTM fragmentation becomes revenue leakage when teams do not detect it early enough.</p>
-          <p>Cognix gives leadership a way to see fragmentation while it is still forming, understand why it matters, trace the evidence, and decide what to do next.</p>
-          <p>That is the role of revenue cognition infrastructure. Cognix turns fragmented GTM signals into trusted leadership decisions before the damage shows up in pipeline.</p>
-        </article>
-      </div>
-    </details>`;
 }
 
 function ontologyPreview(report, project) {
@@ -907,6 +921,7 @@ function normalizeContradiction(contradiction = {}, report = {}) {
   return {
     name: contradiction.title || "GTM fragmentation",
     plainEnglish: plainEnglishContradiction(contradiction),
+    meaning: contradiction.interpretation || "GTM surfaces are no longer translating one shared strategic story.",
     evidence,
     rootCause: brief.rootCause,
     businessConsequence: brief.businessConsequence,
@@ -915,6 +930,7 @@ function normalizeContradiction(contradiction = {}, report = {}) {
     affectedFunnelStage: affectedFunnelStageFor(contradiction.title),
     whatBreaksNext: brief.whatBreaksNext,
     recommendedDecision: brief.recommendedDecision,
+    firstAction: brief.firstAction,
     owner: brief.owner,
     urgency: brief.urgency,
     expectedImpact: brief.expectedImpact
@@ -940,6 +956,7 @@ function cognixReadout(project, report, contradiction, brief) {
     affectedFunnelStage: normalized.affectedFunnelStage,
     whatBreaksNext: normalized.whatBreaksNext,
     recommendedDecision: normalized.recommendedDecision,
+    firstAction: normalized.firstAction,
     owner: normalized.owner,
     urgency: normalized.urgency,
     expectedImpact: normalized.expectedImpact,
@@ -963,6 +980,7 @@ function executiveBriefData(report, contradiction) {
     businessConsequence: contradiction.business_consequence || cause.downstream_consequence || "Buyer clarity, sales interpretation, and leadership confidence are likely to diverge.",
     recommendedDecision: decisionFor(contradiction.title),
     nextIntervention: priority.intervention || "Create one narrative hierarchy and apply it across website, sales, launch, and enablement surfaces.",
+    firstAction: firstActionFor(contradiction.title),
     owner: ownerFor(contradiction.title),
     urgency: contradiction.severity === "High" ? "Resolve before the next launch or field rollout." : "Resolve before creating more GTM assets.",
     expectedImpact: impactFor(contradiction.title),
@@ -1001,47 +1019,40 @@ function executiveRiskRows(report, readout) {
 }
 
 function cognitionMemoryRows(project, report, previousReport, readout) {
-  const previous = previousReport ? primaryContradiction(previousReport) : null;
-  const previousBrief = previous ? executiveBriefData(previousReport, previous) : null;
-  const currentRisk = riskScore(primaryContradiction(report));
-  const previousRisk = previous ? riskScore(previous) : Math.max(20, currentRisk - 18);
-  const changeDirection = currentRisk > previousRisk ? "increased" : currentRisk < previousRisk ? "decreased" : "stayed the same";
-  const latestSignal = project.signals[project.signals.length - 1];
-  const current = {
-    label: `Run ${project.reports.length || 1} · ${formatDate(report.generated_at)}`,
-    inputs: `${project.signals.length} signals`,
-    diagnosis: readout.activeContradiction,
-    riskScore: currentRisk,
-    contradiction: readout.activeContradiction,
-    rootCause: readout.rootCause,
-    revenueRisk: readout.revenueRisk,
-    recommendedDecision: readout.recommendedDecision,
-    changed: previousReport
-      ? `Cognition changed because ${latestSignal?.title || "the latest signal"} added new evidence. Risk ${changeDirection} from ${previousRisk} to ${currentRisk}.`
-      : "This is the first saved cognition run. Future signals will be compared against this baseline."
-  };
-  const prior = previous ? {
-    label: `Previous run · ${formatDate(previousReport.generated_at)}`,
-    inputs: `${Math.max(1, project.signals.length - 1)} signals`,
-    diagnosis: previous.title,
-    riskScore: previousRisk,
-    contradiction: previous.title,
-    rootCause: previousBrief.rootCause,
-    revenueRisk: revenueRiskFor(previous.title, previousBrief.businessConsequence),
-    recommendedDecision: previousBrief.recommendedDecision,
-    changed: "Previous diagnosis preserved as memory for comparison."
-  } : null;
-  return [current, prior].filter(Boolean);
+  const reports = (project.reports?.length ? project.reports : [report]).slice(0, 5);
+  return reports.map((savedReport, index) => {
+    const contradiction = index === 0 ? primaryContradiction(report) : primaryContradiction(savedReport);
+    const brief = index === 0 ? { ...readout, rootCause: readout.rootCause } : executiveBriefData(savedReport, contradiction);
+    const prior = reports[index + 1] ? primaryContradiction(reports[index + 1]) : null;
+    const currentRisk = riskScore(contradiction);
+    const previousRisk = prior ? riskScore(prior) : Math.max(20, currentRisk - 14);
+    const changeDirection = currentRisk > previousRisk ? "increased" : currentRisk < previousRisk ? "decreased" : "stayed the same";
+    const latestSignal = project.signals[Math.max(0, project.signals.length - 1 - index)];
+    return {
+      label: `Run ${reports.length - index} · ${formatDate(savedReport.generated_at)}`,
+      inputs: `${Math.max(1, project.signals.length - index)} signals used`,
+      diagnosis: contradiction.title || readout.activeContradiction,
+      riskScore: currentRisk,
+      contradiction: contradiction.title || readout.activeContradiction,
+      rootCause: brief.rootCause || readout.rootCause,
+      revenueRisk: revenueRiskFor(contradiction.title, brief.businessConsequence || readout.businessConsequence),
+      recommendedDecision: brief.recommendedDecision || readout.recommendedDecision,
+      changed: index === 0
+        ? cognitionChangeSummary(report, previousReport, latestSignal, changeDirection, previousRisk, currentRisk)
+        : "Previous diagnosis preserved as memory for comparison."
+    };
+  });
 }
 
-function cognitionChangeSummary(report, previousReport) {
+function cognitionChangeSummary(report, previousReport, latestSignal = null, changeDirection = "", previousRisk = "", currentRisk = "") {
   const current = primaryContradiction(report);
   if (!previousReport) return "Add a new signal below to show how Cognix updates the diagnosis from memory.";
   const previous = primaryContradiction(previousReport);
+  const signalLabel = latestSignal?.title || "the latest signal";
   if (previous.title !== current.title) {
-    return `Cognition changed because the latest signal shifted the active contradiction from ${previous.title.toLowerCase()} to ${current.title.toLowerCase()}.`;
+    return `Cognition changed because ${signalLabel} shifted the active contradiction from ${previous.title.toLowerCase()} to ${current.title.toLowerCase()}. Risk ${changeDirection} from ${previousRisk} to ${currentRisk}.`;
   }
-  return `Cognition stayed focused on ${current.title.toLowerCase()}, but the latest signal changed the evidence and confidence behind the diagnosis.`;
+  return `Cognition changed because ${signalLabel} introduced new evidence into the same contradiction. Risk ${changeDirection} from ${previousRisk} to ${currentRisk}.`;
 }
 
 function evidenceTrailRows(contradiction) {
@@ -1050,14 +1061,20 @@ function evidenceTrailRows(contradiction) {
   if (refs.length) {
     return refs.map((ref, index) => ({
       source: ref.signal_title || ref.signal_type || "GTM signal",
+      type: ref.signal_type || "GTM signal",
       claim: cleanEvidenceClaim(evidence[index] || evidence[0] || contradiction.title),
-      why: whyEvidenceMatters(contradiction.title)
+      why: whyEvidenceMatters(contradiction.title),
+      role: evidenceRoleFor(contradiction.title, index),
+      confidence: confidenceFor(contradiction.severity, index)
     }));
   }
-  return evidence.map((line) => ({
+  return evidence.map((line, index) => ({
     source: signalTitleFromEvidence(line) || "Evidence",
+    type: signalTypeFromEvidence(line) || "GTM signal",
     claim: cleanEvidenceClaim(line),
-    why: whyEvidenceMatters(contradiction.title)
+    why: whyEvidenceMatters(contradiction.title),
+    role: evidenceRoleFor(contradiction.title, index),
+    confidence: confidenceFor(contradiction.severity, index)
   }));
 }
 
@@ -1069,6 +1086,30 @@ function cleanEvidenceClaim(line = "") {
 
 function signalTitleFromEvidence(line = "") {
   return String(line).match(/^([^:]+):/)?.[1] || "";
+}
+
+function signalTypeFromEvidence(line = "") {
+  const source = signalTitleFromEvidence(line).toLowerCase();
+  if (source.includes("website")) return "Website copy";
+  if (source.includes("sales") || source.includes("deck")) return "Sales deck";
+  if (source.includes("enable")) return "Enablement asset";
+  if (source.includes("customer") || source.includes("prospect")) return "Customer feedback";
+  if (source.includes("launch")) return "Launch plan";
+  if (source.includes("founder") || source.includes("strategy")) return "Strategy note";
+  return "";
+}
+
+function evidenceRoleFor(title = "", index = 0) {
+  if (index === 0) return "Supports the diagnosis";
+  if (title.includes("Positioning") && index % 2 === 1) return "Contradicts the intended category claim";
+  if (title.includes("AI")) return "Shows narrative drift from generated content";
+  return index % 2 ? "Contradicts the diagnosis boundary" : "Supports the diagnosis";
+}
+
+function confidenceFor(severity = "", index = 0) {
+  if (String(severity).toLowerCase().includes("high")) return index > 2 ? "Medium-high" : "High";
+  if (String(severity).toLowerCase().includes("medium")) return "Medium";
+  return "Directional";
 }
 
 function whyEvidenceMatters(title = "") {
@@ -1143,6 +1184,13 @@ function decisionFor(title = "") {
   if (title.includes("AI")) return "Replace generic AI claims with specific buyer pain, proof, and category language.";
   if (title.includes("ICP")) return "Choose the primary buyer and subordinate secondary audiences.";
     return "Create one narrative hierarchy and make it the operating reference across GTM.";
+}
+
+function firstActionFor(title = "") {
+  if (title.includes("Commercial") || title.includes("Service") || title.includes("software")) return "Decide whether the first buying motion is product-led, guided, or strategic advisory, then update sales qualification against that motion.";
+  if (title.includes("AI")) return "Audit AI-generated GTM drafts against the approved buyer, proof, and category claim before they reach the field.";
+  if (title.includes("ICP")) return "Name the primary buyer and rewrite discovery, campaign targeting, and enablement around that buyer first.";
+  return "Lock one primary category claim, one buyer, one core promise, and one proof system before scaling more campaigns or enablement.";
 }
 
 function ownerFor(title = "") {
@@ -1355,8 +1403,25 @@ function bindEvents() {
   });
 
   $("[data-action='seed-sample']")?.addEventListener("click", () => {
-    state.projects = [withSampleCognition(structuredClone(sampleProject))];
+    state.projects = [withSampleCognition(cloneSampleProject())];
     state.activeProjectId = "sample-project";
+    saveLocalProjects();
+    renderShell();
+  });
+
+  $("[data-action='clear-memory']")?.addEventListener("click", () => {
+    const project = getActiveProject();
+    if (project) {
+      project.reports = project.reports.slice(0, 1);
+      project.memory = [];
+      project.updated_at = new Date().toISOString();
+    }
+    state.storageWarning = "";
+    try {
+      localStorage.removeItem(storageKey);
+    } catch {
+      // Clearing saved memory is best effort.
+    }
     saveLocalProjects();
     renderShell();
   });
