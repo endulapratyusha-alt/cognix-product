@@ -1,431 +1,468 @@
-const productsMenu = [
+const riskCards = [
   {
-    heading: "Product",
-    items: [
-      ["Cognix readout", "Turn fragmented GTM signals into a leadership-ready diagnosis."],
-      ["Fragmentation detection", "Find where strategy, messaging, sales narrative, proof, offers, and AI drafts diverge."],
-      ["Revenue risk mapping", "See which GTM contradictions may create pipeline, conversion, cycle, handoff, or churn risk."],
-      ["Executive reports", "Share decisions, owners, urgency, evidence, and expected GTM impact."]
-    ]
+    title: "Messaging drift",
+    signal: "Launch deck frames the release around capability while the website promises revenue-risk decisions.",
+    risk: "Buyers cannot tell what category to place the product in.",
+    action: "Anchor every launch asset to one revenue-risk promise."
   },
   {
-    heading: "Use cases",
-    items: [
-      ["AI-generated narrative drift", "Detect unsupported or inconsistent claims in AI-created GTM content."],
-      ["Positioning fragmentation", "Find when the company is being positioned as multiple things at once."],
-      ["Sales interpretation variance", "See where field talk tracks and enablement translate the story differently."],
-      ["Launch coherence risk", "Analyze whether launch strategy, proof, ICP, and sales materials are aligned before rollout."]
-    ]
+    title: "Sales narrative gaps",
+    signal: "Gong notes show reps leading with automation instead of buyer urgency.",
+    risk: "High activity produces weak qualified pipeline conversion.",
+    action: "Update objection handling around missed warning signs."
   },
   {
-    heading: "Outputs",
-    items: [
-      ["Active contradiction", "The GTM issue leadership needs to understand first."],
-      ["Root cause", "Why the contradiction emerged and where it is spreading."],
-      ["Evidence trail", "The signals behind the diagnosis."],
-      ["Recommended decision", "What leadership should fix first and who should own it."]
-    ]
+    title: "Competitive risk",
+    signal: "Competitive intel points to buying criteria, but sales decks still compare feature lists.",
+    risk: "The team is fighting the wrong frame in late-stage deals.",
+    action: "Rebuild the battlecard around interpretation, not workflow."
+  },
+  {
+    title: "Launch KPI misalignment",
+    signal: "Campaign reporting rewards volume while launch goals depend on sales confidence.",
+    risk: "Leadership sees motion before it sees conversion weakness.",
+    action: "Track narrative adoption beside pipeline quality."
   }
 ];
 
-const solutionsMenu = [
-  {
-    heading: "By team",
-    items: [
-      ["For founders", "See whether the original market thesis is surviving translation."],
-      ["For CMOs", "Understand why narrative, demand, and sales alignment are drifting."],
-      ["For product marketing", "Detect positioning fragmentation, proof gaps, launch risk, and buyer confusion."],
-      ["For RevOps", "See the interpretation issues behind pipeline quality and forecast noise."],
-      ["For enablement", "Understand whether the field is being trained on the right story and proof."]
-    ]
-  },
-  {
-    heading: "By moment",
-    items: [
-      ["Before a launch", "Catch coherence risk before market rollout."],
-      ["Before execution scales", "Decide what should change before the wrong story spreads."],
-      ["Before a board update", "Create a clear executive readout on GTM drift and revenue exposure."]
-    ]
-  },
-  {
-    heading: "By risk",
-    items: [
-      ["Buyer clarity", "Find when ICP, pain, promise, and proof stop reinforcing each other."],
-      ["Pipeline quality", "Connect GTM fragmentation to quality, qualification, and conversion risk."],
-      ["Sales cycle risk", "Identify where unclear narrative or proof can slow buying decisions."],
-      ["Churn exposure", "See expectation gaps before customer teams inherit them."]
-    ]
-  }
+const breakpoints = [
+  "Sales narrative does not map to buyer urgency",
+  "Launch proof points support activity, not conversion confidence",
+  "Competitive story is framed around features instead of revenue risk"
 ];
 
-const simpleMenus = {
-  customers: ["Design partners", "Beta cohort", "Use cases", "Customer stories, coming soon"],
-  resources: ["Revenue cognition manifesto", "GTM fragmentation report", "Blog", "Research library", "Founder notes", "Guides"],
-  company: ["About Cognix", "Why now", "Category POV", "Careers, coming soon", "Contact"]
-};
-
-const signalInputs = ["Strategy docs", "Sales calls", "Launch plans", "Website copy", "Customer feedback", "Win loss notes", "RevOps reports", "Enablement assets", "AI drafts"];
-const outputs = ["Contradiction", "Root cause", "Evidence trail", "Revenue risk", "What breaks next", "Decision brief"];
-
-const whatCards = [
-  ["Detect fragmentation", "Find where strategy, messaging, sales narrative, buyer definition, proof, offers, and AI-generated content are no longer aligned."],
-  ["Explain the cause", "Separate symptoms from root cause. Cognix shows why the contradiction emerged, which signals created it, and where it is spreading."],
-  ["Map revenue risk", "Understand how GTM fragmentation can create pipeline quality issues, sales interpretation variance, longer cycles, handoff gaps, churn risk, or weak conversion."],
-  ["Recommend the decision", "Get an executive cognition brief that explains what leadership should fix first, who should own it, and what impact to expect."]
-];
-
-const readInputs = [
-  "Website copy",
-  "Sales decks",
-  "Launch plans",
-  "Positioning docs",
-  "Customer feedback",
-  "Win loss notes",
-  "RevOps observations",
-  "Enablement assets",
-  "AI-generated GTM drafts",
-  "Competitive messaging",
-  "Founder strategy notes"
-];
-
-const readOutputs = [
-  "Active GTM contradiction",
-  "Root cause",
-  "Evidence trail",
-  "Revenue risk",
-  "Affected team",
-  "Affected funnel stage",
-  "What breaks next",
-  "Recommended leadership decision",
-  "Shareable executive report"
-];
-
-const comparisonLeft = [
-  "Capture more signals",
-  "Generate more content",
-  "Track pipeline data",
-  "Manage enablement assets",
-  "Monitor competitors",
-  "Run workflows"
-];
-
-const comparisonRight = [
-  "Understand what those signals mean",
-  "Detect when content drifts from strategy",
-  "Explain which GTM contradictions may create revenue risk",
-  "See whether enablement is reinforcing the right story",
-  "Understand how competitive pressure is changing your positioning",
-  "Decide what should change before execution scales the wrong story"
-];
-
-const useCases = [
-  ["AI-generated narrative drift", "Detect when AI-created sales, marketing, and enablement content starts introducing generic, unsupported, or inconsistent claims."],
-  ["Positioning fragmentation", "Find when the company is being positioned as multiple things at once, such as platform, service, workflow tool, operating layer, or transformation solution."],
-  ["Sales interpretation variance", "See where sales talk tracks, customer conversations, and enablement assets are translating the GTM story differently from leadership or marketing."],
-  ["Launch coherence risk", "Analyze whether launch strategy, website copy, sales materials, proof points, ICP, and customer-facing narrative are aligned before market rollout."],
-  ["Revenue-risk explanation", "Connect GTM fragmentation to pipeline quality, conversion risk, sales cycle risk, handoff gaps, forecast confidence, or churn exposure."]
-];
-
-const audienceCards = [
-  ["Founders", "See whether your original market thesis is surviving translation across website, sales, product, customer feedback, and AI-generated GTM content."],
-  ["CMOs and marketing leaders", "Understand why narrative, demand, sales alignment, and board-ready GTM clarity are drifting before pipeline quality suffers."],
-  ["Product marketing leaders", "Detect positioning fragmentation, proof gaps, launch risk, buyer confusion, and sales narrative variance with evidence."],
-  ["RevOps leaders", "See the GTM interpretation issues behind pipeline quality, qualification inconsistency, handoff gaps, and forecast noise."],
-  ["Enablement leaders", "Understand whether the field is being trained on the right story, the right buyer, the right proof, and the right commercial motion."]
-];
-
-const steps = [
-  ["Add company context", "Tell Cognix who you sell to, what motion you run, what market you are in, and what GTM question you want answered."],
-  ["Paste GTM signals", "Add website copy, sales notes, launch docs, customer feedback, AI-generated drafts, RevOps observations, or enablement snippets."],
-  ["Run cognition", "Cognix extracts claims, buyers, proof, offers, objections, ambiguity signals, contradictions, and revenue-risk clues."],
-  ["Review the diagnosis", "See the active contradiction, root cause, evidence, affected teams, revenue risk, and what breaks next."],
-  ["Share the executive report", "Export or share a leadership-ready readout with recommended decisions, owners, urgency, and expected GTM impact."]
+const evidence = [
+  ["Gong", "6 of 9 calls led with efficiency language before pain recognition"],
+  ["Launch doc", "Primary claim varies across PMM brief, homepage, and sales deck"],
+  ["CRM notes", "Qualified opportunities mention urgency only after discovery"],
+  ["Slack", "Sales asks for new objection handling two weeks after launch kickoff"]
 ];
 
 const pricingCards = [
-  ["Free readout", "$0", "Run your first GTM fragmentation readout.", ["1 workspace", "5 GTM signals", "1 cognition run", "Basic evidence trail", "Limited report"], "Run free readout"],
-  ["Starter beta", "$99/month", "For founders and solo GTM leaders.", ["1 workspace", "25 signals per month", "10 cognition runs per month", "3 saved reports", "30-day memory", "Manual inputs"], "Start beta"],
-  ["Team beta", "$249/month", "For small GTM teams.", ["3 workspaces", "100 signals per month", "50 cognition runs per month", "10 saved reports", "90-day memory", "Scenario simulations", "3 users", "Shareable reports"], "Start team beta"],
-  ["Custom", "Talk to us", "For larger teams or guided beta support.", ["Higher signal volume", "Guided onboarding", "Custom report format", "Priority support"], "Talk to us"]
+  {
+    title: "Free readout",
+    price: "$0",
+    bestFor: "Trying Cognix on one GTM motion",
+    items: ["1 limited GTM risk readout", "Sample revenue-risk score", "Top 3 GTM breakpoints", "Limited course correction", "Shareable preview"],
+    cta: "Run free readout"
+  },
+  {
+    title: "Starter beta",
+    price: "$99/month",
+    bestFor: "Solo PMMs, founders, and lean GTM teams",
+    items: ["5 full GTM risk readouts per month", "3 saved projects", "Revenue-risk scoring", "Evidence trail", "Course correction plan", "Exportable executive summary"],
+    cta: "Start beta",
+    featured: true
+  },
+  {
+    title: "Team beta",
+    price: "$249/month",
+    bestFor: "PMM teams working with sales and enablement",
+    items: ["20 GTM risk readouts per month", "Team workspace", "Saved projects", "Messaging, launch, competitive, and enablement readouts", "Shareable executive reports", "Priority beta access"],
+    cta: "Start team beta"
+  },
+  {
+    title: "Design partner",
+    price: "Custom",
+    bestFor: "Series A to C GTM teams shaping the roadmap",
+    items: ["Custom readout workflows", "Live feedback sessions", "Roadmap influence", "Advanced signal analysis", "Founder access"],
+    cta: "Apply as design partner"
+  }
 ];
 
-const esc = (value = "") => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
+const valueCards = [
+  "Find launch risk before launch day",
+  "Turn messaging gaps into revenue decisions",
+  "Show sales where the story is breaking",
+  "Tie PMM work to pipeline, conversion, and sales confidence",
+  "Create executive-ready GTM readouts"
+];
 
-function slug(value) {
-  return String(value).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-}
+const heroSignals = ["Launch brief", "Sales deck", "Gong notes", "Competitive notes", "Customer feedback"];
 
-function menuColumn(column) {
+const demoSteps = [
+  {
+    title: "Add signals",
+    items: ["Launch docs", "Sales notes", "Competitive intel", "Customer feedback", "Slack threads", "Campaign goals"],
+    artifactLabel: "Signals attached",
+    artifactValue: "6 sources",
+    artifactDetail: "Cognix reads the motion from the documents and conversations already shaping GTM execution."
+  },
+  {
+    title: "Detect breakpoints",
+    items: ["Messaging drift", "Sales narrative gaps", "ICP mismatch", "Enablement weakness", "Competitive confusion"],
+    artifactLabel: "GTM breakpoints",
+    artifactValue: "5 found",
+    artifactDetail: "The readout separates surface noise from the breaks most likely to affect buyer urgency."
+  },
+  {
+    title: "Score revenue risk",
+    items: ["Pipeline risk", "Conversion risk", "Sales adoption risk", "Launch KPI risk"],
+    artifactLabel: "Revenue-risk score",
+    artifactValue: "72%",
+    artifactDetail: "Risk is mapped to the revenue outcome the motion is supposed to influence."
+  },
+  {
+    title: "Course correct",
+    items: ["Fix the narrative", "Update enablement", "Sharpen competitive story", "Align to KPI"],
+    artifactLabel: "Course correction",
+    artifactValue: "4 moves",
+    artifactDetail: "The readout turns evidence into next actions for PMM, sales, and leadership."
+  }
+];
+
+const signupDiagnoses = [
+  "Launch",
+  "Messaging",
+  "Sales enablement",
+  "Competitive positioning",
+  "Pipeline narrative",
+  "Other"
+];
+
+const state = {
+  betaSubmitted: false,
+  activeDemoStep: 0
+};
+
+const esc = (value = "") =>
+  String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+
+function productPreview() {
   return `
-    <div class="mega-column">
-      <p>${esc(column.heading)}</p>
-      ${column.items.map(([title, description, href]) => `
-        <a class="mega-link" href="${href || `#${slug(title)}`}">
-          <span class="menu-icon"></span>
-          <span><strong>${esc(title)}</strong><small>${esc(description)}</small></span>
-        </a>`).join("")}
-    </div>`;
+    <aside class="product-preview" aria-label="Cognix product preview">
+      <div class="signal-flow" aria-hidden="true">
+        <div class="signal-column">
+          ${heroSignals.map((signal) => `<span>${esc(signal)}</span>`).join("")}
+        </div>
+        <div class="flow-lines">
+          <i></i><i></i><i></i><i></i>
+        </div>
+        <div class="readout-chip">Readout</div>
+      </div>
+      <div class="preview-topline">
+        <span>GTM risk readout</span>
+        <span>Launch narrative</span>
+      </div>
+      <div class="score-row">
+        <div>
+          <p>Revenue-risk score</p>
+          <strong>72%</strong>
+        </div>
+        <div class="score-ring" aria-hidden="true"><span></span></div>
+      </div>
+      <div class="preview-stack">
+        <article>
+          <span>GTM breakpoint</span>
+          <strong>Sales narrative does not map to buyer urgency</strong>
+        </article>
+        <article>
+          <span>Revenue implication</span>
+          <strong>High activity, weak qualified pipeline conversion</strong>
+        </article>
+        <article>
+          <span>Course correction</span>
+          <strong>Reframe launch narrative around buyer pain and update objection handling</strong>
+        </article>
+      </div>
+    </aside>`;
 }
 
-function simpleMenu(name, items) {
+function signalCard({ title, signal, risk, action }) {
   return `
-    <div class="simple-menu" data-menu-panel="${name}">
-      ${items.map((item) => `<a href="#${slug(item)}">${esc(item)}</a>`).join("")}
-    </div>`;
-}
-
-function cardGrid(items, className = "") {
-  return items.map(([title, body], index) => `
-    <article class="insight-card ${className}" style="--i:${index}">
-      <span class="card-rule"></span>
+    <article class="signal-card">
+      <div class="card-icon" aria-hidden="true"></div>
       <h3>${esc(title)}</h3>
-      <p>${esc(body)}</p>
-    </article>`).join("");
+      <dl>
+        <div>
+          <dt>Signal</dt>
+          <dd>${esc(signal)}</dd>
+        </div>
+        <div>
+          <dt>Risk</dt>
+          <dd>${esc(risk)}</dd>
+        </div>
+        <div>
+          <dt>Action</dt>
+          <dd>${esc(action)}</dd>
+        </div>
+      </dl>
+    </article>`;
 }
 
-function listBlock(title, items) {
+function riskReadout() {
   return `
-    <div class="list-block">
-      <h3>${esc(title)}</h3>
-      <div class="pill-grid">
-        ${items.map((item) => `<span>${esc(item)}</span>`).join("")}
+    <div class="readout-ui" aria-label="GTM risk readout mockup">
+      <div class="readout-header">
+        <div>
+          <span class="ui-label">GTM risk readout</span>
+          <h3>Spring launch narrative</h3>
+        </div>
+        <span class="status-pill">Decision needed</span>
+      </div>
+      <div class="readout-grid">
+        <section class="readout-score">
+          <span>Revenue-risk score</span>
+          <strong>72%</strong>
+          <div class="meter"><i></i></div>
+          <p>Risk is concentrated in sales narrative adoption and proof alignment.</p>
+        </section>
+        <section class="readout-panel">
+          <span class="ui-label">Top 3 GTM breakpoints</span>
+          <ol>
+            ${breakpoints.map((item) => `<li>${esc(item)}</li>`).join("")}
+          </ol>
+        </section>
+        <section class="readout-panel evidence-panel">
+          <span class="ui-label">Evidence trail</span>
+          <div class="evidence-list">
+            ${evidence.map(([source, detail]) => `
+              <div>
+                <b>${esc(source)}</b>
+                <p>${esc(detail)}</p>
+              </div>`).join("")}
+          </div>
+        </section>
+        <section class="readout-panel implication-panel">
+          <span class="ui-label">Revenue implication</span>
+          <p>High engagement is masking weak qualified pipeline conversion. Sales is generating activity, but the story is not creating enough buyer urgency to move serious opportunities forward.</p>
+        </section>
+        <section class="readout-panel correction-panel">
+          <span class="ui-label">Course correction</span>
+          <p>Reframe the launch around the missed-warning-sign narrative, rebuild the first-call story around buyer pain, and update objection handling before the next campaign wave.</p>
+        </section>
       </div>
     </div>`;
 }
 
-function cognitionVisual() {
+function demoReadoutCard() {
+  const step = demoSteps[state.activeDemoStep] || demoSteps[0];
   return `
-    <div class="cognition-visual" aria-label="Fragmented GTM signals flowing into a Cognix readout">
-      <div class="visual-grid visual-grid-left">
-        ${signalInputs.map((item, index) => `<span style="--i:${index}">${esc(item)}</span>`).join("")}
+    <aside class="demo-readout-card" aria-live="polite">
+      <div class="demo-card-header">
+        <span>GTM risk readout</span>
+        <strong>${esc(step.title)}</strong>
       </div>
-      <div class="cognition-core">
-        <span>GTM signals</span>
-        <strong>Cognix</strong>
-        <small>readout</small>
+      <div class="demo-score-band">
+        <span>${esc(step.artifactLabel)}</span>
+        <strong>${esc(step.artifactValue)}</strong>
       </div>
-      <div class="visual-grid visual-grid-right">
-        ${outputs.map((item, index) => `<span style="--i:${index}">${esc(item)}</span>`).join("")}
+      <p>${esc(step.artifactDetail)}</p>
+      <div class="demo-mini-map" aria-hidden="true">
+        <i></i><i></i><i></i>
+        <b></b>
       </div>
-      <svg viewBox="0 0 840 520" role="presentation" aria-hidden="true">
-        <defs>
-          <linearGradient id="signalLine" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0" stop-color="#3448FF" stop-opacity="0.1" />
-            <stop offset="0.48" stop-color="#3448FF" stop-opacity="0.72" />
-            <stop offset="1" stop-color="#6E5BFF" stop-opacity="0.18" />
-          </linearGradient>
-        </defs>
-        <path d="M135 72 C280 86 302 216 420 260 C302 302 270 438 135 446" />
-        <path d="M135 145 C266 150 312 226 420 260 C306 272 262 348 135 374" />
-        <path d="M135 220 C266 220 316 244 420 260 C310 286 258 300 135 302" />
-        <path d="M705 92 C596 114 550 210 420 260 C556 296 592 390 705 428" />
-        <path d="M705 170 C594 178 548 232 420 260 C550 278 594 326 705 354" />
-        <path d="M705 246 C590 246 548 252 420 260 C548 266 590 278 705 286" />
-      </svg>
-    </div>`;
+    </aside>`;
 }
 
-function pricingGrid() {
-  return pricingCards.map(([title, price, body, includes, cta]) => `
-    <article class="pricing-card">
-      <h3>${esc(title)}</h3>
-      <strong>${esc(price)}</strong>
-      <p>${esc(body)}</p>
+function demoSection() {
+  return `
+    <section class="demo-section" id="how-readout-works">
+      <div class="section demo-shell">
+        <div class="section-header centered">
+          <span class="section-kicker">Product demo</span>
+          <h2>How a GTM risk readout works</h2>
+        </div>
+        <div class="demo-flow">
+          <div class="demo-steps" role="list">
+            ${demoSteps.map((step, index) => `
+              <button class="demo-step ${index === state.activeDemoStep ? "active" : ""}" type="button" role="listitem" data-demo-step="${index}">
+                <span>${index + 1}</span>
+                <strong>${esc(step.title)}</strong>
+                <small>${step.items.map((item) => esc(item)).join(", ")}</small>
+              </button>`).join("")}
+          </div>
+          ${demoReadoutCard()}
+        </div>
+        <p class="demo-closing">Cognix does not give you more GTM noise.<br>It tells you which signal matters, why it threatens revenue, and what to fix next.</p>
+      </div>
+    </section>`;
+}
+
+function pricingCard(card) {
+  return `
+    <article class="pricing-card ${card.featured ? "featured" : ""}">
+      ${card.featured ? `<span class="plan-badge">Best beta entry</span>` : ""}
+      <h3>${esc(card.title)}</h3>
+      <strong>${esc(card.price)}</strong>
+      <p><b>Best for:</b> ${esc(card.bestFor)}</p>
       <ul>
-        ${includes.map((item) => `<li>${esc(item)}</li>`).join("")}
+        ${card.items.map((item) => `<li>${esc(item)}</li>`).join("")}
       </ul>
-      <a class="btn btn-secondary" href="#beta">${esc(cta)}</a>
+      <a class="btn ${card.featured ? "btn-primary" : "btn-secondary"}" href="#beta-signup">${esc(card.cta)}</a>
+    </article>`;
+}
+
+function valueGrid() {
+  return valueCards.map((item, index) => `
+    <article class="value-card">
+      <span>${String(index + 1).padStart(2, "0")}</span>
+      <h3>${esc(item)}</h3>
     </article>`).join("");
+}
+
+function betaSignup() {
+  if (state.betaSubmitted) {
+    return `
+      <div class="signup-confirmation" role="status">
+        <span class="section-kicker">Beta request</span>
+        <h2>Your beta request is in.</h2>
+        <p>Next step: run your first GTM risk readout.</p>
+        <a class="btn btn-primary btn-large" href="product.html">Run the product flow</a>
+      </div>`;
+  }
+
+  return `
+    <form class="signup-form" id="beta-form">
+      <div class="field">
+        <label for="beta-name">Name</label>
+        <input id="beta-name" name="name" type="text" autocomplete="name" required />
+      </div>
+      <div class="field">
+        <label for="beta-email">Work email</label>
+        <input id="beta-email" name="email" type="text" inputmode="email" autocomplete="email" required />
+      </div>
+      <div class="field">
+        <label for="beta-company">Company</label>
+        <input id="beta-company" name="company" type="text" autocomplete="organization" required />
+      </div>
+      <div class="field">
+        <label for="beta-role">Role</label>
+        <input id="beta-role" name="role" type="text" autocomplete="organization-title" required />
+      </div>
+      <div class="field full">
+        <label for="beta-diagnose">What do you want to diagnose?</label>
+        <select id="beta-diagnose" name="diagnose" required>
+          ${signupDiagnoses.map((item) => `<option>${esc(item)}</option>`).join("")}
+        </select>
+      </div>
+      <button class="btn btn-primary btn-large full" type="submit">Request beta access</button>
+    </form>`;
 }
 
 function render() {
   document.querySelector("#app").innerHTML = `
     <div class="site-shell">
       <header class="site-header">
-        <div class="nav-bar">
+        <nav class="nav-bar" aria-label="Primary navigation">
           <a class="brand" href="#top" aria-label="Cognix home">
-            <span class="brand-mark"><i></i></span>
+            <span class="brand-mark" aria-hidden="true"></span>
             <span>Cognix</span>
           </a>
-          <button class="mobile-toggle" type="button" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
-          <nav class="nav-links" aria-label="Primary navigation">
-            <div class="nav-item">
-              <button type="button" data-menu="products">Product</button>
-              <div class="mega-menu" data-menu-panel="products">${productsMenu.map(menuColumn).join("")}</div>
-            </div>
-            <div class="nav-item">
-              <button type="button" data-menu="solutions">Solutions</button>
-              <div class="mega-menu" data-menu-panel="solutions">${solutionsMenu.map(menuColumn).join("")}</div>
-            </div>
-            ${Object.entries(simpleMenus).map(([name, items]) => `
-              <div class="nav-item">
-                <button type="button" data-menu="${name}">${name[0].toUpperCase()}${name.slice(1)}</button>
-                ${simpleMenu(name, items)}
-              </div>`).join("")}
-          </nav>
-          <div class="nav-actions">
-            <a class="login-link" href="product.html">Open product</a>
-            <a class="btn btn-primary" href="#beta">Run free readout</a>
+          <button class="mobile-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+            <span></span>
+            <span></span>
+          </button>
+          <div class="nav-links">
+            <a href="#product">Product</a>
+            <a href="#readout">Readout</a>
+            <a href="#why-now">Why now</a>
+            <a href="#pricing">Pricing</a>
           </div>
-        </div>
+          <div class="nav-actions">
+            <a class="text-link" href="product.html">See the product</a>
+            <a class="btn btn-primary" href="#beta-signup">Run a free GTM risk readout</a>
+          </div>
+        </nav>
       </header>
 
       <main id="top">
-        <section class="hero-section section">
-          <div class="hero-copy">
-            <p class="eyebrow">Revenue cognition for AI-era GTM teams</p>
-            <h1>Detect GTM fragmentation before it becomes revenue risk.</h1>
-            <p class="subheadline">Cognix reads strategy, sales, marketing, RevOps, customer, market, and AI-generated GTM signals to show where GTM truth is breaking, why it matters, and what leadership should fix first.</p>
-            <p class="supporting">Built for GTM teams where positioning, buyer clarity, sales execution, and revenue decisions cannot afford to drift.</p>
-            <div class="hero-actions">
-              <a class="btn btn-primary btn-large" href="#beta">Run your first Cognix readout</a>
-              <a class="btn btn-secondary btn-large" href="#how-it-works">See how it works</a>
+        <section class="hero-section">
+          <div class="hero-inner">
+            <div class="hero-copy">
+              <p class="eyebrow">Revenue cognition for PMM and GTM leaders</p>
+              <h1>Know why your GTM motion is missing before revenue does.</h1>
+              <p class="subheadline">Cognix turns messaging, launch, enablement, competitive, and customer signals into a GTM risk readout that shows where pipeline, conversion, and sales confidence are exposed.</p>
+              <div class="hero-actions">
+                <a class="btn btn-primary btn-large" href="#beta-signup">Run a free GTM risk readout</a>
+                <a class="btn btn-secondary btn-large" href="product.html">See the product</a>
+              </div>
+              <p class="hero-microcopy">Built for launches, messaging updates, enablement motions, competitive campaigns, and pipeline narratives.</p>
             </div>
-            <div class="hero-proof">
-              <span>No integrations required to start.</span>
-              <span>Paste 3 to 5 GTM signals.</span>
-              <span>See where your GTM story is fragmenting.</span>
-            </div>
-          </div>
-          ${cognitionVisual()}
-        </section>
-
-        <section class="section category-section">
-          <div class="section-header centered">
-            <p class="eyebrow">Category</p>
-            <h2>Revenue cognition infrastructure for AI-era GTM teams.</h2>
-            <p>Cognix turns fragmented GTM signals into trusted leadership decisions. It reads strategy, sales, marketing, RevOps, customer, market, and AI-generated signals to show where GTM truth is breaking, why it matters, what will break next, and what leadership should fix first.</p>
-          </div>
-          <div class="three-up">
-            ${cardGrid([
-              ["See the drift", "Detect where the company is no longer operating from one coherent GTM story."],
-              ["Understand the risk", "Connect fragmented interpretation to buyer confusion, weak conversion, sales variance, and forecast noise."],
-              ["Decide what changes", "Give leadership a clear view of the first decision that will restore GTM coherence."]
-            ], "category-card")}
+            ${productPreview()}
           </div>
         </section>
 
-        <section class="problem-section dark-band">
-          <div class="section split-section">
-            <div>
-              <p class="eyebrow">Problem</p>
-              <h2>Your GTM truth is fragmenting faster than your team can see it.</h2>
-              <p>Modern GTM teams are surrounded by signals.</p>
-              <p>Sales calls. CRM notes. Launch plans. Website copy. Customer feedback. Win loss themes. Enablement assets. RevOps reports. AI-generated drafts. Leadership strategy docs.</p>
-              <p>Each system captures a piece of the truth. But none of them tells leadership whether the company is still operating from one coherent GTM story.</p>
-            </div>
-            <div class="question-panel">
-              <ul>
-                <li>Leadership says one thing.</li>
-                <li>Marketing turns it into another.</li>
-                <li>Sales adapts it in the field.</li>
-                <li>Enablement trains a simplified version.</li>
-                <li>RevOps sees the symptoms in pipeline.</li>
-                <li>Customer teams inherit the expectation gap.</li>
-                <li>AI tools generate even more versions at scale.</li>
-              </ul>
-              <p>By the time the story reaches the buyer, the company may be selling multiple versions of itself.</p>
-              <strong>The risk is not lack of data. The risk is fragmented interpretation.</strong>
+        <section class="section problem-section">
+          <div class="section-kicker">The problem</div>
+          <div class="split">
+            <h2>Your GTM team is not short on signals. It is short on interpretation.</h2>
+            <div class="problem-copy">
+              <p>Your CRM says one thing.<br>Sales calls say another.<br>Campaigns show activity.<br>Slack shows confusion.<br>Customers expose gaps.<br>Leadership wants answers.</p>
+              <p>By the time everyone agrees something is broken, the launch is already underperforming.</p>
             </div>
           </div>
         </section>
 
-        <section class="section product-section" id="cognix-readout">
+        <section class="section product-section" id="product">
           <div class="section-header">
-            <p class="eyebrow">What Cognix does</p>
-            <h2>Cognix turns scattered GTM signals into one leadership-ready view of what is breaking.</h2>
+            <span class="section-kicker">Signal interpretation</span>
+            <h2>Cognix shows where GTM is breaking and what it means for revenue.</h2>
+            <p>Each readout connects scattered signals to GTM breakpoints, evidence trails, and course correction.</p>
           </div>
-          <div class="four-up">${cardGrid(whatCards, "product-card")}</div>
-        </section>
-
-        <section class="audit-section" id="readout-preview">
-          <div class="section audit-shell">
-            <div class="audit-copy">
-              <p class="eyebrow">Product readout preview</p>
-              <h2>From messy GTM inputs to a clear executive decision.</h2>
-              <p>Cognix found positioning fragmentation across 5 GTM signals.</p>
-              <p>The company is using platform, advisory, AI transformation, and workflow narratives interchangeably. The root cause is that the commercial motion has not been clearly defined across marketing, sales, and launch materials.</p>
-              <p>If unresolved, sales interpretation variance will increase, buyer clarity will weaken, and pipeline quality may become harder to explain.</p>
-              <p><strong>Recommended move:</strong> create a positioning hierarchy with one category claim, one primary buyer, one core promise, one proof system, and one field activation motion.</p>
-            </div>
-            <div class="audit-lists">
-              ${listBlock("Signals Cognix can read", readInputs)}
-              ${listBlock("What Cognix returns", readOutputs)}
-            </div>
+          <div class="signal-grid">
+            ${riskCards.map(signalCard).join("")}
           </div>
         </section>
 
-        <section class="section differentiation-section">
-          <div class="section-header centered">
-            <p class="eyebrow">Differentiation</p>
-            <h2>Not another dashboard. Not another AI summary. Cognix is built for GTM judgment.</h2>
-            <p>Dashboards show what happened. Copilots generate more output. Workflow tools help teams execute. Cognix answers a different question: Is the GTM system still making sense?</p>
-            <p>It does not just summarize assets. It interprets the relationships between them. Cognix detects when narratives compete, when proof does not support the claim, when sales and marketing translate strategy differently, when AI-generated content drifts from the intended story, and when a GTM issue is likely to become a revenue issue.</p>
-          </div>
-          <div class="comparison-grid">
-            ${listBlock("Other tools help you", comparisonLeft)}
-            ${listBlock("Cognix helps you", comparisonRight)}
+        ${demoSection()}
+
+        <section class="readout-section" id="readout">
+          <div class="section">
+            <div class="section-header centered">
+              <span class="section-kicker">Revenue cognition</span>
+              <h2>See the risk before the miss.</h2>
+            </div>
+            ${riskReadout()}
           </div>
         </section>
 
-        <section class="why-now dark-band">
-          <div class="section split-section">
-            <div>
-              <p class="eyebrow">Why now</p>
-              <h2>AI has made GTM fragmentation harder to see and easier to scale.</h2>
-            </div>
-            <div>
-              <p>Every GTM team is using AI. AI drafts campaigns, summarizes calls, writes enablement, generates sales emails, produces competitive analysis, creates launch content, rewrites messaging, and builds reports.</p>
-              <p>The problem is not that AI creates content. The problem is that every team can now generate local intelligence without a shared system for strategic coherence.</p>
-              <p>Leadership may not see the drift until it shows up as weak conversion, inconsistent qualification, longer sales cycles, or churn risk.</p>
-              <p>Cognix gives AI-era GTM teams a way to govern meaning, not just produce more output.</p>
+        <section class="section why-section" id="why-now">
+          <div class="split">
+            <h2>Modern GTM teams create more signals than they can interpret.</h2>
+            <div class="why-copy">
+              <p>More summaries do not explain why pipeline is slowing.</p>
+              <p>More reporting views do not show why sales is not using the story.</p>
+              <p>More content does not tell PMM teams which narrative will convert.</p>
+              <p>Cognix gives teams the missing interpretation layer: GTM signals translated into revenue decisions.</p>
             </div>
           </div>
-        </section>
-
-        <section class="section use-case-section">
-          <div class="section-header">
-            <p class="eyebrow">Use cases</p>
-            <h2>Where Cognix creates value first</h2>
-          </div>
-          <div class="product-grid">${cardGrid(useCases, "solution-card")}</div>
-        </section>
-
-        <section class="section" id="who-it-is-for">
-          <div class="section-header">
-            <p class="eyebrow">Who it is for</p>
-            <h2>Built for GTM leaders who need clarity across the system.</h2>
-          </div>
-          <div class="solution-grid">${cardGrid(audienceCards, "solution-card")}</div>
-        </section>
-
-        <section class="section stage-section" id="how-it-works">
-          <div class="section-header centered">
-            <p class="eyebrow">How it works</p>
-            <h2>Run a Cognix readout in minutes.</h2>
-          </div>
-          <div class="five-step-grid">${cardGrid(steps, "stage-card")}</div>
         </section>
 
         <section class="pricing-section" id="pricing">
           <div class="section">
-            <div class="section-header centered">
-              <p class="eyebrow">Pricing</p>
-              <h2>Start with a free GTM fragmentation readout.</h2>
-              <p>Cognix is built for product-led adoption. Start free, run your first readout, and upgrade when you need memory, reports, more signals, and team access.</p>
+            <div class="section-header">
+              <span class="section-kicker">Pricing</span>
+              <h2>Start with one readout. Expand when Cognix finds what your team could not see.</h2>
+              <p>Run a free GTM risk readout. Upgrade when you need more readouts, saved projects, team collaboration, and executive-ready reports.</p>
+              <p class="pricing-note">The beta is priced to land quickly, prove revenue value, and expand when GTM leaders see the breakpoints their team missed.</p>
             </div>
-            <div class="pricing-grid">${pricingGrid()}</div>
+            <div class="pricing-grid">
+              ${pricingCards.map(pricingCard).join("")}
+            </div>
           </div>
         </section>
 
-        <section class="final-cta" id="beta">
-          <div class="section final-cta-inner">
-            <p class="eyebrow">Get started</p>
-            <h2>Find the GTM contradiction before your buyers do.</h2>
-            <p>Start with a free Cognix readout. Paste a few GTM signals and see where your story, buyer, proof, offer, and execution path are starting to fragment.</p>
-            <div class="hero-actions">
-              <a class="btn btn-primary btn-large" href="mailto:founders@cognix.ai?subject=Cognix readout">Run your first Cognix readout</a>
+        <section class="section value-section">
+          <div class="section-header centered">
+            <span class="section-kicker">Why teams pay for Cognix</span>
+            <h2>PMM work becomes easier to fund when it is tied to revenue risk.</h2>
+          </div>
+          <div class="value-grid">${valueGrid()}</div>
+        </section>
+
+        <section class="final-cta" id="beta-signup">
+          <div class="signup-shell">
+            <div class="signup-copy">
+              <span class="section-kicker">Request beta access</span>
+              <h2>Before your next launch misses, run the readout.</h2>
+              <p>Cognix turns scattered GTM signals into revenue-risk decisions. Tell us what you want to diagnose and we will route you to the right beta path.</p>
             </div>
+            ${betaSignup()}
           </div>
         </section>
       </main>
@@ -437,31 +474,35 @@ function render() {
 function bindNavigation() {
   const header = document.querySelector(".site-header");
   const toggle = document.querySelector(".mobile-toggle");
-  const nav = document.querySelector(".nav-links");
 
   toggle.addEventListener("click", () => {
     const open = header.classList.toggle("mobile-open");
     toggle.setAttribute("aria-expanded", String(open));
   });
 
-  document.querySelectorAll("[data-menu]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const item = button.closest(".nav-item");
-      if (window.matchMedia("(max-width: 900px)").matches) {
-        item.classList.toggle("open");
-      }
-    });
-  });
-
-  nav.addEventListener("mouseleave", () => {
-    document.querySelectorAll(".nav-item.open").forEach((item) => item.classList.remove("open"));
-  });
-
-  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-    anchor.addEventListener("click", () => {
+  document.querySelectorAll(".nav-links a, .nav-actions a").forEach((link) => {
+    link.addEventListener("click", () => {
       header.classList.remove("mobile-open");
       toggle.setAttribute("aria-expanded", "false");
     });
+  });
+
+  document.querySelector("#beta-form")?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    state.betaSubmitted = true;
+    render();
+    document.querySelector("#beta-signup")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  document.querySelectorAll("[data-demo-step]").forEach((button) => {
+    const setActiveStep = () => {
+      state.activeDemoStep = Number(button.dataset.demoStep);
+      render();
+    };
+
+    button.addEventListener("mouseenter", setActiveStep);
+    button.addEventListener("focus", setActiveStep);
+    button.addEventListener("click", setActiveStep);
   });
 }
 
