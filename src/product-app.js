@@ -69,6 +69,57 @@ const signalInputs = [
   }
 ];
 
+const bucketDefinitions = [
+  {
+    id: "launch-brief",
+    title: "Launch docs",
+    description: "Launch briefs, rollout plans, campaign goals, KPI targets",
+    keywords: ["launch", "rollout", "release", "campaign", "goal", "kpi", "pipeline"]
+  },
+  {
+    id: "messaging-doc",
+    title: "Messaging and positioning",
+    description: "Positioning docs, homepage copy, category narrative, ICP notes",
+    keywords: ["messaging", "positioning", "homepage", "category", "narrative", "icp", "buyer"]
+  },
+  {
+    id: "sales-deck",
+    title: "Sales narrative",
+    description: "Sales decks, discovery talk tracks, objection handling, business case",
+    keywords: ["sales", "deck", "discovery", "objection", "rep", "business case", "enablement"]
+  },
+  {
+    id: "competitive-notes",
+    title: "Competitive intel",
+    description: "Battlecards, competitor notes, pricing pressure, win loss themes",
+    keywords: ["competitor", "competitive", "battlecard", "pricing", "vendor", "criteria"]
+  },
+  {
+    id: "customer-feedback",
+    title: "Customer feedback",
+    description: "Customer quotes, confusion notes, interviews, advisory feedback",
+    keywords: ["customer", "prospect", "buyer said", "feedback", "confusion", "interview"]
+  },
+  {
+    id: "sales-call-notes",
+    title: "Sales call notes",
+    description: "Gong notes, call summaries, stalled deals, qualification concerns",
+    keywords: ["gong", "call", "demo", "qualified", "opportunity", "deal", "stage"]
+  },
+  {
+    id: "team-feedback",
+    title: "Team feedback",
+    description: "Slack threads, PMM notes, RevOps feedback, leadership concerns",
+    keywords: ["slack", "team", "pmm", "revops", "leadership", "field", "internal"]
+  },
+  {
+    id: "pipeline-notes",
+    title: "Campaign and pipeline",
+    description: "Campaign reports, pipeline notes, conversion concerns, forecast commentary",
+    keywords: ["pipeline", "conversion", "forecast", "campaign", "revenue", "qualified demos"]
+  }
+];
+
 const kpis = [
   "Pipeline created",
   "Qualified demos",
@@ -135,6 +186,9 @@ const state = {
     "competitive-notes": "Competitors are positioned as reporting and activity products. Notes explain where Cognix is different, but do not help reps change buying criteria.",
     "sales-call-notes": "Buyer asked whether this is for launch planning, enablement review, or pipeline inspection. Rep returned to product capability instead of business pain."
   },
+  intakeDump: "",
+  attachedFiles: [],
+  sortMessage: "5 sample signals sorted into 5 buckets.",
   loadingIndex: 0,
   actionMessage: ""
 };
@@ -213,21 +267,65 @@ function createReadoutScreen() {
 }
 
 function addSignalsScreen() {
+  const attachedCount = state.attachedFiles.length;
+  const sortedCount = Object.values(state.signals).filter(Boolean).length;
   return `
     <div class="stage-header">
       <span class="eyebrow">Signal intake</span>
       <h1>Add the signals Cognix should interpret.</h1>
-      <p>Paste real GTM material or use the prefilled examples. Cognix reads each signal for messaging drift, evidence trails, and revenue-risk clues.</p>
+      <p>Drop files, attach docs, or paste a messy GTM dump. Cognix reads and sorts the material into interpretation buckets before the readout runs.</p>
     </div>
-    <div class="signal-input-grid">
-      ${signalInputs.map((signal) => `
-        <label class="signal-input-card" for="${esc(signal.id)}">
-          <span>${esc(signal.title)}</span>
-          <textarea id="${esc(signal.id)}" data-signal="${esc(signal.id)}" placeholder="${esc(signal.placeholder)}">${esc(state.signals[signal.id] || "")}</textarea>
-          <small>${state.signals[signal.id] ? "Signal attached" : "Paste text or simulate upload"}</small>
-        </label>`).join("")}
+
+    <div class="intake-console" data-drop-zone>
+      <div class="drop-zone">
+        <span>Open signal intake</span>
+        <h2>Drop GTM files here or attach them.</h2>
+        <p>Launch docs, sales notes, competitive intel, customer feedback, Slack threads, campaign goals.</p>
+        <div class="intake-actions">
+          <label class="primary-button file-button" for="signal-files">Attach files</label>
+          <button class="ghost-button" type="button" data-action="sort-signals">Sort into buckets</button>
+          <button class="ghost-button" type="button" data-action="load-sample-signals">Load sample dump</button>
+        </div>
+        <input id="signal-files" class="file-input" type="file" multiple data-file-input />
+      </div>
+
+      <label class="dump-space">
+        <span>Blank dump space</span>
+        <textarea data-intake-dump placeholder="Paste messy notes, copied docs, Slack snippets, call summaries, or campaign commentary here. Cognix will sort the material before scoring risk.">${esc(state.intakeDump)}</textarea>
+      </label>
+    </div>
+
+    <div class="intake-status">
+      <span>${attachedCount} files attached</span>
+      <span>${sortedCount} buckets with signal content</span>
+      <strong>${esc(state.sortMessage)}</strong>
+    </div>
+
+    <div class="bucket-board">
+      ${bucketDefinitions.map((bucket) => bucketCard(bucket)).join("")}
     </div>
     ${stageActions({ back: "Back", next: "Continue to KPI" })}`;
+}
+
+function bucketCard(bucket) {
+  const content = state.signals[bucket.id] || "";
+  const attached = state.attachedFiles.filter((file) => file.bucketId === bucket.id);
+  const preview = content ? truncate(content, 170) : "Waiting for a matching signal.";
+
+  return `
+    <article class="bucket-card ${content || attached.length ? "filled" : ""}">
+      <div class="bucket-head">
+        <span>${esc(bucket.title)}</span>
+        <strong>${attached.length + (content ? 1 : 0)}</strong>
+      </div>
+      <p>${esc(bucket.description)}</p>
+      <div class="bucket-preview">${esc(preview)}</div>
+      ${attached.length ? `
+        <div class="attached-list">
+          ${attached.map((file) => `<small>${esc(file.name)}</small>`).join("")}
+        </div>` : ""}
+      <textarea data-bucket="${esc(bucket.id)}" aria-label="${esc(bucket.title)} bucket">${esc(content)}</textarea>
+    </article>`;
 }
 
 function setKpiScreen() {
@@ -436,6 +534,45 @@ function bindEvents() {
     });
   });
 
+  document.querySelectorAll("[data-bucket]").forEach((input) => {
+    input.addEventListener("input", () => {
+      state.signals[input.dataset.bucket] = input.value;
+    });
+  });
+
+  document.querySelector("[data-intake-dump]")?.addEventListener("input", (event) => {
+    state.intakeDump = event.target.value;
+  });
+
+  document.querySelector("[data-file-input]")?.addEventListener("change", async (event) => {
+    await ingestFiles(Array.from(event.target.files || []));
+  });
+
+  const dropZone = document.querySelector("[data-drop-zone]");
+  dropZone?.addEventListener("dragover", (event) => {
+    event.preventDefault();
+    dropZone.classList.add("dragging");
+  });
+  dropZone?.addEventListener("dragleave", () => {
+    dropZone.classList.remove("dragging");
+  });
+  dropZone?.addEventListener("drop", async (event) => {
+    event.preventDefault();
+    dropZone.classList.remove("dragging");
+    await ingestFiles(Array.from(event.dataTransfer?.files || []));
+  });
+
+  document.querySelector("[data-action='sort-signals']")?.addEventListener("click", () => {
+    sortIntake();
+    render();
+  });
+
+  document.querySelector("[data-action='load-sample-signals']")?.addEventListener("click", () => {
+    loadSampleDump();
+    sortIntake();
+    render();
+  });
+
   document.querySelectorAll("[data-kpi]").forEach((button) => {
     button.addEventListener("click", () => {
       state.selectedKpi = button.dataset.kpi;
@@ -483,6 +620,85 @@ function bindEvents() {
       render();
     });
   });
+}
+
+function loadSampleDump() {
+  state.intakeDump = [
+    "Launch brief: Q3 release goal is $500K influenced pipeline. Campaign is built around awareness and product capability.",
+    "Website hero draft: Cognix helps teams understand GTM performance, but the buyer pain is not explicit.",
+    "Sales deck: Reps get feature slides and input examples, but discovery does not connect to business urgency.",
+    "Competitive notes: Competitors are framed as reporting products. Battlecard does not shift buying criteria.",
+    "Customer feedback: Buyer asked whether this is for launch planning, enablement review, or pipeline inspection.",
+    "Slack thread: Sales wants clearer objection handling before campaign launch."
+  ].join("\n\n");
+}
+
+async function ingestFiles(files) {
+  for (const file of files) {
+    const text = await readFileAsText(file);
+    const bucketId = inferBucket(`${file.name}\n${text}`);
+    state.attachedFiles.push({
+      id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      name: file.name,
+      bucketId,
+      size: file.size,
+      text: text || `${file.name} attached for interpretation.`
+    });
+    appendSignal(bucketId, `File: ${file.name}\n${text || "Attached file ready for review."}`);
+  }
+  state.sortMessage = `${files.length} file${files.length === 1 ? "" : "s"} attached and sorted.`;
+  render();
+}
+
+function readFileAsText(file) {
+  return new Promise((resolve) => {
+    if (!file || file.size > 2_000_000) {
+      resolve("");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ""));
+    reader.onerror = () => resolve("");
+    reader.readAsText(file);
+  });
+}
+
+function sortIntake() {
+  const chunks = state.intakeDump
+    .split(/\n{2,}|(?=Launch brief:|Website hero|Sales deck:|Competitive notes:|Customer feedback:|Slack thread:|Gong notes:|Campaign notes:)/i)
+    .map((chunk) => chunk.trim())
+    .filter(Boolean);
+
+  chunks.forEach((chunk) => {
+    appendSignal(inferBucket(chunk), chunk);
+  });
+
+  state.sortMessage = chunks.length
+    ? `${chunks.length} pasted signal${chunks.length === 1 ? "" : "s"} sorted into GTM buckets.`
+    : "No new pasted signals to sort yet.";
+}
+
+function inferBucket(text) {
+  const lower = String(text || "").toLowerCase();
+  const scored = bucketDefinitions.map((bucket) => ({
+    id: bucket.id,
+    score: bucket.keywords.reduce((total, keyword) => total + (lower.includes(keyword) ? 1 : 0), 0)
+  }));
+  scored.sort((a, b) => b.score - a.score);
+  return scored[0]?.score > 0 ? scored[0].id : "team-feedback";
+}
+
+function appendSignal(bucketId, text) {
+  const current = state.signals[bucketId] || "";
+  const normalized = text.trim();
+  if (!normalized || current.includes(normalized)) return;
+  state.signals[bucketId] = current ? `${current}\n\n${normalized}` : normalized;
+}
+
+function truncate(value, max) {
+  const text = String(value || "").replace(/\\s+/g, " ").trim();
+  return text.length > max ? `${text.slice(0, max - 3).trim()}...` : text;
 }
 
 function startAnalysis() {
