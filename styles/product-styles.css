@@ -928,7 +928,8 @@ h3 {
 }
 
 .risk-explanation-grid,
-.decision-grid {
+.decision-grid,
+.revops-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
@@ -943,6 +944,52 @@ h3 {
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
   gap: 20px;
   border-color: rgba(79, 214, 163, 0.3);
+}
+
+.revops-use-case-section {
+  border-color: rgba(76, 167, 255, 0.26);
+}
+
+.revops-grid {
+  grid-template-columns: 0.9fr 0.9fr 1.2fr;
+}
+
+.revops-grid article {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.035);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.revops-grid span {
+  display: block;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.revops-grid ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.revops-grid strong {
+  display: block;
+  margin-bottom: 12px;
+  line-height: 1.45;
+}
+
+.revops-grid p {
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0;
 }
 
 .map-section .ontology-preview {
@@ -1579,6 +1626,7 @@ h3 {
   .evidence-meta,
   .risk-explanation-grid,
   .decision-grid,
+  .revops-grid,
   .pathway-grid,
   .scenario-grid,
   .script-grid,

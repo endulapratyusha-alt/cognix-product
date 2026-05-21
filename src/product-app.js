@@ -68,6 +68,15 @@ const sampleProject = {
       content: "Use Cognix as a reporting aid for founders, CMOs, PMM, RevOps, enablement, and GTM leadership. Reps should promise better reports, cleaner summaries, and faster alignment, then mention revenue risk and leadership decision later.",
       notes: "Internal enablement.",
       created_at: new Date().toISOString()
+    },
+    {
+      id: "sample-revops",
+      project_id: "sample-project",
+      signal_type: "Pipeline review notes",
+      title: "RevOps pipeline review",
+      content: "Pipeline review notes show inconsistent qualification around whether Cognix is a strategic leadership system, a diagnostic workspace, or a reporting aid. RevOps flagged weaker first-call conversion, longer sales cycles in founder-led accounts, and lower forecast confidence because opportunity notes describe different buyer promises.",
+      notes: "RevOps signal connecting GTM interpretation variance to pipeline quality and forecast confidence risk.",
+      created_at: new Date().toISOString()
     }
   ],
   reports: [],
@@ -92,6 +101,12 @@ const demoSignals = [
     title: "Sales enablement snippet",
     content: "Position the product as a reporting aid for marketing, sales, RevOps, and customer teams. Reps should lead with faster summaries and cleaner internal updates instead of leadership judgment.",
     notes: "Shows how the field may reinterpret the category into reporting."
+  },
+  {
+    signal_type: "Forecast commentary",
+    title: "RevOps forecast commentary",
+    content: "Forecast commentary shows pipeline quality concerns in opportunities where sales notes describe Cognix as faster reporting instead of revenue cognition. Stage conversion is weaker when the buyer cannot tell whether the purchase is for ongoing GTM governance or a one-off readout.",
+    notes: "Adds RevOps evidence that narrative drift is becoming forecast confidence and stage conversion risk."
   },
   {
     signal_type: "Customer feedback",
@@ -439,6 +454,7 @@ function canonicalDemoView(report, previousReport, project) {
     ${leadershipDecisionView(readout)}
     ${memorySnapshotView(project, report, previousReport, readout)}
     ${causalChainView(readout)}
+    ${revOpsUseCaseView(readout)}
     ${executiveBriefView(report, readout)}
     ${cognitionChangedView(report, previousReport)}
     ${signalWorkspace(project)}
@@ -672,6 +688,43 @@ function leadershipDecisionView(readout) {
         ${readoutItem("Urgency", readout.urgency)}
         ${readoutItem("Expected impact", readout.expectedImpact)}
         ${readoutItem("First action", readout.firstAction)}
+      </div>
+    </section>`;
+}
+
+function revOpsUseCaseView(readout) {
+  const signals = [
+    "Pasted CRM notes",
+    "Pipeline review notes",
+    "Forecast commentary",
+    "Stage conversion observations",
+    "Qualification themes",
+    "Sales-to-CS handoff notes",
+    "Attribution concerns",
+    "Deal review notes"
+  ];
+  const risks = revenueRiskSet(readout);
+  return `
+    <section class="demo-section revops-use-case-section">
+      <div class="section-title">
+        <span class="tag">RevOps use case</span>
+        <h2>Find the GTM issues behind pipeline noise.</h2>
+        <p class="muted">Cognix supports RevOps by explaining why GTM signals are fragmenting into revenue risk. It does not replace RevOps systems.</p>
+      </div>
+      <div class="revops-grid">
+        <article>
+          <span>RevOps signals Cognix can read</span>
+          <ul>${signals.map((signal) => `<li>${esc(signal)}</li>`).join("")}</ul>
+        </article>
+        <article>
+          <span>Revenue risks Cognix explains</span>
+          <ul>${risks.map((risk) => `<li>${esc(risk)}</li>`).join("")}</ul>
+        </article>
+        <article>
+          <span>Current readout connection</span>
+          <strong>${esc(readout.revenueRisk)}</strong>
+          <p>${esc(readout.whatBreaksNext)}</p>
+        </article>
       </div>
     </section>`;
 }
@@ -1090,6 +1143,7 @@ function signalTitleFromEvidence(line = "") {
 
 function signalTypeFromEvidence(line = "") {
   const source = signalTitleFromEvidence(line).toLowerCase();
+  if (source.includes("pipeline") || source.includes("forecast") || source.includes("crm") || source.includes("revops")) return "RevOps signal";
   if (source.includes("website")) return "Website copy";
   if (source.includes("sales") || source.includes("deck")) return "Sales deck";
   if (source.includes("enable")) return "Enablement asset";
@@ -1143,20 +1197,24 @@ function plainEnglishContradiction(contradiction = {}) {
 
 function revenueRiskFor(title = "", consequence = "") {
   const text = `${title} ${consequence}`.toLowerCase();
-  if (text.includes("positioning") || text.includes("category")) return "Lower conversion from first call to qualified opportunity because buyers cannot quickly understand what the company is or why it matters.";
+  if (text.includes("forecast")) return "Forecast confidence risk because opportunity notes are carrying different buyer promises and qualification logic.";
+  if (text.includes("handoff")) return "Sales-to-CS handoff risk because the expectation sold in discovery may not match the delivery narrative inherited post-sale.";
+  if (text.includes("stage")) return "Stage conversion risk because buyers are not receiving one coherent reason to advance.";
+  if (text.includes("positioning") || text.includes("category")) return "Pipeline quality and stage conversion risk because buyers cannot quickly understand what the company is or why it matters.";
   if (text.includes("icp") || text.includes("buyer") || text.includes("audience")) return "Weaker pipeline quality because campaigns, qualification, and sales conversations may attract or advance different buyers.";
   if (text.includes("commercial") || text.includes("software") || text.includes("offer") || text.includes("service")) return "Longer sales cycles and lower forecast confidence because budget owner, purchase path, and packaging expectations are unclear.";
   if (text.includes("proof") || text.includes("ai") || text.includes("generic")) return "Lower buyer trust and weaker conversion because claims are not anchored in evidence the buyer can believe.";
   if (text.includes("conversion")) return "Interest may fail to become qualified pipeline because the next action and business outcome are unclear.";
-  return "Sales interpretation variance, weaker buyer clarity, and lower pipeline confidence if execution scales the wrong story.";
+  return "Sales cycle risk, forecast confidence risk, and weaker pipeline quality if execution scales the wrong story.";
 }
 
 function affectedTeamFor(title = "") {
   if (title.includes("ICP")) return "Marketing and Sales";
   if (title.includes("Commercial") || title.includes("software") || title.includes("Service")) return "Founder, Sales, and RevOps";
+  if (title.includes("Positioning") || title.includes("Messaging")) return "Founder, PMM, Sales, and RevOps";
   if (title.includes("AI") || title.includes("Generic")) return "Marketing and Enablement";
   if (title.includes("Execution")) return "Enablement and Sales";
-  return "Founder, Marketing, PMM, and Sales";
+  return "Founder, Marketing, PMM, Sales, and RevOps";
 }
 
 function affectedFunnelStageFor(title = "") {
@@ -1204,7 +1262,23 @@ function impactFor(title = "") {
   if (title.includes("Commercial") || title.includes("Service")) return "Cleaner qualification, packaging expectations, and executive confidence.";
   if (title.includes("AI")) return "Higher trust in claims and less generic category noise.";
   if (title.includes("ICP")) return "Sharper targeting, stronger objection handling, and less buyer confusion.";
-  return "Stronger category clarity and lower sales interpretation variance.";
+  return "Stronger category clarity, lower sales interpretation variance, and cleaner pipeline review conversations.";
+}
+
+function revenueRiskSet(readout = {}) {
+  const base = [
+    "Pipeline quality risk",
+    "Stage conversion risk",
+    "Sales cycle risk",
+    "Forecast confidence risk",
+    "Handoff risk",
+    "Churn or expansion risk"
+  ];
+  const active = String(readout.revenueRisk || "").toLowerCase();
+  return base.map((risk) => {
+    const keyword = risk.split(" ")[0].toLowerCase();
+    return active.includes(keyword) ? `${risk} · active in this readout` : risk;
+  });
 }
 
 function unique(items) {
