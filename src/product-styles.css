@@ -364,7 +364,8 @@ h3 {
 }
 
 .drop-zone,
-.dump-space {
+.dump-space,
+.link-space {
   min-height: 290px;
   border: 1px solid rgba(203, 216, 231, 0.9);
   border-radius: 8px;
@@ -380,6 +381,7 @@ h3 {
 
 .drop-zone span,
 .dump-space span,
+.link-space span,
 .bucket-card span,
 .goal-card span,
 .result-card span,
@@ -433,6 +435,40 @@ h3 {
   flex-direction: column;
 }
 
+.intake-right {
+  display: grid;
+  gap: 14px;
+}
+
+.link-space {
+  min-height: auto;
+  display: grid;
+  align-content: start;
+}
+
+.link-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+}
+
+.link-row input {
+  min-height: 42px;
+  border: 1px solid rgba(223, 231, 241, 0.94);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--ink);
+  padding: 0 12px;
+  font: inherit;
+}
+
+.link-space small {
+  margin-top: 9px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 .dump-space textarea,
 .bucket-card textarea {
   width: 100%;
@@ -472,6 +508,26 @@ h3 {
   border-color: rgba(45, 102, 245, 0.24);
   background: rgba(45, 102, 245, 0.08);
   color: var(--blue-dark);
+}
+
+.link-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: -4px 0 16px;
+}
+
+.link-list span {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(45, 102, 245, 0.18);
+  border-radius: 999px;
+  background: rgba(45, 102, 245, 0.07);
+  color: var(--navy);
+  padding: 0 11px;
+  font-size: 12px;
+  font-weight: 760;
 }
 
 .bucket-board {
@@ -764,7 +820,7 @@ h3 {
 
 .digest-topline > span,
 .digest-section-head span,
-.digest-diagnosis > span,
+.digest-fracture > span,
 .digest-score-card span,
 .impact-strip span {
   color: rgba(205, 219, 240, 0.72);
@@ -852,7 +908,7 @@ h3 {
   font-size: 28px;
 }
 
-.digest-diagnosis h2 {
+.digest-fracture h2 {
   max-width: 960px;
   margin: 10px 0 14px;
   color: #fff;
@@ -860,7 +916,7 @@ h3 {
   line-height: 0.98;
 }
 
-.digest-diagnosis p {
+.digest-fracture p {
   max-width: 760px;
   margin: 0;
   color: rgba(230, 238, 249, 0.78);
@@ -1227,6 +1283,10 @@ h3 {
     grid-template-columns: 1fr;
   }
 
+  .link-row {
+    grid-template-columns: 1fr;
+  }
+
   .intake-actions {
     flex-direction: column;
   }
@@ -1253,7 +1313,7 @@ h3 {
     font-size: 42px;
   }
 
-  .digest-diagnosis h2 {
+  .digest-fracture h2 {
     font-size: 34px;
   }
 

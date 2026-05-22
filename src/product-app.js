@@ -1,27 +1,27 @@
-const readoutTypes = [
+const fractureMapTypes = [
   {
     id: "launch",
-    title: "Launch risk readout",
-    description: "Diagnose whether a launch story, proof, and field motion will convert beyond awareness."
+    title: "Launch Fracture Map",
+    description: "Interpret whether a launch story, proof, and field motion will convert beyond awareness."
   },
   {
     id: "messaging",
-    title: "Messaging risk readout",
+    title: "Messaging Fracture Map",
     description: "Find where positioning, buyer pain, proof, and differentiation are drifting apart."
   },
   {
     id: "enablement",
-    title: "Sales enablement risk readout",
+    title: "Sales enablement Fracture Map",
     description: "See whether reps have the story, objections, and business case needed to advance deals."
   },
   {
     id: "competitive",
-    title: "Competitive risk readout",
+    title: "Competitive Fracture Map",
     description: "Understand whether competitive material changes buying criteria or only defends feature claims."
   },
   {
     id: "pipeline",
-    title: "Pipeline narrative readout",
+    title: "Pipeline narrative Fracture Map",
     description: "Connect pipeline quality signals to the narrative and buyer urgency issues underneath."
   }
 ];
@@ -115,8 +115,41 @@ const bucketDefinitions = [
   {
     id: "pipeline-notes",
     title: "Campaign and pipeline",
-    description: "Campaign reports, pipeline notes, conversion concerns, forecast commentary",
+    description: "Campaign results, pipeline notes, conversion concerns, forecast commentary",
     keywords: ["pipeline", "conversion", "forecast", "campaign", "revenue", "qualified demos"]
+  }
+];
+
+const linkSamples = [
+  {
+    match: ["launch", "brief", "release"],
+    title: "Launch link",
+    text: "Linked launch brief says the release is expected to create awareness and influence pipeline, but the story emphasizes product capability more than buyer urgency."
+  },
+  {
+    match: ["deck", "sales", "enablement"],
+    title: "Sales asset link",
+    text: "Linked sales deck introduces product inputs and features, but discovery guidance does not connect the story to business pain, objection handling, or business case creation."
+  },
+  {
+    match: ["competitive", "battlecard", "competitor"],
+    title: "Competitive link",
+    text: "Linked competitive notes position other vendors as activity products, but the material does not help reps shift buying criteria or reframe the decision."
+  },
+  {
+    match: ["customer", "feedback", "win", "loss"],
+    title: "Customer signal link",
+    text: "Linked customer feedback shows buyers understand the product category unevenly and ask whether the motion is for launch planning, enablement review, or pipeline inspection."
+  },
+  {
+    match: ["slack", "team", "internal"],
+    title: "Team feedback link",
+    text: "Linked team discussion shows sales and PMM using different language for the same launch motion, creating interpretation variance before field rollout."
+  },
+  {
+    match: ["crm", "pipeline", "campaign"],
+    title: "Pipeline link",
+    text: "Linked pipeline notes show strong activity signals, but qualification comments suggest weak buyer urgency and inconsistent narrative adoption."
   }
 ];
 
@@ -161,9 +194,9 @@ const executiveImpacts = [
 ];
 
 const leadershipMoves = [
-  ["Create one narrative hierarchy", "Establish the primary story, supporting proof, and category frame."],
+  ["Define one narrative hierarchy", "Establish the primary story, supporting proof, and category frame."],
   ["Lock the launch operating story", "Use one approved narrative across website, deck, enablement, and field rollout."],
-  ["Run a fast contradiction audit", "Identify where competing stories are spreading across GTM surfaces."]
+  ["Run a fast contradiction scan", "Identify where competing stories are spreading across GTM surfaces."]
 ];
 
 const digestEvidence = [
@@ -183,10 +216,12 @@ const state = {
     "launch-brief": "Launch goal is to create market awareness for the new release and show Cognix as a better way to understand GTM performance.",
     "messaging-doc": "The messaging focuses on signal interpretation, product capability, revenue cognition, and faster GTM alignment.",
     "sales-deck": "The sales deck explains features and inputs, but discovery guidance does not connect the launch story to buyer urgency or business case creation.",
-    "competitive-notes": "Competitors are positioned as reporting and activity products. Notes explain where Cognix is different, but do not help reps change buying criteria.",
+    "competitive-notes": "Competitors are positioned as activity products. Notes explain where Cognix is different, but do not help reps change buying criteria.",
     "sales-call-notes": "Buyer asked whether this is for launch planning, enablement review, or pipeline inspection. Rep returned to product capability instead of business pain."
   },
   intakeDump: "",
+  linkInput: "",
+  attachedLinks: [],
   attachedFiles: [],
   sortMessage: "5 sample signals sorted into 5 buckets.",
   loadingIndex: 0,
@@ -212,9 +247,9 @@ function render() {
         </a>
         <div class="topbar-center">
           <span>Revenue cognition workspace</span>
-          <strong>${esc(readoutTypes.find((item) => item.id === state.selectedType)?.title || "New readout")}</strong>
+          <strong>${esc(fractureMapTypes.find((item) => item.id === state.selectedType)?.title || "New Fracture Map")}</strong>
         </div>
-        <button class="ghost-button" type="button" data-action="reset">Start another readout</button>
+        <button class="ghost-button" type="button" data-action="reset">Start another GTM Fracture Map</button>
       </header>
 
       <main class="workspace">
@@ -229,9 +264,9 @@ function render() {
 }
 
 function progressRail() {
-  const labels = ["Create readout", "Add signals", "Set KPI", "Run readout", "Aha result"];
+  const labels = ["Create map", "Add signals", "Set KPI", "Generate map", "Aha result"];
   return `
-    <aside class="progress-rail" aria-label="Readout progress">
+    <aside class="progress-rail" aria-label="Fracture Map progress">
       ${labels.map((label, index) => `
         <button class="rail-step ${index === state.step ? "active" : ""} ${index < state.step ? "done" : ""}" type="button" data-jump="${index}" ${index > state.step ? "disabled" : ""}>
           <span>${index + 1}</span>
@@ -241,22 +276,22 @@ function progressRail() {
 }
 
 function renderCurrentStep() {
-  if (state.step === 0) return createReadoutScreen();
+  if (state.step === 0) return createFractureMapScreen();
   if (state.step === 1) return addSignalsScreen();
   if (state.step === 2) return setKpiScreen();
-  if (state.step === 3) return runReadoutScreen();
+  if (state.step === 3) return runFractureMapScreen();
   return resultScreen();
 }
 
-function createReadoutScreen() {
+function createFractureMapScreen() {
   return `
     <div class="stage-header">
-      <span class="eyebrow">New readout</span>
-      <h1>What GTM motion do you want to diagnose?</h1>
+      <span class="eyebrow">New GTM Fracture Map</span>
+      <h1>What GTM motion should Cognix interpret?</h1>
       <p>Choose the commercial motion Cognix should interpret. The beta starts with realistic sample inputs so the GTM breakpoints appear fast.</p>
     </div>
     <div class="option-grid">
-      ${readoutTypes.map((item) => `
+      ${fractureMapTypes.map((item) => `
         <button class="option-card ${state.selectedType === item.id ? "selected" : ""}" type="button" data-type="${esc(item.id)}">
           <span></span>
           <h2>${esc(item.title)}</h2>
@@ -268,18 +303,19 @@ function createReadoutScreen() {
 
 function addSignalsScreen() {
   const attachedCount = state.attachedFiles.length;
+  const linkCount = state.attachedLinks.length;
   const sortedCount = Object.values(state.signals).filter(Boolean).length;
   return `
     <div class="stage-header">
       <span class="eyebrow">Signal intake</span>
       <h1>Add the signals Cognix should interpret.</h1>
-      <p>Drop files, attach docs, or paste a messy GTM dump. Cognix reads and sorts the material into interpretation buckets before the readout runs.</p>
+      <p>Drop files, attach docs, or paste a messy GTM dump. Cognix reads and sorts the material into interpretation buckets before generating the GTM Fracture Map.</p>
     </div>
 
     <div class="intake-console" data-drop-zone>
       <div class="drop-zone">
         <span>Open signal intake</span>
-        <h2>Drop GTM files here or attach them.</h2>
+        <h2>Drop files, paste links, or attach GTM material.</h2>
         <p>Launch docs, sales notes, competitive intel, customer feedback, Slack threads, campaign goals.</p>
         <div class="intake-actions">
           <label class="primary-button file-button" for="signal-files">Attach files</label>
@@ -289,17 +325,35 @@ function addSignalsScreen() {
         <input id="signal-files" class="file-input" type="file" multiple data-file-input />
       </div>
 
-      <label class="dump-space">
-        <span>Blank dump space</span>
-        <textarea data-intake-dump placeholder="Paste messy notes, copied docs, Slack snippets, call summaries, or campaign commentary here. Cognix will sort the material before scoring risk.">${esc(state.intakeDump)}</textarea>
-      </label>
+      <div class="intake-right">
+        <label class="link-space">
+          <span>Paste live links</span>
+          <div class="link-row">
+            <input type="url" data-link-input value="${esc(state.linkInput)}" placeholder="https://docs.google.com/... or https://notion.so/..." />
+            <button class="primary-button" type="button" data-action="ingest-link">Read link</button>
+          </div>
+          <small>Beta simulation: Cognix interprets the link title and URL pattern, then sorts it into the right signal bucket.</small>
+        </label>
+        <label class="dump-space">
+          <span>Blank dump space</span>
+          <textarea data-intake-dump placeholder="Paste messy notes, copied docs, Slack snippets, call summaries, or campaign commentary here. Cognix will sort the material before scoring risk.">${esc(state.intakeDump)}</textarea>
+        </label>
+      </div>
     </div>
 
     <div class="intake-status">
       <span>${attachedCount} files attached</span>
+      <span>${linkCount} links interpreted</span>
       <span>${sortedCount} buckets with signal content</span>
       <strong>${esc(state.sortMessage)}</strong>
     </div>
+
+    ${linkCount ? `
+      <div class="link-list">
+        ${state.attachedLinks.map((link) => `
+          <span>${esc(link.title)} · ${esc(link.url)}</span>
+        `).join("")}
+      </div>` : ""}
 
     <div class="bucket-board">
       ${bucketDefinitions.map((bucket) => bucketCard(bucket)).join("")}
@@ -346,10 +400,10 @@ function setKpiScreen() {
         <small>Examples: $500K influenced pipeline, 150 qualified demos, 20% higher sales adoption</small>
       </label>
     </div>
-    ${stageActions({ back: "Back", next: "Run the readout" })}`;
+    ${stageActions({ back: "Back", next: "Generate your GTM Fracture Map" })}`;
 }
 
-function runReadoutScreen() {
+function runFractureMapScreen() {
   return `
     <div class="analysis-shell">
       <div class="analysis-core">
@@ -383,7 +437,7 @@ function executiveDigest() {
         </div>
         <div>
           <b>Scan</b>
-          <strong>5 GTM surfaces</strong>
+          <strong>5 GTM signals interpreted</strong>
         </div>
       </div>
 
@@ -397,9 +451,9 @@ function executiveDigest() {
             <strong>High</strong>
           </div>
         </aside>
-        <div class="digest-diagnosis">
-          <span>One-line diagnosis</span>
-          <h2>GTM narrative fragmentation is increasing revenue execution risk.</h2>
+        <div class="digest-fracture">
+          <span>Primary fracture</span>
+          <h2>Your GTM story is fracturing across positioning, sales interpretation, and enablement.</h2>
           <p>Multiple strategic stories are competing across website, positioning, sales, and enablement.</p>
         </div>
       </div>
@@ -414,7 +468,7 @@ function executiveDigest() {
 
       <div class="leadership-block">
         <div class="digest-section-head">
-          <span>Leadership moves</span>
+          <span>Next GTM decisions</span>
           <strong>What leadership should do next</strong>
         </div>
         <div class="leadership-grid">
@@ -448,8 +502,8 @@ function resultScreen() {
       ${executiveDigest()}
       <section class="result-hero">
         <div>
-          <span class="eyebrow">Aha result</span>
-          <h1>GTM risk readout</h1>
+          <span class="eyebrow">Signal intelligence</span>
+          <h1>GTM Fracture Map</h1>
           <p>This launch is likely to create awareness, but weakly convert into qualified pipeline.</p>
         </div>
         <div class="score-command">
@@ -503,10 +557,10 @@ function resultScreen() {
       </section>
 
       <section class="action-console">
-        <button type="button" data-result-action="Generated executive summary">Generate executive summary</button>
+        <button type="button" data-result-action="Generated Executive Signal Brief">Generate Executive Signal Brief</button>
         <button type="button" data-result-action="Created sales narrative fix">Create sales narrative fix</button>
-        <button type="button" data-result-action="Export prepared">Export readout</button>
-        <button type="button" data-action="reset">Start another readout</button>
+        <button type="button" data-result-action="Export prepared">Export GTM Fracture Map</button>
+        <button type="button" data-action="reset">Start another GTM Fracture Map</button>
       </section>
       ${state.actionMessage ? `<div class="toast">${esc(state.actionMessage)}</div>` : ""}
     </div>`;
@@ -542,6 +596,14 @@ function bindEvents() {
 
   document.querySelector("[data-intake-dump]")?.addEventListener("input", (event) => {
     state.intakeDump = event.target.value;
+  });
+
+  document.querySelector("[data-link-input]")?.addEventListener("input", (event) => {
+    state.linkInput = event.target.value;
+  });
+
+  document.querySelector("[data-action='ingest-link']")?.addEventListener("click", () => {
+    ingestLink();
   });
 
   document.querySelector("[data-file-input]")?.addEventListener("change", async (event) => {
@@ -627,10 +689,42 @@ function loadSampleDump() {
     "Launch brief: Q3 release goal is $500K influenced pipeline. Campaign is built around awareness and product capability.",
     "Website hero draft: Cognix helps teams understand GTM performance, but the buyer pain is not explicit.",
     "Sales deck: Reps get feature slides and input examples, but discovery does not connect to business urgency.",
-    "Competitive notes: Competitors are framed as reporting products. Battlecard does not shift buying criteria.",
+    "Competitive notes: Competitors are framed as activity products. Battlecard does not shift buying criteria.",
     "Customer feedback: Buyer asked whether this is for launch planning, enablement review, or pipeline inspection.",
     "Slack thread: Sales wants clearer objection handling before campaign launch."
   ].join("\n\n");
+}
+
+function ingestLink() {
+  const url = state.linkInput.trim();
+  if (!url) {
+    state.sortMessage = "Paste a GTM link first.";
+    render();
+    return;
+  }
+
+  const sample = sampleFromLink(url);
+  const bucketId = inferBucket(`${url}\n${sample.text}`);
+  const linkRecord = {
+    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    url,
+    title: sample.title,
+    bucketId
+  };
+
+  state.attachedLinks.push(linkRecord);
+  appendSignal(bucketId, `Link: ${sample.title}\nSource: ${url}\n${sample.text}`);
+  state.linkInput = "";
+  state.sortMessage = `1 link interpreted and sorted into ${bucketDefinitions.find((bucket) => bucket.id === bucketId)?.title || "a GTM bucket"}.`;
+  render();
+}
+
+function sampleFromLink(url) {
+  const lower = url.toLowerCase();
+  return linkSamples.find((sample) => sample.match.some((keyword) => lower.includes(keyword))) || {
+    title: "GTM signal link",
+    text: "Linked GTM material contains signal evidence for Cognix to interpret. The beta simulation sorts this source by URL and surrounding context, then adds it to the closest bucket."
+  };
 }
 
 async function ingestFiles(files) {
