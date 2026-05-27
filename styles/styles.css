@@ -1085,6 +1085,8 @@ h3 {
 }
 
 .tech-engine {
+  display: flex;
+  flex-direction: column;
   background:
     radial-gradient(circle at 50% 18%, rgba(79, 70, 229, 0.12), transparent 48%),
     rgba(255, 255, 255, 0.78);
@@ -1114,6 +1116,16 @@ h3 {
   font-weight: 650;
   line-height: 1.25;
   text-align: center;
+}
+
+.tech-engine .cognition-graph {
+  flex: 1;
+  min-height: 300px;
+  margin-top: 0;
+}
+
+.tech-engine .graph-label {
+  display: none;
 }
 
 .architecture-cards {
