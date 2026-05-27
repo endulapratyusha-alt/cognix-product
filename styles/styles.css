@@ -451,7 +451,7 @@ h3 {
 .hero-visual {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(150px, 0.68fr) minmax(380px, 1.62fr) minmax(160px, 0.74fr);
+  grid-template-columns: minmax(132px, 0.64fr) minmax(340px, 1.58fr) minmax(146px, 0.7fr);
   gap: 12px;
   border: 1px solid rgba(188, 202, 226, 0.72);
   border-radius: 28px;
@@ -462,7 +462,8 @@ h3 {
     rgba(255, 255, 255, 0.88);
   box-shadow: var(--shadow);
   backdrop-filter: blur(16px);
-  max-width: 660px;
+  width: min(100%, 720px);
+  max-width: 720px;
   justify-self: end;
 }
 
