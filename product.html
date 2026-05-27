@@ -19,5 +19,12 @@
   <body>
     <div id="app"></div>
     <script type="module" src="src/product-app.js?v=20260525-hardened"></script>
+    <script>
+      if (window.location.protocol === "file:") {
+        const productScript = document.createElement("script");
+        productScript.src = "src/product-app.js?v=20260525-hardened";
+        document.body.appendChild(productScript);
+      }
+    </script>
   </body>
 </html>
