@@ -7,7 +7,9 @@ export default defineConfig({
       input: {
         main: "index.html",
         pmm: "pmm.html",
-        product: "product.html"
+        product: "product.html",
+        freeAuditAccess: "free-audit-access.html",
+        paidAuditAccess: "paid-audit-access.html"
       }
     }
   }

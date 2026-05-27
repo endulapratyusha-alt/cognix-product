@@ -1,4 +1,4 @@
-const auditHref = "product.html";
+const auditHref = "https://tally.so/r/A7jVd0";
 
 const signalNodes = [
   "ChatGPT drafts",
@@ -198,7 +198,7 @@ function hero() {
             <a class="btn btn-primary btn-large" href="${auditHref}">Get your first audit free</a>
             <a class="btn btn-secondary btn-large" href="#sample">See sample output first</a>
           </div>
-          <p class="price-support">First Launch Conversion Audit free for founding PMMs. Next audit is $49. No subscription. No commitment beyond one launch.</p>
+          <p class="price-support">Founding access: your first audit is free. During this early validation window, selected PMMs may run additional audits while we collect feedback. After the founding window, additional audits are $49.</p>
         </div>
         ${liveAuditPreview()}
       </div>
@@ -425,7 +425,7 @@ function finalCta() {
       <div class="shell final-cta-card">
         <p class="section-kicker">Before launch day</p>
         <h2>You will not know what is wrong with this launch until the pipeline review. By then, it is too late.</h2>
-        <p>First Launch Conversion Audit free for founding PMMs. If it helps, your next audit is $49. No subscription. No commitment beyond one launch. Run it before final campaign copy is locked and see whether your launch is built to create qualified demand or just awareness.</p>
+        <p>Founding access: your first audit is free. During this early validation window, selected PMMs may run additional audits while we collect feedback. After the founding window, additional audits are $49. Run it before final campaign copy is locked and see whether your launch is built to create qualified demand or just awareness.</p>
         <div class="hero-actions">
           <a class="btn btn-primary btn-large" href="${auditHref}">Get your first audit free</a>
           <a class="btn btn-secondary btn-large" href="#sample">See sample output first</a>
