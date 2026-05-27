@@ -477,15 +477,15 @@ function technologySection() {
           </div>
           <div class="architecture-cards" id="integrations">
             <article>
-              <strong>1. Deep integration layer</strong>
+              <strong>Deep integration layer</strong>
               <p>Planned connectivity across the systems where work happens: CRM, Slack, calls, docs, product signals, customer feedback, and market intelligence.</p>
             </article>
             <article>
-              <strong>2. Foundational cognitive infrastructure</strong>
+              <strong>Foundational cognitive infrastructure</strong>
               <p>The architecture direction combines organizational memory, signal convergence, cognition graphs, embedding models, reasoning workflows, and learning loops.</p>
             </article>
             <article>
-              <strong>3. Proprietary cognition layer</strong>
+              <strong>Proprietary cognition layer</strong>
               <p>The long-term technical vision includes narrative drift detection, cross-functional signal convergence, coherence scoring, behavioral execution correlation, and adaptive prioritization.</p>
             </article>
           </div>
