@@ -370,9 +370,10 @@ button {
 .hero-grid {
   position: relative;
   z-index: 1;
+  width: min(1500px, calc(100% - 48px));
   display: grid;
-  grid-template-columns: minmax(500px, 0.92fr) minmax(700px, 1.08fr);
-  gap: 56px;
+  grid-template-columns: minmax(500px, 0.82fr) minmax(820px, 1.18fr);
+  gap: 44px;
   align-items: center;
   padding: 68px 0 82px;
 }
@@ -451,20 +452,20 @@ h3 {
 .hero-visual {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(150px, 0.64fr) minmax(350px, 1.42fr) minmax(188px, 0.82fr);
+  grid-template-columns: minmax(150px, 0.62fr) minmax(360px, 1.35fr) minmax(220px, 0.9fr);
   gap: 12px;
   border: 1px solid rgba(188, 202, 226, 0.72);
   border-radius: 28px;
   overflow: hidden;
-  padding: 14px;
+  padding: 14px 28px 14px 14px;
   background:
     radial-gradient(circle at 46% 12%, rgba(79, 70, 229, 0.12), transparent 21rem),
     radial-gradient(circle at 86% 34%, rgba(6, 182, 212, 0.1), transparent 20rem),
     rgba(255, 255, 255, 0.88);
   box-shadow: var(--shadow);
   backdrop-filter: blur(16px);
-  width: min(100%, 760px);
-  max-width: 760px;
+  width: min(100%, 860px);
+  max-width: 860px;
   justify-self: end;
 }
 
