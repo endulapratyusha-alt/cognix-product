@@ -976,6 +976,21 @@ h3 {
   box-shadow: var(--soft-shadow);
 }
 
+.status-badge {
+  width: max-content;
+  max-width: 100%;
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 14px;
+  border: 1px solid rgba(45, 102, 245, 0.2);
+  border-radius: 999px;
+  background: rgba(45, 102, 245, 0.08);
+  color: var(--blue-dark);
+  padding: 7px 11px;
+  font-size: 12px;
+  font-weight: 580;
+}
+
 .paused-hero h1 {
   margin-bottom: 12px;
   font-size: clamp(30px, 3vw, 44px);
@@ -983,10 +998,14 @@ h3 {
 
 .paused-hero p {
   max-width: 780px;
-  margin: 0;
+  margin: 0 0 10px;
   color: var(--slate);
   font-size: 16px;
   line-height: 1.65;
+}
+
+.paused-hero p:last-child {
+  margin-bottom: 0;
 }
 
 .paused-status {
@@ -1024,8 +1043,44 @@ h3 {
   gap: 14px;
 }
 
-.paused-memo {
-  min-height: 190px;
+.locked-output-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.locked-output-card {
+  border: 1px solid rgba(203, 216, 231, 0.9);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.74);
+  padding: 18px;
+  box-shadow: 0 1px 0 rgba(21, 38, 63, 0.04), 0 14px 38px rgba(21, 38, 63, 0.045);
+}
+
+.locked-output-card span {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 560;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.locked-output-card p,
+.paused-command .board-card p {
+  margin: 0;
+  color: var(--slate);
+  line-height: 1.55;
+}
+
+.paused-command .board-card p + ol {
+  margin-top: 12px;
+}
+
+.paused-action {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .executive-digest {
@@ -1610,6 +1665,7 @@ h3 {
   .result-grid,
   .risk-map,
   .paused-grid,
+  .locked-output-grid,
   .impact-strip,
   .leadership-grid,
   .belief-grid,

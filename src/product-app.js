@@ -45,7 +45,9 @@ const genericSignalResponses = new Set([
   "n/a",
   "na",
   "coming soon",
+  "need to add",
   "waiting for input",
+  "awaiting input",
   "no input",
   "no idea",
   "unknown",
@@ -487,53 +489,48 @@ function resultScreen() {
 }
 
 function pausedResultScreen(diagnosis) {
+  const sharedText = diagnosis.sharedAreas.length
+    ? `You have shared: ${diagnosis.sharedAreas.map((item) => esc(item)).join(", ")}`
+    : "No meaningful launch signals detected yet.";
   return `
     <div class="result-command paused-command">
-      <section class="paused-hero" aria-label="Data deficiency">
+      <section class="paused-hero" aria-label="Audit paused">
         <div>
-          <span class="eyebrow">Data deficiency</span>
-          <h1>${esc(diagnosis.verdict)}</h1>
-          <p>${esc(diagnosis.causalDiagnosis)}</p>
+          <span class="status-badge">Audit paused</span>
+          <h1>Not enough launch signal to diagnose reliably.</h1>
+          <p>Cognix needs at least 3 meaningful launch signals to generate a reliable Launch Conversion Audit. You have added ${diagnosis.coverage.count} of 3 required signals so far.</p>
+          <p>Cognix will not generate a launch-to-pipeline verdict, message rewrite, or CMO-ready memo until there is enough launch context to avoid guessing.</p>
         </div>
         <aside class="paused-status">
           <span>Signal coverage</span>
-          <strong>${esc(diagnosis.signalCoverage.label)}, ${diagnosis.coverage.count} of ${diagnosis.coverage.total} areas</strong>
-          <small>Demo intent risk: ${esc(diagnosis.demoIntentRisk)}</small>
+          <strong>${diagnosis.coverage.count} of 3 required signals complete</strong>
+          <small>${diagnosis.coverage.count} of ${diagnosis.coverage.total} total launch signal areas detected</small>
         </aside>
       </section>
 
-      <section class="paused-grid">
-        <article class="result-card">
-          <span>Evidence</span>
-          <h3>No evidence available yet because the audit does not have enough launch context.</h3>
-        </article>
-        <article class="result-card">
-          <span>Before / after rewrite</span>
-          <h3>Awaiting launch context. Add more signal coverage to unlock message direction.</h3>
-        </article>
-      </section>
-
       <section class="deep-grid">
-        <article class="board-card correction">
-          <span>PMM action plan</span>
-          <ol>
-            ${diagnosis.actions.map((item) => `<li>${esc(item)}</li>`).join("")}
-          </ol>
-        </article>
         <article class="board-card">
           <span>Signal coverage</span>
-          <ul>
-            ${diagnosis.coverage.notes.map((item) => `<li>${esc(item)}</li>`).join("")}
-          </ul>
+          <p>${sharedText}</p>
+        </article>
+        <article class="board-card correction">
+          <span>What to add next</span>
+          <p>Add at least three of these:</p>
+          <ol>
+            ${diagnosis.nextSignals.map((item) => `<li>${esc(item)}</li>`).join("")}
+          </ol>
         </article>
       </section>
 
-      <section class="memo-section">
-        <div class="digest-section-head">
-          <span>CMO memo</span>
-          <strong>Paused artifact</strong>
-        </div>
-        <textarea class="memo-copy-block paused-memo" readonly>${esc(diagnosis.memo)}</textarea>
+      <section class="locked-output-grid" aria-label="Locked outputs">
+        ${diagnosis.lockedOutputs.map((item) => `
+          <article class="locked-output-card">
+            <span>${esc(item.title)}</span>
+            <p>${esc(item.body)}</p>
+          </article>`).join("")}
+      </section>
+
+      <section class="paused-action">
         <div class="action-console memo-actions">
           <button type="button" data-action="add-signals">Add more signals</button>
         </div>
@@ -901,20 +898,37 @@ function buildPausedDiagnosis(coverage) {
   const count = coverage.count;
   const signalCoverage = {
     label: "Low",
-    note: `Low, ${count} of ${coverage.total} areas`
+    note: `${count} of 3 required signals complete. ${count} of ${coverage.total} total launch signal areas detected.`
   };
-  const causalDiagnosis = `Cognix needs at least 3 meaningful launch signals to generate a reliable Launch Conversion Audit. The current input only includes ${count} of ${coverage.total} signal areas, so the system cannot identify real fracture patterns without guessing.`;
+  const causalDiagnosis = `Cognix needs at least 3 meaningful launch signals to generate a reliable Launch Conversion Audit. You have added ${count} of 3 required signals so far.`;
   const actions = [
-    "Add your launch message, positioning draft, or landing page copy.",
-    "Add the target buyer or ICP and the buyer pain you want to activate.",
-    "Add the CTA, sales feedback, competitive context, customer proof, or launch goal.",
+    "Add at least 3 meaningful launch signal areas.",
     "Re-run the Launch Conversion Audit once at least 3 signal areas are populated."
   ];
-  const memo = [
-    "Subject: Launch Conversion Audit paused: missing GTM inputs",
-    "",
-    "Cognix paused the audit because signal coverage is too low to generate a reliable executive read. Add at least 3 meaningful launch signals to unlock the launch-to-pipeline risk verdict, evidence trail, PMM action plan, and CMO-ready memo."
-  ].join("\n");
+  const nextSignals = [
+    "Launch message or positioning draft",
+    "Target buyer or ICP",
+    "Buyer pain",
+    "CTA",
+    "Sales feedback or objection notes",
+    "Competitive framing",
+    "Customer proof",
+    "Planned launch goal"
+  ];
+  const lockedOutputs = [
+    {
+      title: "Launch-to-pipeline risk verdict",
+      body: "Unlocks once at least 3 signal areas are covered."
+    },
+    {
+      title: "Before / after message direction",
+      body: "Locked until Cognix has enough launch context."
+    },
+    {
+      title: "CMO-ready launch risk memo",
+      body: "Unlocks once Cognix can generate a reliable executive read."
+    }
+  ];
 
   return {
     paused: true,
@@ -923,11 +937,14 @@ function buildPausedDiagnosis(coverage) {
     riskLabel: "Undetermined",
     signalCoverage,
     coverage,
+    sharedAreas: coverage.presentTitles,
     evidence: [],
     actions,
+    nextSignals,
+    lockedOutputs,
     pattern: "Awaiting launch context",
     scoreName: "Launch-to-pipeline risk",
-    verdict: "Audit paused: not enough launch signal",
+    verdict: "Not enough launch signal to diagnose reliably.",
     demoIntentRisk: "Undetermined",
     causalDiagnosis,
     buyerUrgency: "Awaiting input",
@@ -935,7 +952,7 @@ function buildPausedDiagnosis(coverage) {
     implication: "Awaiting input",
     beforeMessage: "Awaiting launch context.",
     afterMessage: "Awaiting launch context. Add more signal coverage to unlock message direction.",
-    memo,
+    memo: "",
     coreSentence: causalDiagnosis,
     kpiDrivers: []
   };
@@ -1217,6 +1234,9 @@ function buildCoverage(signals, has) {
   const present = signals
     .filter((signal) => coreLaunchSignalIds.includes(signal.id) && isMeaningfulSignalText(signal.text))
     .map((signal) => signal.id);
+  const presentTitles = coreBuckets
+    .filter((bucket) => present.includes(bucket.id))
+    .map((bucket) => bucket.title);
   const missing = coreBuckets.filter((bucket) => !present.includes(bucket.id)).map((bucket) => bucket.title);
   const count = new Set(present).size;
   const total = coreLaunchSignalIds.length;
@@ -1227,7 +1247,7 @@ function buildCoverage(signals, has) {
       ? "Core launch conversion signals are present."
       : "Core conversion signals are incomplete. Add launch message, buyer pain, CTA, and sales or objection signal."
   ];
-  return { count, total, missing, notes };
+  return { count, total, missing, presentTitles, notes };
 }
 
 function computeSignalCoverage(coverage, has) {
@@ -1425,7 +1445,7 @@ function isMeaningfulSignalText(value) {
   const normalized = normalizeSignalText(value);
   if (!normalized) return false;
   if (genericSignalResponses.has(normalized)) return false;
-  if (/^(not sure|unsure|tbd|none|n\/a|na|coming soon|waiting for input|unknown)[.!?]*$/i.test(normalized)) return false;
+  if (/^(not sure|unsure|tbd|none|n\/a|na|coming soon|need to add|waiting for input|awaiting input|unknown)[.!?]*$/i.test(normalized)) return false;
   const words = normalized.split(/\s+/).filter(Boolean);
   if (words.length <= 3 && words.every((word) => genericSignalResponses.has(word) || ["no", "not", "sure", "input", "later"].includes(word))) return false;
   return normalized.length >= 12 || words.length >= 4;
