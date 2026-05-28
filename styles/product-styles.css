@@ -834,21 +834,32 @@ h3 {
 .analysis-shell {
   min-height: 100%;
   display: grid;
-  grid-template-columns: minmax(0, 0.86fr) minmax(360px, 0.7fr);
-  gap: 34px;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.52fr);
+  gap: 28px;
   align-items: center;
 }
 
 .analysis-core {
   display: grid;
-  grid-template-columns: 190px minmax(0, 1fr);
-  gap: 30px;
+  grid-template-columns: 170px minmax(0, 1fr);
+  gap: 26px;
   align-items: center;
+  min-width: 0;
+}
+
+.analysis-core h1 {
+  max-width: 520px;
+  font-size: clamp(34px, 3.4vw, 48px);
+  line-height: 1.1;
+}
+
+.analysis-core p {
+  max-width: 460px;
 }
 
 .analysis-ring {
-  width: 190px;
-  height: 190px;
+  width: 170px;
+  height: 170px;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -859,8 +870,8 @@ h3 {
 }
 
 .analysis-ring span {
-  width: 138px;
-  height: 138px;
+  width: 122px;
+  height: 122px;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -873,6 +884,8 @@ h3 {
 .analysis-steps {
   display: grid;
   gap: 12px;
+  align-self: center;
+  min-width: 0;
 }
 
 .analysis-step {
@@ -886,6 +899,11 @@ h3 {
   background: rgba(255, 255, 255, 0.7);
   padding: 14px;
   color: var(--muted);
+}
+
+.analysis-step strong {
+  font-size: 13.5px;
+  line-height: 1.25;
 }
 
 .analysis-step span {
