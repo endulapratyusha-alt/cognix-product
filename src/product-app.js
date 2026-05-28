@@ -22,6 +22,36 @@ const previewMaps = [
 
 const previewMessage = "This cognition map is being shaped with beta users. Start with the Launch conversion audit first.";
 
+const coreLaunchSignalIds = [
+  "launch-message",
+  "target-buyer",
+  "buyer-pain",
+  "value-prop",
+  "campaign-copy",
+  "cta",
+  "sales-talk-track",
+  "objections",
+  "competitive-framing",
+  "customer-proof",
+  "launch-goal"
+];
+
+const genericSignalResponses = new Set([
+  "not sure",
+  "unsure",
+  "tbd",
+  "to be determined",
+  "none",
+  "n/a",
+  "na",
+  "coming soon",
+  "waiting for input",
+  "no input",
+  "no idea",
+  "unknown",
+  "placeholder"
+]);
+
 const bucketSets = {
   pre: [
     ["launch-message", "Launch message or positioning draft", "Announcement, positioning, headline, shipped capability, launch narrative", ["launch", "release", "announce", "feature", "capability", "shipped", "positioning", "headline"]],
@@ -318,7 +348,7 @@ function executiveDigest(diagnosis) {
         </div>
         <div>
           <b>Evidence areas</b>
-          <strong>${diagnosis.coverage.count} of ${activeBuckets().length} areas</strong>
+          <strong>${diagnosis.coverage.count} of ${diagnosis.coverage.total} areas</strong>
         </div>
       </div>
 
@@ -361,6 +391,7 @@ function executiveDigest(diagnosis) {
 
 function resultScreen() {
   const diagnosis = state.diagnosis || diagnoseLaunch();
+  if (diagnosis.paused) return pausedResultScreen(diagnosis);
   const pre = diagnosis.mode === "pre";
   return `
     <div class="result-command">
@@ -452,6 +483,61 @@ function resultScreen() {
         </div>
       </section>
       ${state.actionMessage ? `<div class="toast">${esc(state.actionMessage)}</div>` : ""}
+    </div>`;
+}
+
+function pausedResultScreen(diagnosis) {
+  return `
+    <div class="result-command paused-command">
+      <section class="paused-hero" aria-label="Data deficiency">
+        <div>
+          <span class="eyebrow">Data deficiency</span>
+          <h1>${esc(diagnosis.verdict)}</h1>
+          <p>${esc(diagnosis.causalDiagnosis)}</p>
+        </div>
+        <aside class="paused-status">
+          <span>Signal coverage</span>
+          <strong>${esc(diagnosis.signalCoverage.label)}, ${diagnosis.coverage.count} of ${diagnosis.coverage.total} areas</strong>
+          <small>Demo intent risk: ${esc(diagnosis.demoIntentRisk)}</small>
+        </aside>
+      </section>
+
+      <section class="paused-grid">
+        <article class="result-card">
+          <span>Evidence</span>
+          <h3>No evidence available yet because the audit does not have enough launch context.</h3>
+        </article>
+        <article class="result-card">
+          <span>Before / after rewrite</span>
+          <h3>Awaiting launch context. Add more signal coverage to unlock message direction.</h3>
+        </article>
+      </section>
+
+      <section class="deep-grid">
+        <article class="board-card correction">
+          <span>PMM action plan</span>
+          <ol>
+            ${diagnosis.actions.map((item) => `<li>${esc(item)}</li>`).join("")}
+          </ol>
+        </article>
+        <article class="board-card">
+          <span>Signal coverage</span>
+          <ul>
+            ${diagnosis.coverage.notes.map((item) => `<li>${esc(item)}</li>`).join("")}
+          </ul>
+        </article>
+      </section>
+
+      <section class="memo-section">
+        <div class="digest-section-head">
+          <span>CMO memo</span>
+          <strong>Paused artifact</strong>
+        </div>
+        <textarea class="memo-copy-block paused-memo" readonly>${esc(diagnosis.memo)}</textarea>
+        <div class="action-console memo-actions">
+          <button type="button" data-action="add-signals">Add more signals</button>
+        </div>
+      </section>
     </div>`;
 }
 
@@ -565,6 +651,12 @@ function bindEvents() {
       state.step = 0;
       render();
     });
+  });
+
+  document.querySelector("[data-action='add-signals']")?.addEventListener("click", () => {
+    state.step = 1;
+    state.actionMessage = "";
+    render();
   });
 
   document.querySelector("[data-action='copy-memo']")?.addEventListener("click", async () => {
@@ -732,10 +824,11 @@ function diagnoseLaunch() {
       title: activeBuckets().find((bucket) => bucket.id === id)?.title || "Launch signal",
       text: String(value || "").trim()
     }))
-    .filter((signal) => signal.text.length > 12);
+    .filter((signal) => isMeaningfulSignalText(signal.text));
   const allText = signals.map((signal) => signal.text).join("\n").toLowerCase();
   const has = buildSignalFlags(signals, allText);
   const coverage = buildCoverage(signals, has);
+  if (coverage.count < 3) return buildPausedDiagnosis(coverage);
   const fractures = buildFractures(has, allText);
   const rankedFractures = prioritizeFractures(fractures, has);
   const ranked = has.strongLaunch ? buildReadinessFindings(signals, has) : rankedFractures.length ? rankedFractures : [{
@@ -804,8 +897,52 @@ function diagnoseLaunch() {
   };
 }
 
+function buildPausedDiagnosis(coverage) {
+  const count = coverage.count;
+  const signalCoverage = {
+    label: "Low",
+    note: `Low, ${count} of ${coverage.total} areas`
+  };
+  const causalDiagnosis = `Cognix needs at least 3 meaningful launch signals to generate a reliable Launch Conversion Audit. The current input only includes ${count} of ${coverage.total} signal areas, so the system cannot identify real fracture patterns without guessing.`;
+  const actions = [
+    "Add your launch message, positioning draft, or landing page copy.",
+    "Add the target buyer or ICP and the buyer pain you want to activate.",
+    "Add the CTA, sales feedback, competitive context, customer proof, or launch goal.",
+    "Re-run the Launch Conversion Audit once at least 3 signal areas are populated."
+  ];
+  const memo = [
+    "Subject: Launch Conversion Audit paused: missing GTM inputs",
+    "",
+    "Cognix paused the audit because signal coverage is too low to generate a reliable executive read. Add at least 3 meaningful launch signals to unlock the launch-to-pipeline risk verdict, evidence trail, PMM action plan, and CMO-ready memo."
+  ].join("\n");
+
+  return {
+    paused: true,
+    mode: state.launchMode,
+    riskScore: null,
+    riskLabel: "Undetermined",
+    signalCoverage,
+    coverage,
+    evidence: [],
+    actions,
+    pattern: "Awaiting launch context",
+    scoreName: "Launch-to-pipeline risk",
+    verdict: "Audit paused: not enough launch signal",
+    demoIntentRisk: "Undetermined",
+    causalDiagnosis,
+    buyerUrgency: "Awaiting input",
+    salesPath: "Awaiting input",
+    implication: "Awaiting input",
+    beforeMessage: "Awaiting launch context.",
+    afterMessage: "Awaiting launch context. Add more signal coverage to unlock message direction.",
+    memo,
+    coreSentence: causalDiagnosis,
+    kpiDrivers: []
+  };
+}
+
 function buildSignalFlags(signals, allText) {
-  const area = (id) => signals.some((signal) => signal.id === id && signal.text.length > 24);
+  const area = (id) => signals.some((signal) => signal.id === id && isMeaningfulSignalText(signal.text));
   const ctaText = signals.find((signal) => signal.id === "cta")?.text.toLowerCase() || "";
   const objectionText = [
     signals.find((signal) => signal.id === "objections")?.text || "",
@@ -1042,7 +1179,7 @@ function findEvidence(terms) {
       source: activeBuckets().find((bucket) => bucket.id === id)?.title || "Launch signal",
       text: String(value || "").trim()
     }))
-    .filter((signal) => signal.text.length > 12);
+    .filter((signal) => isMeaningfulSignalText(signal.text));
   const matches = signals
     .map((signal) => {
       const term = terms.find((item) => signal.text.toLowerCase().includes(item));
@@ -1076,24 +1213,27 @@ function evidenceScore(item, termText) {
 }
 
 function buildCoverage(signals, has) {
-  const present = signals.map((signal) => signal.id);
-  const missing = activeBuckets().filter((bucket) => !present.includes(bucket.id)).map((bucket) => bucket.title);
+  const coreBuckets = bucketDefinitions.pre.filter((bucket) => coreLaunchSignalIds.includes(bucket.id));
+  const present = signals
+    .filter((signal) => coreLaunchSignalIds.includes(signal.id) && isMeaningfulSignalText(signal.text))
+    .map((signal) => signal.id);
+  const missing = coreBuckets.filter((bucket) => !present.includes(bucket.id)).map((bucket) => bucket.title);
   const count = new Set(present).size;
+  const total = coreLaunchSignalIds.length;
   const notes = [
-    `${count} of ${activeBuckets().length} launch signal areas have meaningful content.`,
+    `${count} of ${total} launch signal areas have meaningful content.`,
     missing.length ? `Missing or thin areas: ${missing.slice(0, 5).join(", ")}.` : "All launch signal areas have content.",
-    has.launchMessage && has.buyerPain && (has.strongCta || has.passiveCta) && has.salesSignal
+    count >= 3 && has.launchMessage && has.buyerPain && (has.strongCta || has.passiveCta) && has.salesSignal
       ? "Core launch conversion signals are present."
       : "Core conversion signals are incomplete. Add launch message, buyer pain, CTA, and sales or objection signal."
   ];
-  return { count, missing, notes };
+  return { count, total, missing, notes };
 }
 
 function computeSignalCoverage(coverage, has) {
-  const required = has.launchMessage && has.buyerPain && (has.strongCta || has.passiveCta) && has.salesSignal;
-  if (coverage.count >= 6 && required) return { label: "Strong", note: "Six or more meaningful signal areas are present, including launch message, buyer pain, CTA, and sales or objection signal." };
-  if (coverage.count >= 3) return { label: "Medium", note: "Three to five meaningful signal areas are present, or core conversion signals are still incomplete." };
-  return { label: "Low", note: "Fewer than three meaningful signal areas are present, so the memo should be treated as an early read." };
+  if (coverage.count >= 7) return { label: "Strong", note: "Seven or more meaningful launch signal areas are present." };
+  if (coverage.count >= 3) return { label: "Medium", note: "Three to six meaningful launch signal areas are present." };
+  return { label: "Low", note: "Fewer than three meaningful launch signal areas are present." };
 }
 
 function deriveBeforeMessage(signals) {
@@ -1107,11 +1247,17 @@ function buildPainLedRewrite(has, signals, beforeMessage) {
   const painSignal = signals.find((signal) => signal.id === "buyer-pain")?.text || "";
   const valueSignal = signals.find((signal) => signal.id === "value-prop")?.text || "";
   const messageSignal = signals.find((signal) => signal.id === "launch-message")?.text || beforeMessage;
-  const buyer = has.unclearIcp ? "the target buyer" : extractBuyerValue(buyerSignal, "your buyer");
-  const pain = extractPainValue(painSignal, "launch-critical work is creating hidden pipeline risk");
+  const buyer = isMeaningfulSignalText(buyerSignal) && !has.unclearIcp
+    ? extractBuyerValue(buyerSignal, "Awaiting input")
+    : "Awaiting input";
+  const pain = isMeaningfulSignalText(painSignal)
+    ? extractPainValue(painSignal, "Awaiting input")
+    : "Awaiting input";
   const product = extractProductName(messageSignal);
-  const outcome = extractOutcomeValue(valueSignal, has.quantifiedImpact ? "protect pipeline conversion before the launch window closes" : "see where attention is likely to stall before it becomes qualified demand");
-  const friction = extractStatusQuoFriction(signals, "waiting for the status quo to break pipeline conversion");
+  const outcome = isMeaningfulSignalText(valueSignal)
+    ? extractOutcomeValue(valueSignal, "Awaiting input")
+    : "Awaiting input";
+  const friction = extractStatusQuoFriction(signals, "Awaiting input");
   const cta = has.strongCta ? "Book a demo" : "Request a launch conversion audit";
   if (beforeMessage === "No launch message was provided.") {
     return `${cta} to show ${buyer} why ${pain} matters now and what to fix before launch day.`;
@@ -1254,7 +1400,7 @@ function activeBuckets() {
 }
 
 function meaningfulAreas() {
-  return activeBuckets().filter((bucket) => String(state.signals[bucket.id] || "").trim().length > 24);
+  return activeBuckets().filter((bucket) => isMeaningfulSignalText(state.signals[bucket.id]));
 }
 
 function excerpt(text, term) {
@@ -1273,6 +1419,24 @@ function cleanEvidenceSnippet(text) {
   return truncate(String(text || "")
     .replace(/^(Launch message or positioning draft|Landing page copy|Landing page or campaign copy|Launch page or campaign copy|Target buyer or ICP|Buyer pain|Value proposition|CTA|Sales talk track|Objection notes|Competitive framing|Customer proof|Planned launch goal):\s*/i, "")
     .trim(), 210);
+}
+
+function isMeaningfulSignalText(value) {
+  const normalized = normalizeSignalText(value);
+  if (!normalized) return false;
+  if (genericSignalResponses.has(normalized)) return false;
+  if (/^(not sure|unsure|tbd|none|n\/a|na|coming soon|waiting for input|unknown)[.!?]*$/i.test(normalized)) return false;
+  const words = normalized.split(/\s+/).filter(Boolean);
+  if (words.length <= 3 && words.every((word) => genericSignalResponses.has(word) || ["no", "not", "sure", "input", "later"].includes(word))) return false;
+  return normalized.length >= 12 || words.length >= 4;
+}
+
+function normalizeSignalText(value) {
+  return String(value || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase()
+    .replace(/[.?!]+$/g, "");
 }
 
 function hasAny(text, terms) {

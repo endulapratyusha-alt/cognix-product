@@ -939,6 +939,77 @@ h3 {
   position: relative;
 }
 
+.paused-command {
+  display: grid;
+  gap: 14px;
+}
+
+.paused-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.34fr);
+  gap: 20px;
+  align-items: stretch;
+  border: 1px solid rgba(203, 216, 231, 0.9);
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(45, 102, 245, 0.09), transparent 18rem),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 251, 255, 0.82));
+  padding: clamp(22px, 3vw, 32px);
+  box-shadow: var(--soft-shadow);
+}
+
+.paused-hero h1 {
+  margin-bottom: 12px;
+  font-size: clamp(30px, 3vw, 44px);
+}
+
+.paused-hero p {
+  max-width: 780px;
+  margin: 0;
+  color: var(--slate);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.paused-status {
+  display: grid;
+  align-content: center;
+  gap: 8px;
+  border: 1px solid rgba(203, 216, 231, 0.9);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.72);
+  padding: 18px;
+}
+
+.paused-status span {
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 560;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.paused-status strong {
+  color: var(--navy);
+  font-size: 18px;
+  font-weight: 520;
+}
+
+.paused-status small {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.paused-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.paused-memo {
+  min-height: 190px;
+}
+
 .executive-digest {
   position: relative;
   overflow: hidden;
@@ -1467,7 +1538,8 @@ h3 {
   .analysis-core,
   .result-hero,
   .deep-grid,
-  .digest-hero {
+  .digest-hero,
+  .paused-hero {
     grid-template-columns: 1fr;
   }
 
@@ -1519,6 +1591,7 @@ h3 {
   .kpi-layout,
   .result-grid,
   .risk-map,
+  .paused-grid,
   .impact-strip,
   .leadership-grid,
   .belief-grid,
