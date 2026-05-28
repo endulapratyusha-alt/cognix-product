@@ -498,8 +498,9 @@ function pausedResultScreen(diagnosis) {
         <div>
           <span class="status-badge">Audit paused</span>
           <h1>Not enough launch signal to diagnose reliably.</h1>
-          <p>Cognix needs at least 3 meaningful launch signals to generate a reliable Launch Conversion Audit. You have added ${diagnosis.coverage.count} of 3 required signals so far.</p>
-          <p>Cognix will not generate a launch-to-pipeline verdict, message rewrite, or CMO-ready memo until there is enough launch context to avoid guessing.</p>
+          <p>Cognix needs at least 3 meaningful launch signals to generate a reliable Launch Conversion Audit. Cognix will not generate a launch-to-pipeline verdict, message rewrite, or CMO-ready memo until there is enough launch context to avoid guessing.</p>
+          <p>You have added ${diagnosis.coverage.count} of 3 required signals so far.</p>
+          <p>A prompt will always answer. Cognix pauses when the signal is too thin.</p>
         </div>
         <aside class="paused-status">
           <span>Signal coverage</span>

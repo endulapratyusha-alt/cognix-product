@@ -271,7 +271,7 @@ function inputOutputSection() {
           "What you paste, what you get",
           "Paste your launch signals. Get a verdict.",
           "",
-          "This is not a summary. It is a diagnosis."
+          "This is not a summary. It is a diagnostic read on whether your launch has enough shared context to create qualified demand."
         )}
         <div class="io-grid">
           ${listCard("Signals in", signalsIn)}
@@ -300,7 +300,7 @@ function sampleOutputSection() {
         ${sectionIntro(
           "Sample output",
           "A CMO-ready memo, not another AI summary.",
-          "Example scenario: Meridian is launching an AI workflow assistant for RevOps teams in 11 days. The launch page is feature-heavy, sales is unsure how to create urgency, and the CTA is \"Learn more.\""
+          "Example scenario: Meridian is launching an AI workflow assistant for RevOps teams in 11 days. The launch page is feature-heavy, sales is unsure how to create urgency, and the CTA is \"Learn more.\" The memo turns scattered launch signals into a leadership-ready read on risk, evidence, and what needs to change before the launch is judged in pipeline."
         )}
         <article class="memo-card">
           ${memoField("Subject", "Pre-launch conversion risk for Meridian AI workflow assistant")}
@@ -368,6 +368,7 @@ function differenceSection() {
         )}
         <div class="narrative-block compact narrative-block-plain">
           <p>A prompt cannot detect that your ICP describes one buyer while your CTA attracts another. It cannot cross-reference what sales is hearing against what your landing page says. Cognix interprets your signals against each other. That contradiction is what a prompt misses. That is the fracture that kills demo intent.</p>
+          <p>Cognix is a diagnostic engine, not a guessing machine. If your launch inputs are too thin, Cognix will pause the audit and tell you what context is missing instead of producing confident AI noise.</p>
         </div>
         <div class="comparison-table">
           ${comparisonRows.map(([prompt, cognix]) => `
@@ -406,7 +407,7 @@ function architectureSection() {
         ${sectionIntro(
           "The bigger architecture",
           "AI made GTM faster. Cognix makes it coherent.",
-          "The Launch Conversion Audit is the first surface of the Cognix GTM cognition architecture. Today, that architecture helps PMMs diagnose launch conversion risk before launch day. Over time, it expands into narrative drift, sales adoption, competitive pressure, pipeline quality, and enablement mismatch."
+          "The Launch Conversion Audit is the first surface of the Cognix GTM cognition architecture. Today, that architecture helps PMMs diagnose launch conversion risk before launch day. Over time, the same interpretation layer expands into narrative drift, sales adoption, competitive pressure, pipeline quality, and enablement mismatch."
         )}
         ${auditMap({ large: true })}
         <div class="spine-block">

@@ -71,9 +71,9 @@ const betaOutputs = [
   "Supporting evidence",
   "Contradiction clusters",
   "Narrative drift analysis",
-  "Revenue execution risk",
-  "Signal confidence",
-  "Next GTM decisions",
+  "Launch conversion risk",
+  "CMO-ready launch risk memo",
+  "Signal coverage",
   "Executive Signal Brief"
 ];
 
@@ -354,10 +354,10 @@ function shiftSection() {
           <h2>The next AI problem is not generation. It is cognition.</h2>
         </div>
         <div class="prose">
-          <p>The first wave of AI helped teams produce more campaigns, call notes, sales content, launch docs, customer summaries, and analysis.</p>
-          <p>But more output does not create shared understanding. It creates interpretation debt.</p>
-          <p>When every function generates faster but interprets differently, teams start scaling contradictions. Marketing says one thing. Sales repeats another. Customers hear a third. Product sees signals too late. RevOps watches risk appear downstream.</p>
-          <p><strong>Cognix is built for the next phase of AI adoption: helping organizations understand what all their signals mean, where teams are drifting apart upstream and downstream, and what decision should happen next. Cognition orchestration across your GTM lifecycle.</strong></p>
+          <p>The first wave of AI gave every team more output: more campaigns, call notes, sales content, launch docs, customer summaries, and analysis.</p>
+          <p>But scale without shared interpretation creates a new operating risk. When every function generates faster but interprets differently, teams start scaling contradictions.</p>
+          <p>Marketing says one thing. Sales repeats another. Customers hear a third. Product sees signals too late. RevOps watches risk appear downstream.</p>
+          <p><strong>Cognix is built for the next phase of AI adoption: helping organizations interpret what all these signals mean, where teams are drifting apart, and what decision should happen next.</strong></p>
         </div>
       </div>
     </section>`;
@@ -370,6 +370,7 @@ function whyNowSection() {
         <div class="section-intro">
           ${sectionLabel("Why this matters now")}
           <h2>The fracture shows up late. That is the danger.</h2>
+          <p>AI-generated work accelerates content creation. Without a shared interpretation layer, it also accelerates narrative drift, inconsistent execution, and late-stage revenue risk.</p>
         </div>
         <div class="card-grid three">
           ${risks.map(([title, copy], index) => `
@@ -506,7 +507,7 @@ function activeBetaSection() {
         <article class="beta-card">
           ${pill("GTM Fracture Map", true)}
           <h3>The first active Cognix workflow.</h3>
-          <p>Teams add a small set of GTM signals. Cognix analyzes contradiction, narrative drift, signal confidence, fracture patterns, and revenue execution risk.</p>
+          <p>Teams add a small set of GTM signals. Cognix analyzes launch conversion risk, narrative drift, contradiction detection, signal coverage, and the executive read needed to decide what changes next.</p>
           <div class="check-grid">
             ${betaOutputs.map((item) => `<span>${esc(item)}</span>`).join("")}
           </div>
