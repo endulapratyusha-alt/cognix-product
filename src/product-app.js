@@ -792,7 +792,10 @@ function appendSignal(bucketId, text) {
 
 function truncate(value, max) {
   const text = String(value || "").replace(/\s+/g, " ").trim();
-  return text.length > max ? `${text.slice(0, max - 3).trim()}...` : text;
+  if (text.length <= max) return text;
+  const sliced = text.slice(0, max - 3).trim();
+  const clean = sliced.replace(/\s+\S{1,18}$/, "").replace(/[,:;/-]+$/, "").trim();
+  return `${clean || sliced}...`;
 }
 
 function startAnalysis() {
@@ -1124,48 +1127,69 @@ function buildReadinessFindings(signals, has) {
 function buildCausalDiagnosis(fractures, evidence, has, pre) {
   const top = fractures[0];
   const second = fractures.find((item) => item.title !== top.title);
-  const firstEvidence = evidence[0];
-  const secondEvidence = evidence.find((item) => item.source !== firstEvidence?.source) || evidence[1];
   if (!top) return "Cognix needs more pasted or uploaded launch signals before it can explain the launch-to-pipeline risk.";
 
   if (has.strongLaunch) {
     return "The launch has the core conversion conditions Cognix expects before launch: a clear ICP, a concrete buyer pain, urgency, proof, a demo-intent CTA, and sales or objection support. The remaining work is execution consistency, not a major conversion-risk fix.";
   }
 
-  const inputSignal = firstEvidence
-    ? `${firstEvidence.source} says "${firstEvidence.snippet}"`
-    : "The provided launch inputs are thin";
-  const secondSignal = secondEvidence
-    ? ` Another signal says "${secondEvidence.snippet}"`
-    : "";
-  const pairedFracture = second ? ` and ${second.title.toLowerCase()}` : "";
+  const pairedFracture = second ? `, with ${formatFractureLabel(second.title)} also contributing` : "";
+  const detected = buildDetectedSummary(top, second, has);
+  const conversionRisk = "That matters because launch-to-pipeline conversion depends on making the buyer pain feel urgent enough to justify a qualified demo conversation, not just clear enough to understand.";
+  const preface = pre ? "before launch day" : "before the next conversion push";
 
   if (top.title === "Passive CTA" && (has.weakDemoIntent || has.weakSalesPath)) {
-    return `${inputSignal}.${secondSignal} Together, this points to ${top.title.toLowerCase()}${pairedFracture}: the launch may create interest, but buyers and reps do not have a clear path from awareness to a qualified demo conversation. PMM should make the demo ask explicit and tie it to the buying trigger.`;
+    return `${detected} The CTA and sales path are not yet doing enough work to turn interest into demo intent${pairedFracture}. ${conversionRisk} PMM should make the demo ask explicit and tie it to the buying trigger ${preface}.`;
   }
 
   if (top.title === "Launch activity without qualified demand" || has.activityNoIntent) {
-    return `${inputSignal}.${secondSignal} That combination indicates activity without qualified demand: the launch is getting attention, but the message is not converting that attention into demo intent or pipeline movement. PMM should shift the follow-up from launch activity to buyer pain, proof, and the demo path.`;
+    return `${detected} The launch is getting attention, but the message is not converting that attention into demo intent or pipeline movement. ${conversionRisk} PMM should shift the follow-up from launch activity to buyer pain, proof, and the demo path ${preface}.`;
   }
 
   if (top.title === "Feature-heavy message") {
-    return `${inputSignal}.${secondSignal} Cognix detects a feature-heavy message${pairedFracture}: the launch explains what changed in the product before it makes the buyer problem expensive or urgent. That weakens launch-to-pipeline conversion because buyers can understand the release without feeling a reason to book time. PMM should reframe the message around pain, impact, and why now.`;
+    return `${detected} The launch explains what changed in the product before it makes the buyer problem expensive or urgent${pairedFracture}. That weakens launch-to-pipeline conversion because buyers can understand the release without feeling a reason to book time. PMM should reframe the message around pain, impact, and why now ${preface}.`;
   }
 
   if (top.title === "Competitive differentiation gap") {
-    return `${inputSignal}.${secondSignal} The competitive signal suggests the market may understand the problem through another frame. If Cognix does not make the pain and why-us contrast explicit, the launch can create awareness while competitors own the buying criteria. PMM should add a sharper contrast around the buyer problem and business impact.`;
+    return `${detected} The market may understand the problem through another frame, while this launch does not yet make the pain and why-us contrast explicit. That can create awareness while competitors shape the buying criteria. PMM should add a sharper contrast around the buyer problem and business impact ${preface}.`;
   }
 
   if (top.title === "Missing customer proof") {
-    return `${inputSignal}.${secondSignal} This creates a proof gap: the launch asks buyers to believe the claim without enough customer evidence or quantified pain. That weakens demo intent because buyers do not yet have confidence that the problem is expensive enough to prioritize. PMM should add proof before launch day.`;
+    return `${detected} The launch asks buyers to believe the claim without enough customer evidence or quantified pain. That weakens demo intent because buyers do not yet have confidence that the problem is expensive enough to prioritize. PMM should add proof ${preface}.`;
   }
 
   if (top.title === "Weak sales conversion path") {
-    return `${inputSignal}.${secondSignal} Cognix detects weak sales conversion path: the launch may create interest, but reps do not yet have a crisp way to turn that interest into a qualified demo conversation. PMM should create the pain-to-demo talk track and answer the why-now objection before launch day.`;
+    return `${detected} The launch may create interest, but reps do not yet have a crisp way to turn that interest into a qualified demo conversation. ${conversionRisk} PMM should create the pain-to-demo talk track and answer the why-now objection ${preface}.`;
   }
 
   const mode = pre ? "Before launch" : "After launch";
-  return `${inputSignal}.${secondSignal} ${mode}, this points to ${top.title.toLowerCase()}${pairedFracture}. It affects launch-to-pipeline conversion because the buyer does not have a clear enough reason to move from interest to a demo request. PMM should fix the highest-risk fracture before launch momentum is spent.`;
+  return `${detected} ${mode}, this points to ${formatFractureLabel(top.title)}${pairedFracture}. It affects launch-to-pipeline conversion because the buyer does not have a clear enough reason to move from interest to a demo request. PMM should fix the highest-risk fracture before launch momentum is spent.`;
+}
+
+function buildDetectedSummary(top, second, has) {
+  const themes = [top?.title, second?.title].filter(Boolean).map((item) => item.toLowerCase());
+  if (has.featureHeavy && (has.weakBuyerPain || has.weakDemoIntent)) {
+    return "Cognix detects a strategic launch problem: the message has a real product story, but the buyer pain is not yet urgent or concrete enough.";
+  }
+  if (has.passiveCta && has.weakSalesPath) {
+    return "Cognix detects a conversion-path problem: the launch may generate curiosity, but the CTA and sales narrative are not yet strong enough to create demo intent.";
+  }
+  if (has.passiveCta) {
+    return "Cognix detects a CTA problem: the launch asks buyers to keep learning instead of giving them a clear next step toward a qualified conversation.";
+  }
+  if (has.proofGap || themes.includes("missing customer proof")) {
+    return "Cognix detects a trust problem: the message is making a claim before it gives buyers enough proof to believe the risk is worth prioritizing.";
+  }
+  if (has.competitorOwnsPain) {
+    return "Cognix detects a positioning problem: competitors or alternatives may be framing the buyer pain more sharply than this launch.";
+  }
+  return `Cognix detects ${formatFractureLabel(top.title)}: the launch has enough signal to diagnose the dominant fracture, but the conversion path still needs tightening.`;
+}
+
+function formatFractureLabel(title) {
+  return String(title || "")
+    .replace(/\bcta\b/ig, "CTA")
+    .replace(/^./, (letter) => letter.toLowerCase());
 }
 
 function buildDemoIntentRisk(riskLabel, top, has, pre) {
@@ -1260,7 +1284,7 @@ function computeSignalCoverage(coverage, has) {
 function deriveBeforeMessage(signals) {
   const preferred = signals.find((signal) => ["launch-message", "campaign-copy"].includes(signal.id)) || signals[0];
   if (!preferred) return "No launch message was provided.";
-  return truncate(preferred.text.replace(/^(Launch message or positioning draft|Landing page or campaign copy|Launch page or campaign copy):\s*/i, ""), 260);
+  return cleanConceptPhrase(preferred.text, 260);
 }
 
 function buildPainLedRewrite(has, signals, beforeMessage) {
@@ -1268,22 +1292,24 @@ function buildPainLedRewrite(has, signals, beforeMessage) {
   const painSignal = signals.find((signal) => signal.id === "buyer-pain")?.text || "";
   const valueSignal = signals.find((signal) => signal.id === "value-prop")?.text || "";
   const messageSignal = signals.find((signal) => signal.id === "launch-message")?.text || beforeMessage;
+  const ctaSignal = signals.find((signal) => signal.id === "cta")?.text || "";
   const buyer = isMeaningfulSignalText(buyerSignal) && !has.unclearIcp
-    ? extractBuyerValue(buyerSignal, "Awaiting input")
-    : "Awaiting input";
+    ? extractBuyerValue(buyerSignal, "PMMs launching in fast-moving GTM teams")
+    : inferBuyerFromSignals(signals, has);
   const pain = isMeaningfulSignalText(painSignal)
-    ? extractPainValue(painSignal, "Awaiting input")
-    : "Awaiting input";
+    ? extractPainValue(painSignal, "messy launch signals and weak shared interpretation")
+    : inferPainFromSignals(has);
   const product = extractProductName(messageSignal);
   const outcome = isMeaningfulSignalText(valueSignal)
-    ? extractOutcomeValue(valueSignal, "Awaiting input")
-    : "Awaiting input";
-  const friction = extractStatusQuoFriction(signals, "Awaiting input");
-  const cta = has.strongCta ? "Book a demo" : "Request a launch conversion audit";
+    ? extractOutcomeValue(valueSignal, "diagnose launch-to-pipeline risk before launch day")
+    : inferOutcomeFromSignals(has);
+  const how = inferProductMechanism(signals, has);
+  const friction = extractStatusQuoFriction(signals, inferStatusQuoFromSignals(has));
+  const cta = extractCtaAction(ctaSignal, has);
   if (beforeMessage === "No launch message was provided.") {
     return `${cta} to show ${buyer} why ${pain} matters now and what to fix before launch day.`;
   }
-  return `For ${stripTerminalPunctuation(buyer)} struggling with ${stripTerminalPunctuation(pain).toLowerCase()}, ${product} helps ${stripTerminalPunctuation(outcome).toLowerCase()} without ${stripTerminalPunctuation(friction).toLowerCase()}. ${cta}.`;
+  return `For ${stripTerminalPunctuation(buyer)} struggling with ${lowerConcept(pain)}, ${product} helps ${lowerConcept(outcome)} by ${lowerConcept(how)}. Instead of ${lowerConcept(friction)}, ${stripTerminalPunctuation(cta)}.`;
 }
 
 function buildCmoMemo({ verdict, demoIntentRisk, causalDiagnosis, evidence, pattern, implication, actions, signalCoverage, afterMessage, strongLaunch }) {
@@ -1343,24 +1369,23 @@ function tightenSentence(text) {
 }
 
 function extractFieldValue(text, fallback) {
-  const cleaned = String(text || "")
-    .replace(/^(Launch message or positioning draft|Landing page copy|Landing page or campaign copy|Launch page or campaign copy|Target buyer or ICP|Buyer pain|Value proposition|CTA|Sales talk track|Objection notes|Competitive framing|Customer proof|Planned launch goal):\s*/i, "")
-    .replace(/\s+/g, " ")
-    .trim();
-  return cleaned ? truncate(cleaned, 180) : fallback;
+  const cleaned = cleanConceptPhrase(text, 180);
+  return cleaned || fallback;
 }
 
 function extractBuyerValue(text, fallback) {
   const cleaned = extractFieldValue(text, "");
   if (!cleaned) return fallback;
-  const roleMatch = cleaned.match(/(?:says\s+)?([^,.]+(?:leaders|managers|teams|buyers|PMMs|CMOs|operators|marketers))/i);
-  return roleMatch ? roleMatch[1].replace(/^the draft says\s+/i, "").trim() : truncate(cleaned, 90);
+  const roleMatch = cleaned.match(/(?:says\s+)?([^,.]+(?:leaders|managers|teams|buyers|PMMs|PMM teams|CMOs|operators|marketers))/i);
+  const buyer = roleMatch ? roleMatch[1].replace(/^the draft says\s+/i, "").trim() : cleaned;
+  return cleanConceptPhrase(buyer, 90) || fallback;
 }
 
 function extractProductName(text) {
   const cleaned = extractFieldValue(text, "the launch");
+  if (/cognix/i.test(cleaned)) return "Cognix";
   const launchMatch = cleaned.match(/(?:launching|launch|release|announcing)\s+([^,.;]+?)(?:,|\s+helps|\s+for|\s+with|$)/i);
-  if (launchMatch?.[1]) return launchMatch[1].trim();
+  if (launchMatch?.[1]) return cleanConceptPhrase(launchMatch[1], 48) || "this launch";
   return "this launch";
 }
 
@@ -1370,16 +1395,26 @@ function extractPainValue(text, fallback) {
   if (/not fully defined|not defined|unclear|weak|not quantified/i.test(cleaned)) {
     return "a buyer problem that is not yet specific or quantified";
   }
-  return cleaned;
+  if (/shared interpretation|scattered|notion|slack|chatgpt|claude|gemini/i.test(cleaned)) {
+    return "messy AI-era GTM output without shared interpretation";
+  }
+  return cleanConceptPhrase(cleaned, 120) || fallback;
 }
 
 function extractOutcomeValue(text, fallback) {
   const cleaned = extractFieldValue(text, "");
   if (!cleaned) return fallback;
   const helpsMatch = cleaned.match(/helps? (.+?)(?:, but|\.|$)/i);
-  if (helpsMatch?.[1]) return helpsMatch[1].trim().replace(/^(teams|revops|users|buyers)\s+/i, "");
+  if (helpsMatch?.[1]) {
+    const outcome = helpsMatch[1]
+      .split(/\s+by\s+/i)[0]
+      .trim()
+      .replace(/^(teams|revops|users|buyers|pmms|product marketing leaders)\s+/i, "");
+    return cleanConceptPhrase(outcome, 110) || fallback;
+  }
   if (/visibility dashboard/i.test(cleaned)) return "make launch handoff risk visible before it turns into missed pipeline";
-  return truncate(cleaned, 150);
+  if (/qualified demand|pipeline|demo intent|launch-to-pipeline/i.test(cleaned)) return "diagnose whether the launch will create qualified demand or just activity";
+  return cleanConceptPhrase(cleaned, 120) || fallback;
 }
 
 function extractStatusQuoFriction(signals, fallback) {
@@ -1390,9 +1425,89 @@ function extractStatusQuoFriction(signals, fallback) {
     const value = alreadyMatch[1].trim();
     if (/have a process/i.test(value)) return "relying on an existing manual process";
     if (/track this manually/i.test(value)) return "relying on manual tracking";
-    return `relying on ${value}`;
+    return `relying on ${cleanConceptPhrase(value, 80)}`;
   }
   return fallback;
+}
+
+function inferBuyerFromSignals(signals, has) {
+  const combined = signals.map((signal) => signal.text).join(" ");
+  if (/pmm|product marketing/i.test(combined)) return "PMMs launching in fast-moving GTM teams";
+  if (/revops/i.test(combined)) return "RevOps leaders";
+  if (/cmo|gtm leader/i.test(combined)) return "GTM leaders";
+  return has.unclearIcp ? "launch teams with unclear ICP pressure" : "GTM teams preparing for launch";
+}
+
+function inferPainFromSignals(has) {
+  if (has.featureHeavy && has.weakBuyerPain) return "a message that explains product capability before making the buyer pain urgent";
+  if (has.passiveCta) return "launch interest that does not turn into a clear demo path";
+  if (has.proofGap) return "claims that need stronger proof before buyers will prioritize them";
+  if (has.weakSalesPath) return "sales narrative gaps that weaken qualified demo conversations";
+  return "messy launch signals and unclear conversion risk";
+}
+
+function inferOutcomeFromSignals(has) {
+  if (has.activityNoIntent) return "turn launch attention into qualified demand";
+  if (has.proofGap) return "make the launch risk credible enough for buyers to act";
+  return "diagnose whether the launch will create qualified demand or just activity";
+}
+
+function inferProductMechanism(signals, has) {
+  const combined = signals.map((signal) => signal.text).join(" ");
+  if (/cognix/i.test(combined)) {
+    return "interpreting launch signals across messaging, ICP, CTA, sales feedback, proof, and competitive pressure";
+  }
+  if (has.weakSalesPath) return "connecting buyer pain, CTA, and sales follow-through into one conversion path";
+  if (has.proofGap) return "turning weak claims into evidence-backed launch fixes";
+  return "turning the dominant GTM fracture into a focused PMM action plan";
+}
+
+function inferStatusQuoFromSignals(has) {
+  if (has.passiveCta) return "asking buyers to learn more and hoping interest becomes pipeline";
+  if (has.featureHeavy) return "leading with product capability and category language";
+  if (has.proofGap) return "asking buyers to trust an unproven launch claim";
+  return "shipping with scattered signals and unresolved launch risk";
+}
+
+function extractCtaAction(text, has) {
+  const cleaned = extractFieldValue(text, "");
+  if (has.strongCta && /demo/i.test(cleaned)) return "book a demo tied to the buying trigger";
+  if (/audit|risk|diagnos/i.test(cleaned)) return "run the launch conversion audit before launch day";
+  return "run a launch conversion audit before launch day";
+}
+
+function cleanConceptPhrase(text, max = 120) {
+  const labelPattern = /^(Launch message(?: or positioning draft)?|Launch page|Landing page(?: copy| or campaign copy)?|Campaign copy|Target buyer(?: or ICP)?|ICP|Buyer pain|Value proposition|CTA|Sales talk track|Sales feedback|Objection notes?|Competitive framing|Customer proof|Planned launch goal)\s*:\s*/i;
+  let cleaned = String(text || "")
+    .replace(labelPattern, "")
+    .replace(/\b(chatgpt|claude|gemini|copilot)\s*,\s*[a-z]$/i, "$1")
+    .replace(/\s+/g, " ")
+    .replace(/\b(.{10,80}?)\b(?:\s+\1\b)+/gi, "$1")
+    .trim();
+  cleaned = cleaned
+    .split(/(?<=[.!?])\s+/)
+    .map((sentence) => sentence.trim())
+    .filter(Boolean)
+    .find((sentence) => !looksLikeRawDump(sentence)) || cleaned;
+  cleaned = cleaned
+    .replace(/^[,.;:\-\s]+|[,.;:\-\s]+$/g, "")
+    .replace(/\s+\S{1,2}$/g, "")
+    .trim();
+  return truncate(cleaned, max);
+}
+
+function looksLikeRawDump(text) {
+  const value = String(text || "").trim();
+  if (!value) return true;
+  const words = value.split(/\s+/);
+  const lowercaseWords = words.filter((word) => /^[a-z][a-z'-]*[,.]?$/.test(word));
+  return words.length > 22 && lowercaseWords.length / words.length > 0.82;
+}
+
+function lowerConcept(text) {
+  const cleaned = stripTerminalPunctuation(cleanConceptPhrase(text, 130));
+  if (!cleaned) return "unclear launch risk";
+  return cleaned.charAt(0).toLowerCase() + cleaned.slice(1);
 }
 
 function capitalizeFirst(text) {
@@ -1437,9 +1552,7 @@ function excerpt(text, term) {
 }
 
 function cleanEvidenceSnippet(text) {
-  return truncate(String(text || "")
-    .replace(/^(Launch message or positioning draft|Landing page copy|Landing page or campaign copy|Launch page or campaign copy|Target buyer or ICP|Buyer pain|Value proposition|CTA|Sales talk track|Objection notes|Competitive framing|Customer proof|Planned launch goal):\s*/i, "")
-    .trim(), 210);
+  return cleanConceptPhrase(text, 210);
 }
 
 function isMeaningfulSignalText(value) {
