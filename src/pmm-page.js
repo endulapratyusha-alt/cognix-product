@@ -21,7 +21,7 @@ const interpretationNodes = [
   "Demo intent risk",
   "Buyer urgency gap",
   "CTA mismatch",
-  "Proof weakness",
+  "Proof transmission gap",
   "Sales narrative variance",
   "Launch-to-pipeline risk",
   "PMM action path"
@@ -33,7 +33,7 @@ const decisionNodes = [
   "Evidence trail",
   "PMM action plan",
   "Before and after direction",
-  "CMO-ready memo",
+  "Resource alignment memo",
   "Launch decision"
 ];
 
@@ -43,10 +43,10 @@ const signalsIn = [
   "Buyer pain statement",
   "Campaign copy and CTA",
   "Sales talk track or objection notes",
-  "Gong or Fireflies call summaries",
+  "Call summaries or sales notes",
   "Competitive framing",
   "Customer proof or testimonials",
-  "AI-generated GTM drafts (ChatGPT, Claude, Gemini, Copilot)",
+  "Generated GTM drafts and launch notes",
   "Planned launch goal"
 ];
 
@@ -56,8 +56,8 @@ const cognixOut = [
   "Dominant GTM fracture",
   "Evidence from your signals",
   "PMM action plan",
-  "Before and after message direction",
-  "CMO-ready launch risk memo"
+  "Instead of / Say this rewrite",
+  "Strategic alignment & resource brief"
 ];
 
 const evidenceBullets = [
@@ -74,7 +74,7 @@ const memoEvidence = [
 ];
 
 const memoFixes = [
-  "Reframe the headline around buyer pain, not automation capability.",
+  "Replace the automation-led headline with the buyer's pipeline review risk.",
   "Replace \"Learn more\" with a CTA that invites a pipeline or workflow diagnosis.",
   "Add one customer proof point tied to time saved, leakage found, or reporting speed.",
   "Give sales a short \"why now\" talk track for status quo objections."
@@ -190,15 +190,15 @@ function hero() {
     <section class="hero-section">
       <div class="hero-shell">
         <div class="hero-copy">
-          <p class="eyebrow">Launch conversion audit for product marketers</p>
-          <h1>Know what will break before your launch misses pipeline.</h1>
-          <p class="hero-subcopy">Turn messy launch signals into a CMO-ready launch risk verdict before launch day.</p>
-          <p class="hero-support">AI made GTM faster. Cognix makes it coherent by interpreting signals from ChatGPT, Claude, Gemini, Copilot, Notion launch briefs, sales feedback, launch copy, customer proof, and competitive pressure.</p>
+          <p class="eyebrow">Pre-launch coherence audit for product marketers</p>
+          <h1>Protect your launch strategy before it gets diluted in market.</h1>
+          <p class="hero-subcopy">Cognix compares your launch strategy against buyer-facing copy, sales talk tracks, proof, CTA, and commercial goals to detect where cross-functional drift may weaken qualified pipeline.</p>
+          <p class="hero-support">Senior PMMs already have strategy. Cognix helps protect that strategy as it moves through execution surfaces: buyer-facing copy, sales narrative, proof placement, CTA, competitive framing, and campaign follow-up.</p>
           <div class="hero-actions">
             <a class="btn btn-primary btn-large" href="${auditHref}">Get your first audit free</a>
             <a class="btn btn-secondary btn-large" href="#sample">See sample output first</a>
           </div>
-          <p class="price-support">Founding access: your first audit is free. During this early validation window, selected PMMs may run additional audits while we collect feedback. After the founding window, additional audits are $49.</p>
+          <p class="price-support">Your first audit is free during validation. Selected PMMs may run additional audits while we collect feedback on where Cognix matches launch reality and where it needs more context.</p>
         </div>
         ${liveAuditPreview()}
       </div>
@@ -223,13 +223,13 @@ function liveAuditPreview() {
         <strong>Launch-to-pipeline risk</strong>
       </div>
       <div class="audit-preview-head">
-        <p>This is what a Cognix Launch Conversion Audit produces. Your version is built from your own launch signals.</p>
+        <p>This is what a Cognix pre-launch coherence audit produces. Your version is built from your own launch signals.</p>
         <span class="risk-pill">Medium-high</span>
       </div>
       <div class="audit-card-grid">
         <article class="calm-card audit-card">
           <p class="card-label">Dominant fracture</p>
-          <h3>Feature-heavy message with weak buyer urgency</h3>
+          <h3>Feature-heavy execution with buyer urgency dilution</h3>
         </article>
         <article class="calm-card audit-card">
           <p class="card-label">Evidence</p>
@@ -239,7 +239,7 @@ function liveAuditPreview() {
         </article>
         <article class="calm-card audit-card">
           <p class="card-label">PMM action</p>
-          <p>Reframe the headline around buyer pain, replace passive CTA with a demo-intent CTA, and add one proof point before campaign copy is locked.</p>
+          <p>Replace the automation-led headline with the buyer's pipeline review risk, replace passive CTA with a demo-intent CTA, and add one proof point before campaign copy is locked.</p>
         </article>
       </div>
     </section>`;
@@ -299,7 +299,7 @@ function sampleOutputSection() {
       <div class="shell">
         ${sectionIntro(
           "Sample output",
-          "A CMO-ready memo, not another AI summary.",
+          "A resource alignment memo, not another generic summary.",
           "Example scenario: Meridian is launching an AI workflow assistant for RevOps teams in 11 days. The launch page is feature-heavy, sales is unsure how to create urgency, and the CTA is \"Learn more.\" The memo turns scattered launch signals into a leadership-ready read on risk, evidence, and what needs to change before the launch is judged in pipeline."
         )}
         <article class="memo-card">
@@ -309,7 +309,7 @@ function sampleOutputSection() {
           </div>
           ${memoField("Demo intent", "Awareness is likely. Demo intent is not yet supported.")}
           ${memoField("Why", "The launch explains what Meridian ships, but it does not make the buyer pain urgent enough for RevOps leaders to book time before launch day.")}
-          ${memoField("Dominant fracture", "Feature-heavy message with weak buyer urgency and a passive conversion path.")}
+          ${memoField("Dominant fracture", "Feature-heavy execution with buyer urgency dilution and a passive conversion path.")}
           ${memoList("Evidence from launch signals", memoEvidence)}
           ${memoNumberedList("Recommended fixes before launch", memoFixes)}
           ${memoField("Decision needed", "Align on whether this launch is meant to create awareness or qualified demand before final campaign copy is approved.")}
@@ -321,7 +321,7 @@ function sampleOutputSection() {
           </article>
           <article class="calm-card message-card featured-message">
             <p class="card-label">After Cognix</p>
-            <p class="signal-note">Evidence from the signals: sales says prospects understand the product but are not asking for demos. That is why the reframe moves from automation capability to buyer urgency and a clearer demo path.</p>
+            <p class="signal-note">Evidence from the signals: sales says prospects understand the product but are not asking for demos. That is why the rewrite moves from automation capability to buyer urgency and a clearer demo path.</p>
             <h3>Already behind on forecast confidence? Meridian helps RevOps teams find the manual workflow gaps that slow pipeline decisions. See where your process is leaking demand before the next pipeline review.</h3>
           </article>
         </div>
@@ -407,7 +407,7 @@ function architectureSection() {
         ${sectionIntro(
           "The bigger architecture",
           "AI made GTM faster. Cognix makes it coherent.",
-          "The Launch Conversion Audit is the first surface of the Cognix GTM cognition architecture. Today, that architecture helps PMMs diagnose launch conversion risk before launch day. Over time, the same interpretation layer expands into narrative drift, sales adoption, competitive pressure, pipeline quality, and enablement mismatch."
+          "The pre-launch coherence audit is the first surface of the Cognix GTM cognition architecture. Today, that architecture helps PMMs detect strategy dilution before launch day. Over time, the same interpretation layer expands into narrative drift, sales adoption, competitive pressure, pipeline quality, and enablement mismatch."
         )}
         ${auditMap({ large: true })}
         <div class="spine-block">
@@ -426,7 +426,7 @@ function finalCta() {
       <div class="shell final-cta-card">
         <p class="section-kicker">Before launch day</p>
         <h2>You will not know what is wrong with this launch until the pipeline review. By then, it is too late.</h2>
-        <p>Founding access: your first audit is free. During this early validation window, selected PMMs may run additional audits while we collect feedback. After the founding window, additional audits are $49. Run it before final campaign copy is locked and see whether your launch is built to create qualified demand or just awareness.</p>
+        <p>Your first audit is free during validation. Run it before final campaign copy is locked and see whether your launch is built to create qualified demand or just awareness.</p>
         <div class="hero-actions">
           <a class="btn btn-primary btn-large" href="${auditHref}">Get your first audit free</a>
           <a class="btn btn-secondary btn-large" href="#sample">See sample output first</a>

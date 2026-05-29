@@ -4,7 +4,7 @@ const signals = [
   "Data from AI agents (Claude, Gemini, ChatGPT)",
   "Sales calls",
   "CRM",
-  "Slack / Teams",
+  "Team notes",
   "Product usage",
   "Customer feedback",
   "Marketing campaigns",
@@ -35,7 +35,7 @@ const risks = [
   ["Sales interpretation splits", "Reps carry different versions of the message into the market."],
   ["Customer truth gets buried", "Signals from calls, feedback, support, and onboarding never become shared intelligence."],
   ["AI output becomes inconsistent", "AI-generated work accelerates content creation without preserving strategic coherence."],
-  ["Pipeline quality weakens", "Bad-fit demand and inconsistent execution show up as revenue risk."],
+  ["Pipeline quality drifts", "Low-fit demand and inconsistent execution show up as revenue risk."],
   ["Revenue risk appears late", "By the time metrics expose the problem, the fracture has already spread."]
 ];
 
@@ -72,7 +72,7 @@ const betaOutputs = [
   "Contradiction clusters",
   "Narrative drift analysis",
   "Launch conversion risk",
-  "CMO-ready launch risk memo",
+  "Strategic alignment & resource brief",
   "Signal coverage",
   "Executive Signal Brief"
 ];
@@ -316,7 +316,7 @@ function hero() {
         <div class="hero-copy">
           ${sectionLabel("Cognition-as-a-Service (CAAS) for AI-era organizations")}
           <h1>The unified cognitive layer for modern organizations.</h1>
-          <p>AI has made every function faster. But speed without shared interpretation creates a new operating risk: teams produce more, decide faster, and drift further apart. Cognix helps organizations interpret the signals behind the work so leaders can see where alignment is weakening and act before the risk becomes visible in the numbers.</p>
+          <p>AI has increased GTM output volume. But output without shared interpretation creates a new operating risk: teams produce more, decide faster, and drift further apart. Cognix helps organizations interpret the signals behind the work so leaders can see where alignment is diluting and act before the risk becomes visible in the numbers.</p>
           <div class="hero-actions">
             <a class="btn btn-primary btn-large" href="#design-partner">Become a design partner</a>
             <a class="btn btn-secondary btn-large" href="${pmmPage}">Explore product marketing beta</a>
@@ -479,7 +479,7 @@ function technologySection() {
           <div class="architecture-cards" id="integrations">
             <article>
               <strong>Deep integration layer</strong>
-              <p>Planned connectivity across the systems where work happens: CRM, Slack, calls, docs, product signals, customer feedback, and market intelligence.</p>
+              <p>Planned connectivity across the systems where GTM work happens: customer records, team notes, calls, docs, product signals, customer feedback, and market intelligence.</p>
             </article>
             <article>
               <strong>Foundational cognitive infrastructure</strong>
@@ -532,13 +532,14 @@ function designPartnerSection() {
           </div>
         </div>
         <article class="pricing-card">
-          <span>Design partner access</span>
-          <div class="price"><strong>$99</strong><small>/ month</small></div>
+          <span>Founding design partner access</span>
+          <div class="price"><strong>No-cost</strong><small>access</small></div>
+          <p>No payment required during the design partner window. We are inviting serious GTM operators to pressure-test Cognix, share feedback, and help shape the cognition layer for AI-era GTM teams.</p>
           <div class="pricing-items">
             ${designPartnerItems.map((item) => `<p>${esc(item)}</p>`).join("")}
           </div>
           <a class="btn btn-primary btn-block" href="mailto:hello@cognix.ai?subject=Design%20partner%20beta">Apply to become a design partner</a>
-          <small>Limited early cohort for operators who want to shape what comes next.</small>
+          <small>Limited founding cohort for operators who want to shape what comes next.</small>
         </article>
       </div>
     </section>`;
