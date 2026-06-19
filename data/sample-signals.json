@@ -1,38 +1,38 @@
 {
   "company_name": "Cognix demo company",
-  "project_name": "GTM fragmentation readout",
-  "diagnostic_type": "Fragmentation readout",
+  "project_name": "GTM story drift readout",
+  "diagnostic_type": "Story drift readout",
   "company_stage": "Founder-led emerging SaaS",
   "primary_buyer": "GTM leadership",
   "signals": [
     {
       "signal_type": "Website copy",
       "title": "Founder strategy note",
-      "content": "Cognix is a revenue cognition system for AI-era GTM teams. It protects strategic coherence by detecting GTM fragmentation before it becomes revenue risk and turning scattered signals into leadership decisions.",
-      "notes": "Founder narrative and intended category claim."
+      "content": "Cognix detects where your GTM story breaks before the market does. PMMs paste messy launch reality, and Cognix compares the signals to show positioning-to-execution contradiction with receipts.",
+      "notes": "Founder narrative and intended product claim."
     },
     {
       "signal_type": "Positioning document",
       "title": "Website hero draft",
-      "content": "Run a Cognix readout to find GTM contradictions in minutes. Paste GTM signals, get an evidence trail, and see the revenue risk before teams create more sales and marketing content.",
+      "content": "Run a Cognix readout to find GTM story drift in minutes. Paste launch briefs, sales decks, landing pages, Slack debates, and customer proof. Get the evidence trail before teams create more sales and marketing content.",
       "notes": "Public website copy for the first product workflow."
     },
     {
       "signal_type": "Sales deck",
       "title": "Sales talk track",
-      "content": "Position Cognix as a diagnostic workspace for GTM teams. Lead with a practical analysis of messaging, buyer clarity, sales narrative, and enablement gaps so prospects understand the first use case quickly.",
+      "content": "Position Cognix as a story drift workspace for PMMs. Lead with a practical analysis of messaging, buyer clarity, sales narrative, proof, and enablement gaps so prospects understand the first use case quickly.",
       "notes": "Field narrative for discovery calls."
     },
     {
       "signal_type": "Customer feedback",
       "title": "Prospect confusion notes",
-      "content": "A VP Marketing prospect asked whether Cognix is strategic infrastructure, a diagnostic workspace, a reporting aid, or an enablement review tool. They liked the revenue cognition framing but did not understand the first use case or buying motion.",
+      "content": "A VP Marketing prospect asked whether Cognix is for launch reviews, sales narrative checks, positioning drift, or enablement review. They liked the receipts but did not understand the first use case or buying motion.",
       "notes": "Sales call notes from beta discovery."
     },
     {
       "signal_type": "Enablement asset",
       "title": "Beta sales talk track",
-      "content": "Use Cognix as a reporting aid for founders, CMOs, PMM, RevOps, enablement, and GTM leadership. Reps should promise better reports, cleaner summaries, and faster alignment, then mention revenue risk and leadership decision later.",
+      "content": "Use Cognix as a receipt-backed story drift read for PMMs and GTM leaders. Reps should promise a clear contradiction, the source evidence behind it, the buyer or sales execution risk, and the PMM-safe fix.",
       "notes": "Internal enablement."
     }
   ]

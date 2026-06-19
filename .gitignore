@@ -1,0 +1,10 @@
+.DS_Store
+node_modules/
+dist/
+*.zip
+/Cognix-github-ready/
+/cognix-product-pages-fix-*/
+/assets/
+/cognix-code-for-chatgpt.txt
+/cognix-website-source.html
+/direct-preview.html

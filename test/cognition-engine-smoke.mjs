@@ -33,7 +33,7 @@ const signals = [
     project_id: project.id,
     signal_type: "Launch plan",
     title: "PMM Narrative Engine launch",
-    content: "Launch the PMM Narrative Engine as a diagnostic workspace and software platform. Offer a paid beta design partner package.",
+    content: "Launch GTM fracture detection as a diagnostic workspace. Offer free founding access and a first contradiction read free.",
     notes: "Launch plan",
     created_at: new Date().toISOString()
   },

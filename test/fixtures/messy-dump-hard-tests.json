@@ -1,0 +1,140 @@
+{
+  "tests": [
+    {
+      "id": "weak-public-copy-only",
+      "name": "Weak public-copy-only input",
+      "shouldPause": true,
+      "input": "We are launching an AI workflow product for revenue teams.\n\nThe homepage headline says:\nAI-powered workflow intelligence for modern teams.\n\nThe page says the product helps teams move faster, automate updates, and get better visibility across systems.\n\nThe CTA is:\nLearn more.",
+      "expected": {
+        "found": ["Buyer-facing copy", "CTA"],
+        "noFullAudit": true,
+        "pdfHidden": true
+      }
+    },
+    {
+      "id": "dealpulse",
+      "name": "DealPulse raw founder dump",
+      "shouldPause": false,
+      "input": "We’re preparing a launch for a product called DealPulse AI. The idea came from a problem our sales and RevOps teams keep seeing every quarter. Everyone says they have pipeline visibility, but by the time the forecast meeting happens, nobody agrees on which deals are real, which deals are slipping, and which accounts need executive attention.\n\nThe product reads signals from CRM updates, call notes, deal stage movement, rep activity, customer emails, and sales manager comments. It is supposed to help sales leaders and RevOps teams spot deal risk earlier, before the forecast call turns into a debate.\n\nThe buyers we care about most are VP Sales, RevOps leaders, and CROs at B2B SaaS companies with 150 to 1,000 employees. These companies usually have Salesforce, Gong, Clari, BI dashboards, spreadsheets, and weekly forecast meetings already. The issue is not lack of tools. The issue is that every tool shows part of the truth, and the team still has to manually interpret what is actually happening.\n\nRight now the homepage headline says:\nAI-powered deal intelligence for modern revenue teams.\n\nThe page copy says:\nDealPulse AI helps revenue teams improve visibility across the sales process using AI-driven insights, automated summaries, and real-time deal intelligence. Sales leaders can move faster, align teams, and make better decisions with one place to understand deal health.\n\nThis sounds polished, but I’m worried it sounds like every other revenue AI product. It does not hit the actual pain. The real pain is that sales leaders walk into forecast calls with a pipeline number they do not fully trust. They know some deals are weak, but they do not know which ones are quietly losing momentum until it is too late.\n\nThe sharper story might be:\nFind the deals that will slip before your forecast call.\n\nSales feedback has been pretty consistent. Reps and managers understand it faster when we show a messy forecast meeting example. The best demo moment is when DealPulse shows that a deal marked “commit” has no recent champion engagement, a stale next step, negative call sentiment, and no executive activity in 21 days.\n\nThe current CTA is:\nBook a demo.\n\nMaybe the CTA should be more specific, like:\nPressure-test your forecast risk.\n\nExpected objections:\nWe already have Clari.\nWe already use Salesforce dashboards.\nGong already summarizes calls.\nCan’t ChatGPT summarize deal notes?\nIs this just another forecasting tool?\n\nThe response should be:\nClari and CRM show forecast data, but they do not always explain why a deal is actually at risk across CRM, calls, emails, rep notes, and manager comments. ChatGPT can summarize pasted notes, but it does not continuously compare live deal signals across systems or show forecast risk before the meeting.\n\nProof:\nOne pilot customer found 14 at-risk commit deals before the weekly forecast call.\nAnother sales team reduced forecast review prep from 5 hours to 75 minutes.\nA RevOps leader said the product helped them stop arguing about the number and start talking about which deals needed action.\nA CRO said the readout helped them identify 3 enterprise deals that needed executive intervention before quarter-end.\n\nLaunch goal:\nWe want 35 qualified demo requests from VP Sales, RevOps, and CRO buyers in 45 days. We care about serious forecast-risk conversations, not generic AI curiosity or ebook downloads.\n\nCommercial assumptions:\nLaunch budget is around $58,000 across paid, webinar, content, and sales follow-up.\nAverage contract value is roughly $72,000.\nIf the launch story stays generic, we could lose 4 to 6 serious opportunities from the first campaign push.\nThe campaign should not go live until the headline, CTA, proof, and sales talk track clearly connect DealPulse AI to forecast risk and slipping deals.",
+      "expected": {
+        "product": "DealPulse AI",
+        "domain": "sales",
+        "dominantIncludes": "Generic AI/deal intelligence positioning weakens sales leadership demo intent",
+        "buyerPressureIncludes": ["forecast calls", "pipeline number"],
+        "downstreamIncludes": "AI-powered deal intelligence for modern revenue teams",
+        "cta": "Book a demo",
+        "suggestedCta": "Pressure-test your forecast risk",
+        "commercialIncludes": ["$58,000 launch budget", "$72,000 ACV", "4 to 6 opportunities at risk", "35 qualified demo target"],
+        "rewrite": "Find the deals that will slip before your forecast call.",
+        "forbidden": ["CMO-level", "Find the launch story that will break before your campaign budget goes live"]
+      }
+    },
+    {
+      "id": "renewalradar",
+      "name": "RenewalRadar CS renewal dump",
+      "shouldPause": false,
+      "input": "We’re launching RenewalRadar AI for customer success teams. The idea is simple: CSMs keep finding renewal risk too late. By the time the account is red, the customer has already stopped using key workflows, the champion has gone quiet, support tickets are increasing, and the renewal meeting is only a few weeks away.\n\nThe buyer is VP Customer Success, CS Ops, and account management leaders at B2B SaaS companies with 200 to 2,000 employees. Sales leadership cares too because expansion gets hit when CS misses risk early.\n\nThe homepage currently says:\nAI-powered customer health intelligence for modern CS teams.\n\nThe page says RenewalRadar brings together usage signals, support tickets, meeting notes, renewal dates, and account activity to help teams improve retention and expansion.\n\nIt is not wrong, but it sounds like another health score dashboard. The sharper story is:\nFind the renewal risks your health score missed.\n\nCS feedback says the best demo moment is when RenewalRadar shows an account that looks green in the health score but has declining admin usage, no executive sponsor activity, unresolved support pain, and no QBR in 90 days.\n\nCurrent CTA:\nBook a demo.\n\nMaybe better:\nFind hidden renewal risk.\n\nObjections:\nWe already have Gainsight.\nWe already track health scores.\nCSMs know their accounts.\nCan’t AI just summarize account notes?\n\nResponse:\nHealth scores show a snapshot. RenewalRadar explains contradiction across usage, support, meeting notes, renewal timing, and account behavior before the risk becomes obvious.\n\nProof:\nOne beta team identified 11 hidden renewal-risk accounts in the first month.\nAnother reduced manual account review prep by 40%.\nA VP CS said the tool helped them spot quiet churn before the customer raised it.\n\nGoal:\nGenerate 30 qualified demos from VP CS and CS Ops leaders in 45 days.\n\nCommercial:\nLaunch budget is $36,000.\nAverage renewal value is $95,000.\nIf the launch sounds generic, we may miss 3 to 4 strong CS buyer conversations.",
+      "expected": {
+        "product": "RenewalRadar AI",
+        "domain": "cs",
+        "dominantIncludes": "Generic AI/customer health positioning weakens renewal-risk urgency",
+        "buyerPressureIncludes": ["renewal risk", "too late"],
+        "downstreamIncludes": "AI-powered customer health intelligence for modern CS teams",
+        "cta": "Book a demo",
+        "suggestedCta": "Find hidden renewal risk",
+        "commercialIncludes": ["$36,000 launch budget", "$95,000 average renewal value", "3 to 4 buyer conversations at risk", "30 qualified demo target"],
+        "rewrite": "Find the renewal risks your health score missed.",
+        "forbidden": ["CMO-level", "launch-to-pipeline"]
+      }
+    },
+    {
+      "id": "exceptioniq",
+      "name": "ExceptionIQ finance/AP dump",
+      "shouldPause": false,
+      "input": "We’re launching ExceptionIQ for finance and AP teams. The problem is that invoice exceptions keep piling up before close, but the team does not know which exceptions are simple vendor issues, which are PO mismatch issues, and which ones are about to delay payment or create month-end risk.\n\nThe audience is Controllers, VP Finance, and AP directors at mid-market companies processing more than 10,000 invoices a month.\n\nThe homepage headline today is:\nAI-powered invoice intelligence for modern finance teams.\n\nThe page says ExceptionIQ helps AP teams automate invoice review, improve visibility, and resolve issues faster using AI.\n\nThe sharper angle is probably:\nFind invoice exceptions before they become month-end backlog.\n\nCTA today:\nLearn more.\n\nMaybe it should be:\nFind your invoice exception leakage.\n\nProof:\nOne customer reduced exception resolution time by 52%.\nAnother reduced backlog by 38% in one quarter.\nA finance team saved 420 AP hours in 90 days.\n\nObjections:\nWe already have an ERP.\nWe already use AP automation.\nIs this replacing procurement?\nCan’t our team just use reports?\n\nResponse:\nERP and AP automation systems process the workflow. ExceptionIQ explains which exceptions are creating operational risk and what action AP should take next.\n\nLaunch goal:\nGet 28 qualified demos from finance and AP leaders in 45 days.\n\nCommercial:\nLaunch budget is $44,000.\nAverage contract value is $48,000.\nIf the CTA stays passive, we may lose 3 to 5 serious finance opportunities.",
+      "expected": {
+        "product": "ExceptionIQ",
+        "domain": "finance",
+        "dominantIncludesOneOf": ["Generic AI/invoice intelligence positioning weakens finance buyer urgency", "Proof is strong but CTA and conversion path are weak"],
+        "buyerPressureIncludes": ["invoice exceptions", "month-end"],
+        "downstreamIncludes": "AI-powered invoice intelligence for modern finance teams",
+        "cta": "Learn more",
+        "suggestedCta": "Find your invoice exception leakage",
+        "commercialIncludes": ["$44,000 launch budget", "$48,000 ACV", "3 to 5 finance opportunities at risk", "28 qualified demo target"],
+        "rewrite": "Find invoice exceptions before they become month-end backlog.",
+        "forbidden": ["CMO-level", "forecast call"]
+      }
+    },
+    {
+      "id": "flowpilot",
+      "name": "FlowPilot operations dump",
+      "shouldPause": false,
+      "input": "We are putting together copy for FlowPilot. It helps operations teams see where work gets stuck between handoffs. The audience is operations leaders and business systems teams at mid-market companies. The pain is that everyone knows work is delayed, but nobody knows whether the bottleneck is approvals, ownership, missing data, or follow-up.\n\nCurrent headline:\nAI workflow automation for modern operations teams.\n\nPage copy:\nFlowPilot helps teams automate work, improve visibility, and move faster across systems.\n\nCTA:\nLearn more.\n\nThe stronger idea:\nFind the handoff that is slowing down your workflow.\n\nSales says buyers care most when we show a process where 37% of requests stall between legal review and finance approval. One beta customer reduced approval cycle time by 22%. Another team cut weekly status meetings by 3 hours.\n\nGoal:\nGenerate 20 qualified demos from operations and business systems leaders.\n\nBudget:\n$18,000 launch push.\nACV:\n$24,000.\nRisk:\nIf the message sounds like generic workflow automation, we probably lose 2 to 3 real opportunities.",
+      "expected": {
+        "product": "FlowPilot",
+        "domain": "operations",
+        "dominantIncludes": "Generic AI/workflow automation positioning weakens operations buyer urgency",
+        "buyerPressureIncludes": ["work gets stuck", "bottleneck"],
+        "downstreamIncludes": "AI workflow automation for modern operations teams",
+        "cta": "Learn more",
+        "suggestedCta": "See where approvals get stuck",
+        "commercialIncludes": ["$18,000 launch budget", "$24,000 ACV", "2 to 3 opportunities at risk", "20 qualified demo target"],
+        "rewrite": "Find the handoff that is slowing down your workflow.",
+        "forbidden": ["CMO-level", "invoice exception"]
+      }
+    },
+    {
+      "id": "flowpilot-aligned-copy",
+      "name": "FlowPilot aligned workflow copy",
+      "shouldPause": false,
+      "input": "Product: FlowPilot\nInternal launch strategy: Founder narrative calls it AI operating infrastructure for operations teams.\nBuyer pain: Approvals get stuck in Slack and email, no one knows who owns the next step, and approval cycles dropped from 5 days to 2 days.\nLanding page copy: Find your workflow bottlenecks.\nCTA: Learn more.\nCustomer proof: One beta team cut approval cycles from 5 days to 2.\nDemo target: 20 qualified demos from operations leaders.",
+      "expected": {
+        "product": "FlowPilot",
+        "domain": "operations",
+        "dominantIncludes": "Passive CTA",
+        "buyerPressureIncludes": ["approvals", "stuck"],
+        "downstreamIncludes": "Find your workflow bottlenecks",
+        "cta": "Learn more",
+        "suggestedCta": "See how teams cut approval cycles from 5 days to 2",
+        "commercialIncludes": ["20 qualified demo target"],
+        "rewrite": "Find the handoff that is slowing down your workflow.",
+        "mustInclude": ["Conversion gap detected", "Passive CTA", "Proof-backed buyer urgency", "The issue is not story contradiction"],
+        "forbidden": ["generic automation", "generic workflow-automation interest", "generic AI/workflow automation positioning", "Upstream strategy asset", "Downstream market surface"]
+      }
+    },
+    {
+      "id": "flowpilot-customer-quote-proof",
+      "name": "FlowPilot customer quote proof",
+      "shouldPause": false,
+      "input": "Product: FlowPilot\nInternal launch strategy: Help operations teams move stuck work across approvals.\nBuyer pain: Teams do not need another dashboard. They need the work to actually move.\nLanding page copy: Find your workflow bottlenecks.\nCTA: Learn more.\nCustomer proof: Customer quote: “We do not need another dashboard. We need the work to actually move.” Approval cycle time dropped from 5 days to 2 days.\nDemo target: 20 qualified demos from operations leaders.",
+      "expected": {
+        "product": "FlowPilot",
+        "domain": "operations",
+        "dominantIncludes": "Passive CTA",
+        "downstreamIncludes": "Find your workflow bottlenecks",
+        "cta": "Learn more",
+        "suggestedCta": "See how teams cut approval cycles from 5 days to 2",
+        "mustInclude": ["“We do not need another dashboard. We need the work to actually move.”", "Proof-backed buyer urgency", "The issue is not story contradiction"],
+        "forbidden": ["Customer quote: “We do not need another dashboard", "We do not need another dashboard..."]
+      }
+    },
+    {
+      "id": "signaldesk-founder-override",
+      "name": "SignalDesk founder narrative override",
+      "shouldPause": false,
+      "input": "Product: SignalDesk\n\nFounder / CEO narrative:\n“The AI revenue operating system for every customer-facing team.”\n\nCEO wants category leadership. The launch should sound bigger, not a CS tool, and not tactical.\n\nPMM concern:\nPMM is worried the category language hides renewal-risk urgency.\n\nSales feedback:\nSales says buyers respond to: Catch renewal risk before it becomes churn.\n\nCustomer proof:\nCustomer quote: “We had all the data. We just did not see the risk until the renewal was already in trouble.” Pilot customers identified risk signals 30 days earlier.\n\nLanding page copy:\nThe AI revenue operating system for every customer-facing team.\n\nCTA:\nLearn more\n\nPossible CTAs:\nCatch renewal risk before it becomes churn.\nSee hidden renewal risk.\nBook a renewal-risk review.\n\nDemo target:\n30 qualified demos from VP CS and CS Ops leaders.",
+      "expected": {
+        "product": "SignalDesk",
+        "domain": "cs",
+        "dominantIncludes": "Founder narrative override",
+        "buyerPressureIncludes": ["renewal risk", "churn"],
+        "downstreamIncludes": "The AI revenue operating system for every customer-facing team",
+        "cta": "Learn more",
+        "rewrite": "Catch renewal risk before it becomes churn.",
+        "commercialIncludes": ["30 qualified demo target"],
+        "mustInclude": ["Launch risk found", "Evidence trail", "KPI at risk", "Qualified demo conversion", "Scenario model", "Commercial implication", "Exact fixes", "Lead with hidden renewal risk", "Pause spend scale", "Catch renewal risk before it becomes churn", "Pilot customers identified risk signals 30 days earlier", "Suggested owner + approval path", "Recheck revised launch assets", "Launch decision brief", "Founder / CEO narrative", "Sales / customer reality", "The primary risk is not that the CTA is weak", "Passive CTA does not convert the renewal-risk urgency into a qualified next step", "PMM concern"],
+        "forbidden": ["The AI has", "Forwardable launch note", "This launch is not at risk because", "This is not a PMM quality issue", "The remaining gap is underdeveloped CTA", "not a full story contradiction", "Primary gap: underdeveloped CTA", "Upstream strategy asset", "Downstream market surface"]
+      }
+    }
+  ]
+}

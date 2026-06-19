@@ -1,0 +1,182 @@
+{
+  "version": 1,
+  "description": "Canonical Cognix GTM hard-test scenarios. These fixtures use explicit signal surfaces to test the diagnostic/scoring engine directly, independent of intake parser behavior.",
+  "scenarios": [
+    {
+      "id": "strong-revops-pipeline-trust",
+      "name": "Strong RevOps pipeline trust launch",
+      "assumption": "Structured signal surfaces are used so this validates scoring calibration directly, not Sorting Hat parsing.",
+      "mode": "pre",
+      "signals": {
+        "launch-message": "NovaOps AI helps RevOps leaders stop walking into pipeline reviews with numbers nobody trusts before quarter-end executive pipeline reviews.",
+        "target-buyer": "RevOps leaders at B2B SaaS companies.",
+        "buyer-pain": "RevOps leaders struggle with broken pipeline reviews when Salesforce, Gong, Clari, and spreadsheets tell different stories before executive meetings.",
+        "value-prop": "NovaOps AI helps RevOps leaders protect forecast confidence and pipeline trust before quarter-end executive pipeline reviews.",
+        "campaign-copy": "Stop walking into pipeline reviews with numbers nobody trusts.",
+        "cta": "Pressure-test your next pipeline review.",
+        "sales-talk-track": "Sales lead with pipeline trust, forecast confidence, and the cost of walking into executive reviews with conflicting numbers before quarter-end.",
+        "objections": "If buyers ask whether this is another dashboard, reps explain that NovaOps AI is not another dashboard because it reconciles the pipeline trust gap across systems.",
+        "competitive-framing": "Not another dashboard. NovaOps AI is a pipeline trust layer for executive revenue reviews.",
+        "customer-proof": "Reduced weekly pipeline prep from 6 hours to 90 minutes.",
+        "launch-goal": "Convert RevOps demo requests by protecting forecast confidence before executive pipeline reviews."
+      },
+      "expected": {
+        "scoreMin": 88,
+        "scoreMax": 95,
+        "risk": "Low",
+        "dominantFracture": "No major fracture detected"
+      }
+    },
+    {
+      "id": "generic-ai-launch-intelligence-commercial-risk",
+      "name": "Generic AI launch intelligence with commercial risk",
+      "assumption": "Matches the SignalForge commercial-risk hard test from the product QA discussion.",
+      "mode": "pre",
+      "signals": {
+        "launch-message": "SignalForge is built to find the launch story that will break before campaign budget goes live.",
+        "target-buyer": "CMOs and VP Marketing leaders at Series B to Series D SaaS companies.",
+        "buyer-pain": "CMOs risk spending budget on a launch story that does not convert into qualified demos.",
+        "value-prop": "SignalForge helps CMOs detect launch-to-pipeline risk before campaign spend goes live.",
+        "campaign-copy": "AI-powered launch intelligence for modern product marketing teams.",
+        "cta": "See how it works.",
+        "sales-talk-track": "Sales should lead with launch-to-pipeline risk and ask whether the current story will create qualified demo intent.",
+        "objections": "CMOs worry the launch will create activity but miss the 40 qualified demo target.",
+        "customer-proof": "Pilot teams used SignalForge to catch buyer-facing dilution before paid spend launched.",
+        "launch-goal": "$97,000 launch investment; 40 qualified demo target; $60,000 to $120,000 ARR influence at risk."
+      },
+      "expected": {
+        "scoreMin": 58,
+        "scoreMax": 68,
+        "risk": "Medium",
+        "dominantFracture": "Generic AI positioning weakens CMO-level demo intent"
+      },
+      "requiredEvidence": [
+        "$97,000 launch investment",
+        "40 qualified demo target",
+        "$60,000 to $120,000 ARR influence at risk",
+        "AI-powered launch intelligence"
+      ]
+    },
+    {
+      "id": "good-internal-strategy-weak-buyer-facing-page",
+      "name": "Good internal strategy, weak buyer-facing page",
+      "assumption": "The calibrated fixture keeps only the explicit strategic baseline, public page, value proposition, and CTA surfaces. Adding fuller buyer/proof/sales surfaces currently lifts the risk tier to Medium, so those belong in a separate synthesis fixture rather than this scoring guard.",
+      "mode": "pre",
+      "signals": {
+        "launch-message": "Internal launch strategy: ComplianceOps prevents delayed SOC 2 audits by finding last-minute evidence gaps and control gaps before formal review.",
+        "value-prop": "ComplianceOps gives teams pre-audit intelligence so they can fix evidence gaps before audit readiness is at risk.",
+        "campaign-copy": "Modern compliance intelligence for fast-moving security teams.",
+        "cta": "Book a demo."
+      },
+      "expected": {
+        "scoreMin": 50,
+        "scoreMax": 62,
+        "risk": "Medium to high",
+        "dominantFracture": "Public-facing message does not carry the internal strategy"
+      }
+    },
+    {
+      "id": "awareness-heavy-weak-conversion-path",
+      "name": "Awareness-heavy launch with weak conversion path",
+      "assumption": "Fixture preserves the awareness/activity goal, broad buyer, weak pain, missing proof, and passive CTA needed to trigger the high-risk conversion-path guardrail.",
+      "mode": "pre",
+      "signals": {
+        "launch-message": "FlowPilot is a flexible AI workspace for operations teams, GTM leaders, and finance leaders.",
+        "target-buyer": "Operations leaders, GTM leaders, finance leaders, and business teams.",
+        "buyer-pain": "Teams do too much manual work across disconnected processes.",
+        "value-prop": "FlowPilot helps every team move faster with intelligent workflow automation.",
+        "campaign-copy": "Unlock productivity with intelligent automation for every team.",
+        "cta": "Learn more.",
+        "sales-talk-track": "Sales is unsure which pain to lead with because there are many use cases across sales, marketing, operations, and finance.",
+        "objections": "Prospects may ask why they need another workflow tool.",
+        "competitive-framing": "Broad AI workflow platform.",
+        "customer-proof": "No customer proof is ready.",
+        "launch-goal": "$78,000 launch budget; drive impressions, traffic, page visits, and demo requests from awareness campaigns."
+      },
+      "expected": {
+        "scoreMin": 42,
+        "scoreMax": 55,
+        "risk": "High",
+        "dominantFracture": "Launch motion creates activity but not qualified demo intent"
+      },
+      "requiredEvidence": [
+        "$78,000 launch budget"
+      ]
+    },
+    {
+      "id": "narrow-icp-strong-pain-weak-proof",
+      "name": "Narrow ICP, strong pain, weak proof",
+      "assumption": "Preserves specific VP CS renewal/churn/adoption language and intentionally keeps proof unquantified.",
+      "mode": "pre",
+      "signals": {
+        "launch-message": "RetainIQ helps VP CS teams find renewal risk before it becomes churn risk.",
+        "target-buyer": "VP CS at B2B SaaS companies with enterprise renewal books.",
+        "buyer-pain": "Customer adoption has already dropped before executive sponsors surface renewal risk, putting expansion revenue and renewal conversations at risk.",
+        "value-prop": "RetainIQ identifies account risk signals before renewal conversations become late-stage churn escalations.",
+        "campaign-copy": "Find renewal risk before it turns into churn risk.",
+        "cta": "Book a demo.",
+        "sales-talk-track": "Lead with dropped adoption, executive sponsor silence, renewal risk, and expansion revenue risk.",
+        "objections": "Buyers ask whether CS teams can trust early adoption risk signals; sales explains the account-risk workflow.",
+        "competitive-framing": "Not a CS platform replacement. RetainIQ flags account risk before renewal risk escalates.",
+        "customer-proof": "Three founding users validated the workflow, but quantified renewal impact is not available yet.",
+        "launch-goal": "Convert VP CS demo requests from accounts facing renewal and churn risk."
+      },
+      "expected": {
+        "scoreMin": 68,
+        "scoreMax": 78,
+        "risk": "Medium",
+        "dominantFracture": "Proof gap may weaken late-stage demo conversion"
+      }
+    },
+    {
+      "id": "icp-message-mismatch",
+      "name": "ICP-message mismatch",
+      "assumption": "CTA is intentionally not passive so the dominant fracture remains buyer/message mismatch rather than passive CTA.",
+      "mode": "pre",
+      "signals": {
+        "launch-message": "SpendSync should help finance leaders detect spend leakage, budget leakage, and approval visibility risk before departmental forecasts drift.",
+        "target-buyer": "CFOs and finance leaders.",
+        "buyer-pain": "CFOs need financial control, margin protection, forecast accuracy, spend leakage detection, and approval visibility.",
+        "value-prop": "SpendSync gives finance teams spend visibility before budget leakage damages forecast confidence.",
+        "campaign-copy": "Work smarter across every team with an intelligent workspace for productivity and cross-functional workflows.",
+        "cta": "Book a demo.",
+        "sales-talk-track": "Sales is likely to describe team productivity and workflow automation.",
+        "objections": "CFOs may ask how this protects margin, forecast accuracy, spend leakage, and approval control.",
+        "competitive-framing": "Competitors lead with financial control and spend leakage.",
+        "customer-proof": "Early finance users found $240,000 in budget leakage in approval workflows.",
+        "launch-goal": "Convert CFO demo requests tied to spend leakage and forecast accuracy."
+      },
+      "expected": {
+        "scoreMin": 35,
+        "scoreMax": 48,
+        "risk": "High",
+        "dominantFracture": "Target buyer and message are misaligned"
+      }
+    },
+    {
+      "id": "strong-proof-unclear-cta-conversion-path",
+      "name": "Strong proof, unclear CTA and conversion path",
+      "assumption": "Includes qualified demos/demo requests in the goal so the calibrated strong-proof weak-conversion-path guardrail triggers rather than a generic passive CTA result.",
+      "mode": "pre",
+      "signals": {
+        "launch-message": "InvoiceIQ helps AP leaders find invoice exceptions before they become backlog.",
+        "target-buyer": "AP directors and finance operations leaders.",
+        "buyer-pain": "Invoice exceptions slow down AP teams and create backlog risk before month-end close.",
+        "value-prop": "InvoiceIQ identifies exception leakage and prioritizes AP work before unresolved invoices become operational backlog.",
+        "campaign-copy": "Resolve invoice exceptions faster.",
+        "cta": "Learn more.",
+        "sales-talk-track": "Lead with invoice exception leakage, AP backlog, and operational drag before talking about workflow automation.",
+        "objections": "Buyers ask whether existing AP workflow tools already catch exceptions early enough.",
+        "competitive-framing": "Not generic AP automation. InvoiceIQ focuses on exception leakage and backlog prevention.",
+        "customer-proof": "Reduced invoice exception resolution time by 52%, cut backlog by 38%, and saved 420 AP hours in one quarter.",
+        "launch-goal": "Convert qualified demos and demo requests from finance operations buyers actively trying to reduce AP backlog risk."
+      },
+      "expected": {
+        "scoreMin": 65,
+        "scoreMax": 75,
+        "risk": "Medium",
+        "dominantFracture": "Proof is strong but CTA and conversion path are weak"
+      }
+    }
+  ]
+}

@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
-    "preview": "vite preview --host 127.0.0.1"
+    "preview": "vite preview --host 127.0.0.1",
+    "test:launch-protection-hard-suite": "node test/launch-protection-hard-suite.mjs",
+    "test:gtm-regression": "node test/gtm-regression-suite.mjs",
+    "test:messy-dump-hard": "node test/messy-dump-hard-suite.mjs",
+    "test:product-interactions": "node test/product-interaction-smoke.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",

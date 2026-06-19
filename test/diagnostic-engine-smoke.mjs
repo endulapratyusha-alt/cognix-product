@@ -4,7 +4,7 @@ const project = {
   id: "test-project",
   company_name: "Northstar AI",
   project_name: "AI Platform Launch Diagnostic",
-  diagnostic_type: "Launch coherence audit",
+  diagnostic_type: "GTM fracture detection",
   company_stage: "Series B",
   primary_buyer: "VP Marketing"
 };
