@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Cognix helps solo PMMs and lean GTM teams research the business, build the PMM foundation, prove strategic impact and grow the function from startup to enterprise."
+    />
+    <title>Cognix for Startup PMMs | Build and Scale the PMM Function</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles/startup-page.css?v=20260709-startup-pmm" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="../src/startup-page.js?v=20260709-startup-pmm"></script>
+    <script>
+      if (window.location.protocol === "file:") {
+        const script = document.createElement("script");
+        script.defer = true;
+        script.src = "../src/startup-page.js?v=20260709-startup-pmm";
+        document.head.appendChild(script);
+      }
+    </script>
+  </body>
+</html>

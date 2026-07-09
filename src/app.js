@@ -139,7 +139,7 @@ function nav() {
           <a class="active" href="index.html">Home</a>
           ${dropdown("Solutions", [
             { title: "By segment", items: [
-              { label: "Startups", href: "#stage-strip" },
+              { label: "Startups", href: "solutions/startups.html" },
               { label: "Mid-market", href: "#stage-strip" },
               { label: "Enterprise", href: "#stage-strip" }
             ] },
@@ -333,14 +333,18 @@ function stageStrip() {
     <section class="stage-strip" id="stage-strip" aria-label="Company stages">
       <div class="shell stage-grid">
         ${[
-          ["Startups", "Find clarity. Build GTM foundation."],
-          ["Mid-market", "Scale with alignment. Improve execution."],
-          ["Enterprise", "Drive coherence across the organization."]
-        ].map(([title, copy]) => `
-          <article>
+          ["Startups", "Find clarity. Build GTM foundation.", "solutions/startups.html", true],
+          ["Mid-market", "Scale with alignment. Improve execution.", "#stage-strip", false],
+          ["Enterprise", "Drive coherence across the organization.", "#stage-strip", false]
+        ].map(([title, copy, href, active]) => {
+          const tag = active ? "a" : "article";
+          const attrs = active ? ` href="${href}" aria-label="Open Cognix for Startup PMMs"` : "";
+          return `
+          <${tag}${attrs} class="${active ? "stage-link" : ""}">
             <span></span>
             <div><strong>${esc(title)}</strong><p>${esc(copy)}</p></div>
-          </article>`).join("")}
+          </${tag}>`;
+        }).join("")}
       </div>
     </section>`;
 }
