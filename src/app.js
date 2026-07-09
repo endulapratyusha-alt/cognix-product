@@ -1,65 +1,65 @@
 const pmmPage = "pmm.html";
 
 const signals = [
-  "AI drafts from Claude, Gemini, ChatGPT",
+  "Data from AI agents (Claude, Gemini, ChatGPT)",
   "Sales calls",
   "CRM",
-  "Slack debates",
-  "Launch briefs",
+  "Team notes",
+  "Product usage",
   "Customer feedback",
-  "Landing pages",
+  "Marketing campaigns",
   "Competitive intel",
-  "Sales decks",
-  "Enablement notes"
+  "Documents",
+  "Market signals"
 ];
 
 const engine = [
-  ["Ingest", "Read messy launch reality"],
-  ["Compare", "Bind signals against each other"],
-  ["Detect", "Find story breaks"],
-  ["Receipt", "Show the conflicting evidence"],
-  ["Prioritize", "Name the drift that matters"],
-  ["Recommend", "Give the PMM-safe fix"]
+  ["Ingest", "Collect signals"],
+  ["Converge", "Unify context"],
+  ["Interpret", "Reason across patterns"],
+  ["Detect", "Find fractures"],
+  ["Prioritize", "Rank what matters"],
+  ["Recommend", "Turn insight into action"]
 ];
 
 const outcomes = [
-  ["Story drift exposed", "See where positioning, sales narrative, and execution split."],
-  ["Receipts attached", "Every read points back to user-provided GTM evidence."],
-  ["Commercial risk named", "Know what changes before the launch underperforms."],
-  ["Sales narrative protected", "Catch drift before Sales improvises the wrong story."],
-  ["PMM-safe next step", "Turn the contradiction into a fix PMM can defend."]
+  ["Strategic clarity", "Right positioning, message, and GTM strategy."],
+  ["Execution excellence", "Teams act from the same context."],
+  ["Revenue impact", "Risk and upside surface before they appear late."],
+  ["Team alignment", "Shared priorities across functions."],
+  ["Continuous improvement", "A learning loop for what to fix next."]
 ];
 
 const risks = [
   ["Narrative drift compounds", "Your story changes across website, sales decks, campaigns, enablement, and customer conversations."],
   ["Sales interpretation splits", "Reps carry different versions of the message into the market."],
-  ["Customer truth gets buried", "Signals from calls, feedback, support, and onboarding never make it back into the launch story."],
-  ["AI output multiplies drift", "AI-generated drafts speed up production while the underlying GTM story quietly splits."],
+  ["Customer truth gets buried", "Signals from calls, feedback, support, and onboarding never become shared intelligence."],
+  ["AI output becomes inconsistent", "AI-generated work accelerates content creation without preserving strategic coherence."],
   ["Pipeline quality drifts", "Low-fit demand and inconsistent execution show up as revenue risk."],
   ["Revenue risk appears late", "By the time metrics expose the problem, the fracture has already spread."]
 ];
 
 const teams = [
-  ["Product marketing", "Beta now", "GTM fractures, positioning-to-execution contradiction, launch risk, and receipts.", true],
-  ["Marketing leadership / CMOs", "Coming soon", "Campaign contradictions, message-market fit, audience clarity, and commercial risk reads."],
-  ["Sales enablement", "Coming soon", "Sales narrative drift, rep readiness, objection handling, and field execution clarity."],
-  ["RevOps", "Coming soon", "Pipeline contradictions, handoff quality, forecast confidence, and revenue execution signals."]
+  ["Product marketing", "Beta now", "Positioning intelligence, narrative drift detection, launch readiness, and market signal interpretation.", true],
+  ["Marketing leadership / CMOs", "Coming soon", "Campaign coherence, message-market fit, audience clarity, and strategic decision support."],
+  ["Sales enablement", "Coming soon", "Message adoption, rep readiness, behavior change, and field execution clarity."],
+  ["RevOps", "Coming soon", "Pipeline intelligence, handoff quality, forecast confidence, and revenue execution signals."]
 ];
 
 const products = [
-  ["Cognix PMM", "Active beta", "GTM fractures, launch risk, contradiction receipts, and PMM-safe fixes.", true],
+  ["Cognix PMM", "Active beta", "GTM Fracture Map, narrative drift, launch readiness, market and CI insights.", true],
   ["Cognix Enablement", "Coming soon", "Message adoption, rep readiness, behavior change, and enablement effectiveness."],
   ["Cognix Revenue", "Coming soon", "Pipeline intelligence, deal risk scoring, forecast confidence, and sales motion clarity."],
   ["Cognix Product", "Coming soon", "Customer signal synthesis, roadmap insights, feature-market fit, and launch impact."],
   ["Cognix Customer Success", "Coming soon", "Onboarding intelligence, health and expansion signals, churn risk detection, and voice of customer."],
-  ["Cognix RevOps", "Coming soon", "Pipeline contradictions, handoff quality, tooling gaps, and forecast confidence."]
+  ["Cognix RevOps", "Coming soon", "GTM process intelligence, handoff quality, tooling gaps, and operational alignment."]
 ];
 
 const identifies = [
   "Narrative drift",
-  "Positioning-to-execution contradiction",
+  "Contradictions across teams",
   "GTM fragmentation",
-  "Sales narrative drift",
+  "Execution gaps",
   "Revenue risk",
   "Customer expectation mismatch",
   "Sales interpretation variance",
@@ -68,11 +68,11 @@ const identifies = [
 
 const betaOutputs = [
   "Primary fracture",
-  "Evidence-backed receipts",
+  "Supporting evidence",
   "Contradiction clusters",
-  "GTM fracture detection",
+  "Narrative drift analysis",
   "Launch conversion risk",
-  "Forwardable launch note",
+  "Strategic alignment & resource brief",
   "Signal coverage",
   "Executive Signal Brief"
 ];
@@ -82,40 +82,11 @@ const designPartnerItems = [
   "GTM Fracture Map workflow",
   "Executive Signal Brief",
   "Contradiction scan",
-  "GTM fracture detection",
+  "Narrative drift analysis",
   "Revenue execution risk view",
-  "PMM design partner feedback loop",
+  "Direct feedback loop",
   "Roadmap influence",
-  "Future workflow visibility"
-];
-
-const askCognixQuestions = [
-  "Can we launch today?",
-  "What will break if we launch now?",
-  "What is the biggest revenue risk?",
-  "What is sales saying that marketing is not saying?",
-  "What proof should lead the campaign?",
-  "Is the founder narrative helping or hurting conversion?",
-  "What should PMM fix first?",
-  "What should the CMO care about?",
-  "What should sales say differently?",
-  "How does this compare to our last launch?",
-  "What did we learn from past launches?"
-];
-
-const askCognixSources = [
-  "Website and campaign copy",
-  "Sales calls",
-  "CRM notes",
-  "Slack/Teams",
-  "Sales enablement content",
-  "Customer proof",
-  "Support tickets",
-  "Product usage signals",
-  "Win/loss notes",
-  "Past launch performance",
-  "Founder/leadership comments",
-  "AI conversation exports"
+  "Future platform visibility"
 ];
 
 const esc = (value = "") =>
@@ -133,7 +104,7 @@ function logo() {
       </span>
       <span class="brand-copy">
         <strong>COGNIX</strong>
-        <small>GTM fractures</small>
+        <small>Cognition OS</small>
       </span>
     </a>`;
 }
@@ -202,12 +173,12 @@ function nav() {
           ])}
           ${dropdown("About us", [
             { title: "Company", items: [
-              { label: "About us", href: "#founding-access" },
+              { label: "About us", href: "#design-partner" },
               { label: "Resources", href: "#final-cta" }
             ] }
           ])}
         </div>
-        <a class="btn btn-primary nav-cta" href="#founding-access">Request founding PMM access</a>
+        <a class="btn btn-primary nav-cta" href="#design-partner">Become a design partner</a>
         <button class="mobile-toggle" type="button" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
       </nav>
       <div class="mobile-panel" hidden>
@@ -221,7 +192,7 @@ function nav() {
         <a href="#applications">Products</a>
         <a href="#technology">Technology</a>
         <a href="#integrations">Integrations (coming soon)</a>
-        <a href="#founding-access">Request founding PMM access</a>
+        <a href="#design-partner">Become a design partner</a>
       </div>
     </header>`;
 }
@@ -247,15 +218,15 @@ function graphSvg(id = "graph") {
     .map((node, index) => [node, nodes[(index + 13) % nodes.length], index])
     .filter(([, , index]) => index % 3 === 0);
   const labels = [
-    ["Story", 23, 30],
+    ["Narrative", 23, 30],
     ["Launch", 69, 25],
     ["Signal confidence", 77, 45],
     ["Revenue risk", 67, 72],
-    ["Receipts", 28, 68],
+    ["Alignment", 28, 68],
     ["Drift", 19, 51]
   ];
   return `
-    <svg class="graph-svg" viewBox="0 0 100 100" role="img" aria-label="Animated GTM fracture graph">
+    <svg class="graph-svg" viewBox="0 0 100 100" role="img" aria-label="Animated cognition graph">
       <defs>
         <linearGradient id="${id}-spoke" x1="0" x2="1">
           <stop offset="0%" stop-color="#cbd5e1" stop-opacity="0.08"/>
@@ -293,8 +264,8 @@ function cognitionGraph(id) {
   return `
     <div class="cognition-graph">
       <div class="graph-label">
-        <strong>Messy GTM reality</strong>
-        <span>Story drift graph</span>
+        <strong>Organizational memory</strong>
+        <span>Cognition graph</span>
       </div>
       ${graphSvg(id)}
     </div>`;
@@ -313,8 +284,8 @@ function heroVisual() {
       </div>
       <div class="visual-center">
         <div class="engine-header">
-          <span>Cognix contradiction engine</span>
-          <strong>Find where the GTM story breaks with receipts</strong>
+          <span>Cognix cognitive engine</span>
+          <strong>The interpretation layer behind decision intelligence</strong>
         </div>
         <div class="engine-steps">
           ${engine.map(([title, body], index) => `
@@ -343,14 +314,14 @@ function hero() {
     <section class="hero-section">
       <div class="shell hero-grid">
         <div class="hero-copy">
-          ${sectionLabel("GTM fractures with receipts")}
-          <h1>Cognix detects where your GTM story breaks before the market does.</h1>
-          <p>Paste messy launch reality: launch briefs, sales decks, landing pages, Slack debates, enablement notes, sales objections, customer proof, or raw GTM docs. Cognix compares the signals, finds where positioning, sales narrative, and execution are drifting apart, and shows the contradiction with textual receipts.</p>
+          ${sectionLabel("Cognition-as-a-Service (CAAS) for AI-era organizations")}
+          <h1>The unified cognitive layer for modern organizations.</h1>
+          <p>AI has increased GTM output volume. But output without shared interpretation creates a new operating risk: teams produce more, decide faster, and drift further apart. Cognix helps organizations interpret the signals behind the work so leaders can see where alignment is diluting and act before the risk becomes visible in the numbers.</p>
           <div class="hero-actions">
-            <a class="btn btn-primary btn-large" href="#founding-access">Paste messy launch reality</a>
+            <a class="btn btn-primary btn-large" href="#design-partner">Become a design partner</a>
             <a class="btn btn-secondary btn-large" href="${pmmPage}">Explore product marketing beta</a>
           </div>
-          <small>Now opening founding access for PMMs who want to catch story breaks before Sales improvises the wrong version and leadership asks why launch demand is soft.</small>
+          <small>Now opening early access for GTM leaders starting with product marketing.</small>
         </div>
         ${heroVisual()}
       </div>
@@ -362,9 +333,9 @@ function stageStrip() {
     <section class="stage-strip" id="stage-strip" aria-label="Company stages">
       <div class="shell stage-grid">
         ${[
-          ["Startups", "Catch the first story break before launch."],
-          ["Mid-market", "Keep positioning and sales narrative from drifting apart."],
-          ["Enterprise", "Find the contradiction before the market does."]
+          ["Startups", "Find clarity. Build GTM foundation."],
+          ["Mid-market", "Scale with alignment. Improve execution."],
+          ["Enterprise", "Drive coherence across the organization."]
         ].map(([title, copy]) => `
           <article>
             <span></span>
@@ -380,13 +351,13 @@ function shiftSection() {
       <div class="shell split-section">
         <div>
           ${sectionLabel("The shift")}
-          <h2>The next GTM problem is not more content. It is fractured execution.</h2>
+          <h2>The next AI problem is not generation. It is cognition.</h2>
         </div>
         <div class="prose">
           <p>The first wave of AI gave every team more output: more campaigns, call notes, sales content, launch docs, customer summaries, and analysis.</p>
-          <p>But faster output makes drift easier to miss. When every function generates faster but carries a slightly different story, teams start scaling contradictions.</p>
+          <p>But scale without shared interpretation creates a new operating risk. When every function generates faster but interprets differently, teams start scaling contradictions.</p>
           <p>Marketing says one thing. Sales repeats another. Customers hear a third. Product sees signals too late. RevOps watches risk appear downstream.</p>
-          <p><strong>Cognix is built to show where the GTM story breaks, which evidence proves it, and what PMMs should fix before the market feels the drift.</strong></p>
+          <p><strong>Cognix is built for the next phase of AI adoption: helping organizations interpret what all these signals mean, where teams are drifting apart, and what decision should happen next.</strong></p>
         </div>
       </div>
     </section>`;
@@ -399,7 +370,7 @@ function whyNowSection() {
         <div class="section-intro">
           ${sectionLabel("Why this matters now")}
           <h2>The fracture shows up late. That is the danger.</h2>
-          <p>AI-generated work accelerates content creation. Without a receipt-backed way to compare launch reality, it also accelerates GTM fragmentation, inconsistent execution, and late-stage revenue risk.</p>
+          <p>AI-generated work accelerates content creation. Without a shared interpretation layer, it also accelerates narrative drift, inconsistent execution, and late-stage revenue risk.</p>
         </div>
         <div class="card-grid three">
           ${risks.map(([title, copy], index) => `
@@ -418,12 +389,12 @@ function architectureSection() {
     <section class="section architecture-section">
       <div class="shell">
         <div class="section-intro">
-          ${sectionLabel("How Cognix reads drift")}
-          <h2>One contradiction engine. Multiple GTM surfaces.</h2>
-          <p>Cognix starts where market, revenue, product, and customer signals collide first: the PMM launch reality that has to survive execution.</p>
+          ${sectionLabel("The Cognix architecture")}
+          <h2>One cognitive engine. Multiple business surfaces.</h2>
+          <p>Cognix is built as a cognitive engine for business execution, starting with the function where market, revenue, product, and customer signals collide first.</p>
         </div>
         ${heroVisual()}
-        <p class="center-note">Cognix compares the signals behind decisions, surfaces where the story is drifting, and turns fragmented context into a receipt-backed PMM action.</p>
+        <p class="center-note">Cognix connects the signals behind decisions, surfaces where interpretation is drifting, and turns fragmented context into actionable intelligence.</p>
       </div>
     </section>`;
 }
@@ -434,7 +405,7 @@ function teamsSection() {
       <div class="shell">
         <div class="section-intro">
           ${sectionLabel("For teams")}
-          <h2>Start where GTM fractures are already costing teams clarity.</h2>
+          <h2>Start where signal fragmentation is already costing teams clarity.</h2>
           <p>Product marketing is the first live Cognix surface because it sits at the intersection of market truth, product strategy, sales execution, customer understanding, and competitive pressure.</p>
         </div>
         <div class="card-grid four">
@@ -456,8 +427,8 @@ function productsSection() {
       <div class="shell">
         <div class="section-intro">
           ${sectionLabel("Cognix applications")}
-          <h2>One contradiction engine, focused on specific GTM risks.</h2>
-          <p>Each Cognix application compares the signals a team already works inside and names the story break that can change buyer perception or sales execution.</p>
+          <h2>One cognition engine, delivered through focused intelligence surfaces.</h2>
+          <p>Each Cognix application applies the same cognitive engine to a specific team, decision type, and execution risk.</p>
         </div>
         <div class="card-grid three">
           ${products.map(([title, status, copy, active]) => {
@@ -480,8 +451,8 @@ function technologySection() {
       <div class="shell">
         <div class="section-intro">
           ${sectionLabel("Technology")}
-          <h2>A preview of the contradiction engine we are building.</h2>
-          <p>Cognix is being designed around signal comparison, evidence binding, and reasoning workflows. The first beta exposes one focused PMM surface while the broader direction points toward connected GTM signal ingestion.</p>
+          <h2>A preview of the cognition engine we are building.</h2>
+          <p>Cognix is being designed around a technical foundation for signal convergence, organizational memory, cognition graphs, reasoning workflows, and decision intelligence. The first beta exposes one focused surface of that system, while the broader architecture shows what customers can expect as the platform matures.</p>
         </div>
         <div class="tech-visual">
           <div class="tech-panel">
@@ -489,15 +460,15 @@ function technologySection() {
             ${signals.map((signal) => `<span><i></i>${esc(signal)}</span>`).join("")}
           </div>
           <div class="tech-engine">
-            <h3>Cognix contradiction engine</h3>
+            <h3>Cognix cognitive engine</h3>
             <div class="tech-flow">
               <span>Signal inputs</span>
-              <span>Contradiction engine</span>
-              <span>Evidence memory</span>
-              <span>Story drift graph</span>
+              <span>Cognitive engine</span>
+              <span>Organizational memory</span>
+              <span>Cognition graph</span>
               <span>Reasoning workflows</span>
-              <span>PMM-safe decision</span>
-              <span>Receipt-backed output</span>
+              <span>Decision intelligence</span>
+              <span>Intelligence outputs</span>
             </div>
             ${cognitionGraph("tech")}
           </div>
@@ -507,64 +478,18 @@ function technologySection() {
           </div>
           <div class="architecture-cards" id="integrations">
             <article>
-              <strong>Connected GTM signal ingestion</strong>
+              <strong>Deep integration layer</strong>
               <p>Planned connectivity across the systems where GTM work happens: customer records, team notes, calls, docs, product signals, customer feedback, and market intelligence.</p>
             </article>
             <article>
-              <strong>Evidence-backed interpretation</strong>
-              <p>The architecture direction combines source-bound evidence, GTM fracture maps, reasoning workflows, and learning loops.</p>
+              <strong>Foundational cognitive infrastructure</strong>
+              <p>The architecture direction combines organizational memory, signal convergence, cognition graphs, embedding models, reasoning workflows, and learning loops.</p>
             </article>
             <article>
-              <strong>Future GTM drift layer</strong>
-          <p>The long-term direction includes GTM contradiction detection, cross-functional signal comparison, execution correlation, and adaptive prioritization.</p>
-            </article>
-            <article>
-              <strong>Ask Cognix</strong>
-              <p>Upcoming strategic decision layer for asking launch, messaging, pipeline, and sales alignment questions against actual GTM evidence.</p>
+              <strong>Proprietary cognition layer</strong>
+              <p>The long-term technical vision includes narrative drift detection, cross-functional signal convergence, coherence scoring, behavioral execution correlation, and adaptive prioritization.</p>
             </article>
           </div>
-        </div>
-      </div>
-    </section>`;
-}
-
-function askCognixSection() {
-  return `
-    <section class="section ask-cognix-section" id="ask-cognix">
-      <div class="shell ask-cognix-shell">
-        <div class="section-intro">
-          ${sectionLabel("Roadmap layer")}
-          <h2>Ask Cognix is the strategic decision layer for GTM teams.</h2>
-          <p>Ask Cognix will let PMMs, CMOs, and revenue leaders ask launch, messaging, pipeline, and sales alignment questions against their actual GTM evidence. It is not a generic chatbot. It is the query layer on top of GTM fracture detection.</p>
-        </div>
-        <div class="ask-cognix-grid">
-          <article class="ask-cognix-card ask-cognix-primary">
-            ${pill("Upcoming capability")}
-            <h3>Ask high-stakes launch questions against GTM evidence.</h3>
-            <p>Answers will be based on signal sorting, launch memory, sales reality, customer proof, leadership narrative, and commercial risk.</p>
-            <div class="answer-structure">
-              ${["Direct answer", "Evidence", "Commercial implication", "Recommended action", "Confidence level"].map((item) => `<span>${esc(item)}</span>`).join("")}
-            </div>
-          </article>
-          <article class="ask-cognix-card">
-            <h3>Example questions</h3>
-            <div class="question-list">
-              ${askCognixQuestions.map((question) => `<span>${esc(question)}</span>`).join("")}
-            </div>
-          </article>
-          <article class="ask-cognix-card">
-            <h3>Signal sources over time</h3>
-            <div class="source-list">
-              ${askCognixSources.map((source) => `<span>${esc(source)}</span>`).join("")}
-            </div>
-          </article>
-        </div>
-        <div class="ask-example">
-          <span>Example answer pattern</span>
-          <p><strong>Question:</strong> Can we launch today?</p>
-          <p><strong>Direct answer:</strong> Not yet. Launch readiness is 55%. Strong customer proof exists, but the current story leads with abstract category language while sales and customer evidence point to renewal-risk urgency.</p>
-          <p><strong>Commercial implication:</strong> The launch may generate attention without enough qualified demo intent, weakening sales follow-up and launch attribution.</p>
-          <p><strong>Recommended action:</strong> Lead with renewal risk, move proof near the CTA, and use category language only after buyer urgency is established.</p>
         </div>
       </div>
     </section>`;
@@ -576,13 +501,13 @@ function activeBetaSection() {
       <div class="shell split-section">
         <div>
           ${sectionLabel("Active beta")}
-          <h2>The first live surface: product marketing fracture detection.</h2>
+          <h2>The first live surface: product marketing cognition.</h2>
           <p class="lead">Product marketing is where the fracture becomes visible first. PMMs sit between market truth, product direction, sales execution, competitive pressure, and customer expectations, which makes them the natural starting point for Cognix.</p>
         </div>
         <article class="beta-card">
           ${pill("GTM Fracture Map", true)}
           <h3>The first active Cognix workflow.</h3>
-          <p>Teams paste messy GTM signals. Cognix analyzes launch conversion risk, GTM contradictions, source receipts, signal coverage, and the executive read needed to decide what PMM changes before launch.</p>
+          <p>Teams add a small set of GTM signals. Cognix analyzes launch conversion risk, narrative drift, contradiction detection, signal coverage, and the executive read needed to decide what changes next.</p>
           <div class="check-grid">
             ${betaOutputs.map((item) => `<span>${esc(item)}</span>`).join("")}
           </div>
@@ -594,27 +519,27 @@ function activeBetaSection() {
 
 function designPartnerSection() {
   return `
-    <section class="section design-section" id="founding-access">
+    <section class="section design-section" id="design-partner">
       <div class="shell design-grid">
         <div>
-          ${sectionLabel("Founding PMM access")}
-          <h2>Run GTM fracture detection with Cognix.</h2>
-          <p>We are inviting a small group of senior PMMs and GTM operators to pressure-test Cognix on real launch mess: internal strategy, buyer-facing copy, sales objections, proof gaps, and launch goals.</p>
-          <p>Founding PMMs get early access to the first Cognix PMM surface, a direct feedback loop, and visibility into how the contradiction engine evolves across teams.</p>
+          ${sectionLabel("Design partner beta")}
+          <h2>Shape the cognition layer for AI-era GTM before the category becomes obvious.</h2>
+          <p>We are opening a limited design partner cohort for founders, first marketers, PMM leaders, and GTM operators who believe AI-era execution will need more than generation, dashboards, and scattered summaries.</p>
+          <p>Design partners get early access to the first Cognix intelligence surface, direct influence on the product, and visibility into how the cognition engine evolves across teams.</p>
           <div class="mini-grid">
-            <article><strong>First GTM fracture run</strong><span>Paste messy launch reality and get a receipt-backed read.</span></article>
-            <article><strong>Future workflow visibility</strong><span>See how connected GTM signal ingestion expands across functions.</span></article>
+            <article><strong>Shape the roadmap</strong><span>Your feedback directly influences what Cognix becomes.</span></article>
+            <article><strong>Future platform visibility</strong><span>See how the platform expands across every function.</span></article>
           </div>
         </div>
         <article class="pricing-card">
-          <span>Founding PMM access</span>
-          <div class="price"><strong>First read</strong><small>included</small></div>
-          <p>Your first GTM fracture detection run is included during validation. Bring a messy launch, then tell us whether the contradiction, receipts, and PMM-safe fix match what is actually happening.</p>
+          <span>Founding design partner access</span>
+          <div class="price"><strong>No-cost</strong><small>access</small></div>
+          <p>No payment required during the design partner window. We are inviting serious GTM operators to pressure-test Cognix, share feedback, and help shape the cognition layer for AI-era GTM teams.</p>
           <div class="pricing-items">
             ${designPartnerItems.map((item) => `<p>${esc(item)}</p>`).join("")}
           </div>
-          <a class="btn btn-primary btn-block" href="free-audit-access.html">Start GTM fracture detection</a>
-          <small>Founding access for operators who want receipt-backed GTM fracture detection before launch.</small>
+          <a class="btn btn-primary btn-block" href="mailto:hello@cognix.ai?subject=Design%20partner%20beta">Apply to become a design partner</a>
+          <small>Limited founding cohort for operators who want to shape what comes next.</small>
         </article>
       </div>
     </section>`;
@@ -624,9 +549,9 @@ function finalCta() {
   return `
     <section class="final-cta" id="final-cta">
       <div class="shell">
-        <h2>Do not wait for a GTM fracture to become revenue risk.</h2>
-        <p>Start with product marketing. See where your launch reality is drifting and help shape the receipt-backed layer for AI-era execution.</p>
-        <a class="btn btn-primary btn-large" href="#founding-access">Request founding PMM access</a>
+        <h2>Do not wait for AI-driven GTM noise to become revenue risk.</h2>
+        <p>Start with product marketing. See where your GTM signals are drifting and help shape the cognition layer for AI-era execution.</p>
+        <a class="btn btn-primary btn-large" href="#design-partner">Become a design partner</a>
       </div>
     </section>`;
 }
@@ -637,7 +562,7 @@ function footer() {
       <div class="shell footer-grid">
         ${logo()}
         <div>
-          <a href="#founding-access">About</a>
+          <a href="#design-partner">About</a>
           <a href="#final-cta">Resources</a>
           <a href="mailto:hello@cognix.ai">Contact</a>
           <a href="#final-cta">Privacy</a>
@@ -678,7 +603,6 @@ function render() {
         ${teamsSection()}
         ${productsSection()}
         ${technologySection()}
-        ${askCognixSection()}
         ${activeBetaSection()}
         ${designPartnerSection()}
         ${finalCta()}
