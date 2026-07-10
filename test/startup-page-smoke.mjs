@@ -35,7 +35,8 @@ assert(startupSource.includes("Assess launch predictability before execution"), 
 assert(countOccurrences(startupSource, "Launch predictability") === 0, "Launch predictability should not dominate headings or hero copy.");
 assert(!startupSource.match(/Tapistro|SpringWorks|PMA|ProductLed|RevGenius|GTM Partners|trusted by|backed by/i), "Startup page should not contain unsupported endorsement claims.");
 
-assert(startupStyles.includes("@import url(\"./styles.css"), "Startup page should reuse the existing Cognix homepage stylesheet.");
+assert(!startupStyles.includes("@import url(\"./styles.css"), "Startup page should not rely on nested CSS imports for the base stylesheet.");
+assert(startupStyles.includes(".site-header") && startupStyles.includes(".hub-visual"), "Startup stylesheet should include base Cognix styles and startup-specific styles.");
 assert(startupStyles.includes("focus-visible") || fs.readFileSync(path.join(rootDir, "styles/styles.css"), "utf8").includes("focus-visible"), "Links and buttons should have visible focus styles.");
 assert(viteConfig.includes('startupPmm: "solutions/startups.html"'), "Vite build should include the startup page entry.");
 
